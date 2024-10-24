@@ -4,7 +4,7 @@ import os
 from flask import Flask, flash, redirect, render_template, request, session
 # all sqlalchemy info from: flask-sqlalchemy.palletsprojects.com
 from flask_sqlalchemy import SQLAlchemy
-from flask_session import session
+from flask_session import Session
 from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -109,7 +109,7 @@ def wishlist():
     #TODO
     return apology("to do")
 
-@app.route("/register")["GET", "POST"]
+@app.route("/register", methods=["GET", "POST"])
 def register():
     
     if request.method == "POST":
