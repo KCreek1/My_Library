@@ -14,20 +14,6 @@ app = Flask(__name__)
 
 # todo: configure session to use cookies
 
-# how to initialize database to app ChatGpt clarification
-db = SQLAlchemy()
-
-def init_db(app):
-    db.init_app(app)
-    return app
-
-def create_app():
-    app = Flask(__name__)
-    # I need to get postgres url from environment variable
-    app.config['SQLAlchemy_database_URI'] = os.environ.get('Database_URL')
-    init_db(app)
-    return app
-
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
