@@ -5,15 +5,22 @@ from flask import Flask, flash, redirect, render_template, request, session
 # all sqlalchemy info from: flask-sqlalchemy.palletsprojects.com
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
+from db import db, database_url
 from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from helpers import apology, login_required
 
 app = Flask(__name__)
+# setting up postgresql db
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+db.init_app(app)
 
-# todo: configure session to use cookies
+# from finance - Configure session to use filesystem (instead of signed cookies)
+app.config["SESSION_TYPE"] = "filesystem"
+Session(app)
 
+# from finance
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
@@ -53,18 +60,17 @@ def login():
             return apology("must provide password", 403)
         
         # query db for username
-        rows = db.execute(
-            "SELECT * FROM users WHERE username = ?", request.form.get("username")
-        )
+        username = request.form.get("username")
+        user = User.query.filter_by(username=username).first()
         
         # make sure username exists and password correct
-        if len(rows) != 1 or not check_password_hash(
-            rows[0]["hash"], request.form.get("password")
-        ):
+        # improved for sqlalchemy per copilot
+        if user is None or not check_password_hash(
+            user.password_hash, request.form.get("password")):
             return apology("invalid username and/or password", 403)
         
         # remember user
-        session["user_id"] = rows[0]["id"]
+        session["user_id"] = user.id
         
         return redirect("/")
     
@@ -118,7 +124,10 @@ def register():
         # insert into db for login
         try:
             # need to set up sqlalchemy db
-            db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", username, hash)
+            # ddb advice how to convert db.execute to sqlalchemy
+           new_user = User(username=username, hash=hash)
+           db.session.add(new_user)
+           db.session.commit()
         # MUST set username as a UNIQUE identifier
         except Exception:
             return apology("Username already in use")
