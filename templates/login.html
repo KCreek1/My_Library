@@ -1,9 +1,18 @@
-<!-- to do login page -->
+<!-- imported login.html from finance -->
 {% extends "layout.html" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}
+    Log In
+{% endblock %}
 
 {% block main %}
-    <h1>My Library</h1>
-    <p>Under construction - check back soon</p>
+    <form action="/login" method="post">
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text">
+        </div>
+        <div class="mb-3">
+            <input class="form-control mx-auto w-auto" name="password" placeholder="Password" type="password">
+        </div>
+        <button class="btn btn-primary" type="submit">Log In</button>
+    </form>
 {% endblock %}
