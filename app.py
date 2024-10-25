@@ -5,10 +5,10 @@ from flask import Flask, flash, redirect, render_template, request, session
 # all sqlalchemy info from: flask-sqlalchemy.palletsprojects.com
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
-from db import db, database_url
 from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from db import db, database_url
 from helpers import apology, login_required
 
 app = Flask(__name__)
@@ -66,7 +66,7 @@ def login():
         # make sure username exists and password correct
         # improved for sqlalchemy per copilot
         if user is None or not check_password_hash(
-            user.password_hash, request.form.get("password")):
+            user.hash, request.form.get("password")):
             return apology("invalid username and/or password", 403)
         
         # remember user
@@ -133,6 +133,6 @@ def register():
             return apology("Username already in use")
     
         # send to login
-        return render_template("login.html")
+        return redirect("/login")
 
     return render_template("register.html")
