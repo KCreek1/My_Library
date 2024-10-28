@@ -8,13 +8,12 @@ from flask_session import Session
 from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from db import db, database_url
+from db import db, init_db
 from helpers import apology, login_required
 
 app = Flask(__name__)
-# setting up postgresql db
-app.config['SQLALCHEMY_DATABASE_URI'] = database_url
-db.init_app(app)
+# setting up postgresql db in db.py
+init_db(app)
 
 # from finance - Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_TYPE"] = "filesystem"
@@ -24,6 +23,7 @@ Session(app)
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
+    response.headers["Content-Type"] = "text/html; charset=utf-8"  # Ensure correct content-type
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     response.headers["Expires"] = 0
     response.headers["Pragma"] = "no-cache"
@@ -39,7 +39,7 @@ def index():
     
     # what do I want the page to display
     
-    return apology("to do")
+    return render_template("index.html")
 
 # using login route from finance pset
 

@@ -1,1 +1,10 @@
 /* stylesheet for mylibrary */
+a.navbar-brand {
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: rgb(255, 145, 0);
+    font-size: 40px;
+}
+
+li.nav-item {
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
