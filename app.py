@@ -8,7 +8,7 @@ from flask_session import Session
 from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from db import db, init_db
+from database import db, init_db
 from helpers import apology, login_required
 
 app = Flask(__name__)
