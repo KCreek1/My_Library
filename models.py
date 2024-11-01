@@ -33,4 +33,9 @@ class Wishlist(db.Model):
     title = db.Column(db.String(50), nullable=False)
     author = db.Column(db.String(50), nullable=False)
     year = db.Column(db.Integer, nullable=False)
-  
+    
+class Reviews(db.Model):    
+    __tablename__ = 'reviews'
+    book = db.Column(db.Integer, db.ForeignKey('books.id'), primary_key=True)
+    review = db.Column(db.String(300), nullable=False)
+
