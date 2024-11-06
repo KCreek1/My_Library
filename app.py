@@ -9,10 +9,11 @@ from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from database import db, init_db
-from helpers import apology, login_required
+from helpers import apology, get_current_user,login_required
+from models import Book, User, Wishlist, Review
 
 app = Flask(__name__)
-# setting up postgresql db in db.py
+# setting up db for sqlalchemy
 init_db(app)
 
 # from finance - Configure session to use filesystem (instead of signed cookies)
@@ -30,17 +31,22 @@ def after_request(response):
     return response
 
 @app.route("/")
-@login_required
 def index():
-    # retrieve user_id
-    user_id = session.get("user_id")
-    if not session.get("user_id"):
-        return redirect("login")
+    """ will display generic info about app """
     
     # what do I want the page to display
-    
     return render_template("index.html")
-
+   
+@app.route("/dashboard")
+@login_required
+def dashboard():
+    """ will display a table of books for the logged in user"""
+    
+   # TODO: ADD SEARCH BUTTON TO THIS PAGE
+    books = Book.query.filter_by(private=False).all()
+    
+    return render_template('dashboard.html', books=books)
+    
 # using login route from finance pset
 
 @app.route("/login", methods=["GET", "POST"])
@@ -87,7 +93,9 @@ def logout():
     return redirect("/")
 
 @app.route("/passwordreset")
+@login_required
 def passwordreset():
+    """ reset password """
     #TODO
     return apology("to do")
 
@@ -97,12 +105,19 @@ def peruse():
     return apology("to do")
 
 @app.route("/wishlist")
+@login_required
 def wishlist():
-    #TODO
-    return apology("to do")
+    """ will return a list of books that the user has added to their wishlist"""      
+    user = get_current_user()
+    username = user.username
+    wishlist = Wishlist.query.filter_by(username_id=username).all()
+    return render_template('wishlist.html', wishlist=wishlist)
+
+# need to add a db interaction for adding to/deleting from wishlist
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    """ register a new user """
     
     if request.method == "POST":
         # set username
@@ -136,3 +151,14 @@ def register():
         return redirect("/login")
 
     return render_template("register.html")
+
+@app.route("/mybooks")
+@login_required
+def mybooks():
+    """ will return a list of books for the particular user who is signed in """
+    
+    # TODO
+    # add to library
+    # delete from library
+    
+    return render_template("mybooks.html")

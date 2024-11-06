@@ -3,6 +3,8 @@ import requests
 from flask import redirect, render_template, session
 from functools import wraps
 
+from models import User
+
 # using apology helper from finance pset
 def apology(message, code=400):
     
@@ -39,3 +41,7 @@ def login_required(f):
             return redirect("/login")
         return f(*args, **kwargs)
     return decorated_function
+
+def get_current_user():
+    user_id = session["user_id"]
+    return User.query.get(user_id)
