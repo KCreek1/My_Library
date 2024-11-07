@@ -37,15 +37,15 @@ def index():
     # what do I want the page to display
     return render_template("index.html")
    
-@app.route("/dashboard")
+@app.route("/mybooks")
 @login_required
-def dashboard():
+def mybooks():
     """ will display a table of books for the logged in user"""
     
    # TODO: ADD SEARCH BUTTON TO THIS PAGE
     books = Book.query.filter_by(private=False).all()
     
-    return render_template('dashboard.html', books=books)
+    return render_template('mybooks.html', books=books)
     
 # using login route from finance pset
 

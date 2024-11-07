@@ -8,3 +8,7 @@ a.navbar-brand {
 li.nav-item {
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
+
+p {
+    font-size: 20px;
+}

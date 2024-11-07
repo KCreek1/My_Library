@@ -28,6 +28,8 @@ class Book(db.Model):
     author = db.Column(db.String(50), nullable=False)
     year = db.Column(db.Integer)
     genre = db.Column(db.String(50), nullable=False)
+    is_series = db.Column(db.Boolean, default=False)
+    series_name = db.Column(db.String(50), nullable=True)
     rating = db.Column(db.Integer)
     review = db.Column(db.String(300))
     private = db.Column(db.Boolean, default=False)
@@ -49,6 +51,7 @@ class Review(db.Model):
     book = db.relationship('Book', backref='reviews')
     username_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', backref='reviews')
+    rating = db.Column(db.Integer, nullable=False)
     review = db.Column(db.String(300), nullable=False)
 
     __table_args__ = (
