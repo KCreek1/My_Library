@@ -4,8 +4,6 @@ import os
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy 
 
-from models import Users, Books, Wishlist
-
 load_dotenv(dotenv_path='./.env')
 database_url = os.getenv('DATABASE_URL')
 
