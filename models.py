@@ -15,8 +15,6 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     hash = db.Column(db.String(200), nullable=False)
-    displayname = db.Column(db.String(80))
-    aboutme = db.Column(db.String(200))
     
 class Book(db.Model):
     """ table for books entered into library by any user"""
@@ -28,8 +26,7 @@ class Book(db.Model):
     author = db.Column(db.String(50), nullable=False)
     year = db.Column(db.Integer)
     genre = db.Column(db.String(50), nullable=False)
-    is_series = db.Column(db.Boolean, default=False)
-    series_name = db.Column(db.String(50), nullable=True)
+    series_name = db.Column(db.String(50))
     rating = db.Column(db.Integer)
     review = db.Column(db.String(300))
     private = db.Column(db.Boolean, default=False)
@@ -42,6 +39,7 @@ class Wishlist(db.Model):
     user = db.relationship('User', backref='wishlist')
     title = db.Column(db.String(50), nullable=False)
     author = db.Column(db.String(50), nullable=False)
+    series_name = db.Column(db.String(50), nullable=True)
     year = db.Column(db.Integer)
     
 class Review(db.Model):

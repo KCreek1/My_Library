@@ -1,8 +1,55 @@
-<!-- users personal page -->
-{% extends "layout.html" %}
+ <!--table of books on users wishlist-->
+ <!-- table copied from finance pset and refactored -->
+<!-- additional syntax for suggestion from codeium on if else for items -->
+{% extends 'layout.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Wishlist{% endblock %}
 
 {% block main %}
-    
+    <h1>My Wishlist</h1>
+    <!-- field to enter new book -->
+    <form action="/register" method="post">
+        <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="title" placeholder="Title" type="text">
+        </div>
+        <div class="mb-3">
+            <input class="form-control mx-auto w-auto" name="author" placeholder="Author" type="text">
+        </div>
+        <div class="mb-3">
+            <input class="form-control mx-auto w-auto" name="series_name" placeholder="Series" type="text">
+        </div>
+        <div class="mb-3">
+            <input class="form-control mx-auto w-auto" name="year" placeholder="Year" type="text">
+        </div>
+        <button class="btn btn-primary" type="submit">Add Book</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Series</th>
+                <th>Year</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in wishlist %}
+                <tr>
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.author }}</td>
+                    {% if item.series_name %} <!-- since this column is nullable, check for null -->
+                        <td>{{ item.series_name }}</td>
+                    {% else %}
+                        <td>none</td>
+                    {% endif %}
+                    {% if item.year %} <!-- since this column is nullable, check for null-->
+                        <td>{{ item.year }}</td>
+                    {% else %}
+                        <td>none</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

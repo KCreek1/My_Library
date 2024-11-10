@@ -1,0 +1,52 @@
+<!-- homepage of user to dislpay their library of books-->
+ <!-- table copied from finance pset and refactored -->
+
+{% extends 'layout.html' %}
+
+{% block title %}My Library{% endblock %}
+
+{% block content %}
+  <h1>{{ user.username }}'s Books</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Year</th>
+        <th>Series</th>
+        <th>Genre</th>
+        <th>Rating</th>
+        <th>Review</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for book in books %}
+        <tr>
+          <td>{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          {% if book.year %}
+            <td>{{ book.year }}</td>
+          {% else %}
+            <td>none</td>
+          {% endif %}
+          {% if book.series_name %}
+            <td>{{ book.series_name}}</td>
+          {% else %}
+            <td>none</td>
+          {% endif %}
+          <td>{{ book.genre }}</td>
+          {% if book.rating %}
+            <td>{{ book.rating }}</td>
+          {% else %}
+            <td>none</td>
+          {% endif %}
+          {% if book.review%}
+            <td>{{ book.review }}</td>
+          {% else %}
+            <td>none</td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

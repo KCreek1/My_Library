@@ -29,8 +29,9 @@
                 <div class="collapse navbar-collapse" id="navbar">
                     {% if session["user_id"]%}    
                         <ul class="navbar-nav me-auto mt-2">
+                            <li class="nav-item"><a class="nav-link" href="/library">My Library</a></li>
                             <li class="nav-item"><a class="nav-link" href="/wishlist">Wishlist</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/peruse">My Books</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/search">Search</a></li>
                         </ul>
                         <ul class="navbar-nav ms-auto mt-2">
                             <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
@@ -45,13 +46,18 @@
             </div>
         </nav>
 
-        {% if get_flashed_messages() %}
-            <header>
-                <div class="alert alert-primary mb-0 text-center" role="alert">
-                    {{ get_flashed_messages() | join(" ") }}
-                </div>
-            </header>
-        {% endif %}
+        <!-- flash messages -->
+        <!-- https://getbootstrap.com/docs/5.3/components/alerts/ -->
+        {% for category in ["success", "info", "error"] %}
+            {% with messages = get_flashed_messages(category_filter=[category]) %}
+                {% if messages %}
+                     <div class="alert alert-{{ category }} mb-0 text-center" role="alert">
+                        {{ messages | join(" ") }}
+                    </div>
+                {% endif %}
+            {% endwith %}
+        {% endfor %}
+              
 
         <main class="container py-5 text-center">
             {% block main %}{% endblock %}

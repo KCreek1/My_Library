@@ -78,7 +78,7 @@ def login():
         # remember user
         session["user_id"] = user.id
         
-        return redirect("/")
+        return redirect("/library")
     
     # if by GET
     else:
@@ -99,20 +99,31 @@ def passwordreset():
     #TODO
     return apology("to do")
 
-@app.route("/peruse")
-def peruse():
-    #TODO
-    return apology("to do")
 
-@app.route("/wishlist")
+@app.route("/wishlist", methods=["GET", "POST"])
 @login_required
 def wishlist():
     """ will return a list of books that the user has added to their wishlist"""      
-    user = get_current_user()
-    username = user.username
-    wishlist = Wishlist.query.filter_by(username_id=username).all()
-    return render_template('wishlist.html', wishlist=wishlist)
+    if request.method == "GET":
+        user = get_current_user()
+        username = user.username
+        wishlist = Wishlist.query.filter_by(username_id=username).all()
+        return render_template('wishlist.html', wishlist=wishlist)
 
+    elif request.method == "POST":
+        if not request.form["title"]:
+            return apology("must provide title", 403)
+        elif not request.form["author"]:
+            return apology("must provide author", 403)
+        title = request.form["title"]
+        author = request.form["author"]
+        series_name = request.form["series_name"]
+        year = request.form["year"]
+        new_book = Wishlist(title=title, author=author, series_name=series_name, year=year)
+        db.session.add(new_book)
+        db.session.commit()
+        return redirect("/wishlist")
+        
 # need to add a db interaction for adding to/deleting from wishlist
 
 @app.route("/register", methods=["GET", "POST"])
@@ -135,7 +146,7 @@ def register():
     
         # create hash with salt to ensure unique value
         hash = generate_password_hash(password, method="pbkdf2:sha1", salt_length=8)
-    
+       
         # insert into db for login
         try:
             # need to set up sqlalchemy db
@@ -147,18 +158,26 @@ def register():
         except Exception:
             return apology("Username already in use")
     
+        # success message
+        flash("You have succesfully registered and may log in now!", "success")
         # send to login
         return redirect("/login")
 
     return render_template("register.html")
 
-@app.route("/mybooks")
+@app.route("/library")
 @login_required
-def mybooks():
+def library():
     """ will return a list of books for the particular user who is signed in """
     
     # TODO
     # add to library
     # delete from library
     
-    return render_template("mybooks.html")
+    return apology("to do")
+
+@app.route("/search")
+@login_required
+def search():
+    # TODO
+    return apology("to do")
