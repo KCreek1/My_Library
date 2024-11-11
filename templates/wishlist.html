@@ -31,6 +31,7 @@
                 <th>Author</th>
                 <th>Series</th>
                 <th>Year</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -48,6 +49,12 @@
                     {% else %}
                         <td>none</td>
                     {% endif %}
+                    <td>
+                        <form methond="post" action="delete_book"> <!-- delete book form suggested by codeium -->
+                            <input type="hidden" name="book_id" value="{{ item.id }}">
+                            <button class="btn btn-primary" type="submit">Delete</button>
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
         </tbody>

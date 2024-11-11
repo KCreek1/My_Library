@@ -181,3 +181,25 @@ def library():
 def search():
     # TODO
     return apology("to do")
+
+@app.route("/delete_book", methods=["POST"])
+@login_required
+def delete_book():
+    """ Enables user to delete books from wishlist or library """
+    book_id = request.form["book_id"]  # assigns book_id from unique id in table
+    book = Book.query.filter_by(username_id=get_current_user().id).filter_by(id=book_id).first()
+    if book:
+        db.session.delete(book)
+        db.session.commit
+        flash("Book deleted", "success")
+        return redirect("/library")
+    else:
+        wishlist_book = Wishlist.query.filter_by(username_id=get_current_user().id).filter_by(id=book_id).first()
+        if wishlist_book:
+            db.session.delete(wishlist_book)
+            db.session.commit()
+            flash("Book deleted", "success")
+            return redirect("/wishlist")
+        else:
+            flash("Book not found", "error")
+    
