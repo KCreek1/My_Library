@@ -1,4 +1,4 @@
-<!-- homepage of user to dislpay their library of books-->
+<!-- homepage of user to display their library of books-->
  <!-- table copied from finance pset and refactored -->
 
 {% extends 'layout.html' %}
@@ -7,6 +7,8 @@
 
 {% block content %}
   <h1>{{ user.username }}'s Books</h1>
+  
+  <a href="add_book" class="btn btn-primary">Add Book</a>
   <table>
     <thead>
       <tr>
@@ -45,6 +47,18 @@
           {% else %}
             <td>none</td>
           {% endif %}
+          <td>
+            <form method="post" action="update_book"> <!-- update book form suggested by codeium -->
+                <input type="hidden" name="book_id" value="{{ item.id }}">
+                <button class="btn btn-primary" type="submit">Update</button>
+            </form>
+          </td>
+          <td>
+            <form method="post" action="delete_book"> <!-- delete book form suggested by codeium -->
+                <input type="hidden" name="book_id" value="{{ item.id }}">
+                <button class="btn btn-primary" type="submit">Delete</button>
+            </form>
+          </td>
         </tr>
       {% endfor %}
     </tbody>

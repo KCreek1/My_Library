@@ -202,4 +202,73 @@ def delete_book():
             return redirect("/wishlist")
         else:
             flash("Book not found", "error")
+            
+@app.route("/update_book", methods=["POST"])
+@login_required    
+def update_book():
+    """ Allows user to update the details of a book """
+    book_id = request.form["book_id"]  # assigns book_id from unique id in table
+    book = Book.query.filter_by(username_id=get_current_user().id).filter_by(id=book_id).first()
+    if book:
+        if request.method == "POST":
+        # update book if form is submitted
+            #codieum assistance with method to be used
+            title = request.form.get("title")
+            author = request.form.get("author")
+            series_name = request.form.get("series_name")
+            year = request.form.get("year")
+            genre = request.form.get("genre")
+            rating = request.form.get("rating")
+            review = request.form.get("review")
+            private = request.form.get("private") == "on"
+        
+        
+            if title:
+                book.title = title
+            if author:
+                book.author = author
+            if year:
+                book.year = year
+            if series_name:
+                book.series_name = series_name
+            if genre:
+                book.genre = genre
+            if rating:
+                book.rating = rating
+            if review:
+                book.review = review
+            if private:
+                book.private = private
     
+            db.session.commit()
+            flash("Book details updated", "success")
+            return redirect("/library")
+        else:
+            # will just resubmit the same data
+            return render_template("update_book.html", book=book)
+    else:
+        flash("Book not found", "error")
+        return redirect("/library")
+    
+@app.route("/add_book", methods=["GET", "POST"])
+@login_required
+def add_book():
+    """ User adds new book to the library """
+    if request.method == "POST":
+        title = request.form.get("title")
+        author = request.form.get("author")
+        year = request.form.get("year")
+        series_name = request.form.get("series_name")
+        genre = request.form.get("genre")
+        rating = request.form.get("rating")
+        review = request.form.get("review")
+        private = request.form.get("private") == "on" # if box is checked, private is true
+        if not title or not author or not genre: 
+            flash("Title, Author, and Genre are required", "error")
+            return render_template("add_book.html")
+        new_book = Book(title=title, author=author, series_name=series_name, year=year, genre=genre, rating=rating, review=review)
+        db.session.add(new_book)
+        db.session.commit()
+        return redirect("/library")
+    else:
+        return render_template("add_book.html")
