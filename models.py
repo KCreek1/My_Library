@@ -20,7 +20,7 @@ class Book(db.Model):
     """ table for books entered into library by any user"""
     __tablename__ = 'book'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username_id = db.Column(db.Integer, db.ForeignKey('users.id')) # how to reference other tables
+    username_id = db.Column(db.Integer, db.ForeignKey('user.id')) # how to reference other tables
     user = db.relationship('User', backref='books') # per codieum, try backref, plural for many books
     title = db.Column(db.String(50), nullable=False)
     author = db.Column(db.String(50), nullable=False)

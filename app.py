@@ -170,11 +170,10 @@ def register():
 def library():
     """ will return a list of books for the particular user who is signed in """
     
-    # TODO
-    # add to library
-    # delete from library
+    user = get_current_user()
+    books = Book.query.filter_by(username_id=user.id).all()
+    return render_template('library.html', books=books)    
     
-    return apology("to do")
 
 @app.route("/search")
 @login_required
