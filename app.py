@@ -96,8 +96,29 @@ def logout():
 @login_required
 def passwordreset():
     """ reset password """
-    #TODO
-    return apology("to do")
+    if request.method  == "POST":
+        user = get_current_user()
+        username = user.username
+       
+    
+        security_question_1 = user.security_question_1
+        security_question_2 = user.security_question_2
+        
+        # check if security questions are correct
+        if not request.form.get("security_answer_1"):
+            return apology("must provide answer", 403)
+        elif not request.form.get("security_answer_2"):
+            return apology("must provide answer", 403)
+        
+        security_answer_1 = request.form.get("security_answer_1")   
+        security_answer_2 = request.form.get("security_answer_2")
+        
+        if security_answer_1 != user.security_answer_1 or security_answer_2 != user.security_answer_2:
+            return apology("invalid security answers", 403)
+        elif security_answer_1 == user.security_answer_1 and security_answer_2 == user.security_answer_2:
+            return render_template("new_password.html", username=username)
+        
+    return redirect("/passwordreset")
 
 
 @app.route("/wishlist", methods=["GET", "POST"])
@@ -146,12 +167,24 @@ def register():
     
         # create hash with salt to ensure unique value
         hash = generate_password_hash(password, method="pbkdf2:sha1", salt_length=8)
+        
+        security_question_1 = request.form.get("security_question_1")
+        security_question_2 = request.form.get("security_question_2")
+        security_answer_1 = request.form.get("security_answer_1")
+        security_answer_2 = request.form.get("security_answer_2")
        
         # insert into db for login
         try:
             # need to set up sqlalchemy db
             # ddb advice how to convert db.execute to sqlalchemy
-           new_user = User(username=username, hash=hash)
+           new_user = User(
+               username=username, 
+               hash=hash, 
+               security_question_1=security_question_1, 
+               security_question_2=security_question_2, 
+               security_answer_1=security_answer_1, 
+               security_answer_2=security_answer_2
+            )
            db.session.add(new_user)
            db.session.commit()
         # MUST set username as a UNIQUE identifier

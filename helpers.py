@@ -45,3 +45,23 @@ def login_required(f):
 def get_current_user():
     user_id = session["user_id"]
     return User.query.get(user_id)
+
+def get_questions_1():
+    return [
+        'What was your first car?',
+        'What is your favorite color?',
+        'What is your favorite book?',
+        'What was the name of your first pet?',
+        'Who is your favorite fictional character?',
+        'What is your least favorite book?',
+    ]
+    
+def get_questions_2():
+    return [
+        'What is your favorite movie?',
+        'What was the name of your first school?',
+        'What is your favorite food?', 
+        'What is your favorite song?',
+        'What is your favorite animal?',
+        'What is your favorite band?',
+    ]

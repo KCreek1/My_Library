@@ -15,6 +15,10 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     hash = db.Column(db.String(200), nullable=False)
+    security_question_1 = db.Column(db.String(100), nullable=False)
+    security_question_2 = db.Column(db.String(100), nullable=False)
+    security_answer_1 = db.Column(db.String(100), nullable=False)
+    security_answer_2 = db.Column(db.String(100), nullable=False)
     
 class Book(db.Model):
     """ table for books entered into library by any user"""
