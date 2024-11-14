@@ -99,10 +99,6 @@ def passwordreset():
     if request.method  == "POST":
         user = get_current_user()
         username = user.username
-       
-    
-        security_question_1 = user.security_question_1
-        security_question_2 = user.security_question_2
         
         # check if security questions are correct
         if not request.form.get("security_answer_1"):
@@ -304,3 +300,23 @@ def add_book():
         return redirect("/library")
     else:
         return render_template("add_book.html")
+    
+@app.route("/new_password", methods=["GET", "POST"])
+@login_required
+def new_password():
+    """ User can change password """
+    # copying code from register since it is the same method
+    if request.method == "POST":
+        user = get_current_user()
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+        if password == "":
+            return apology("Enter a valid password")
+        if password != confirmation:
+            return apology("Passwords do not match")
+        hash = generate_password_hash(password, method="pbkdf2:sha1", salt_length=8)
+        user.hash = hash
+        db.session.commit()
+        flash("Password updated", "success")
+        return redirect("/library")
+    return render_template("new_password.html")

@@ -1,4 +1,5 @@
 <!-- register form imported from finance pset -->
+ <!-- updated with security questions and answers-->
 {% extends "layout.html" %}
 
 {% block title %}Register{% endblock %}
@@ -22,7 +23,7 @@
             </select>
         </div>
         <div class="mb-3">
-            <input class="form-control mx-auto w-auto" name="security_answer_1" placeholder="Answer" type="text">
+            <input class="form-control mx-auto w-auto" name="security_answer_1" placeholder="Answer (case sensitive)" type="text">
         </div>
         <div class="mb-3">
             <select class="form-control mx-auto w-auto" name="security_question_2">
@@ -32,7 +33,7 @@
             </select>
         </div>
         <div class="mb-3">
-            <input class="form-control mx-auto w-auto" name="security_answer_2" placeholder="Answer" type="text">
+            <input class="form-control mx-auto w-auto" name="security_answer_2" placeholder="Answer (case sensitive)" type="text">
         </div>
         <button class="btn btn-primary" type="submit">Register</button>
     </form>
