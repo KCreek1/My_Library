@@ -1,5 +1,5 @@
 <!-- register form imported from finance pset -->
- <!-- updated with security questions and answers-->
+<!-- updated with security questions and answers-->
 {% extends "layout.html" %}
 
 {% block title %}Register{% endblock %}
@@ -18,7 +18,7 @@
         <div class="mb-3">
             <select class="form-control mx-auto w-auto" name="security_question_1">
                 {% for question in get_questions_1 %}
-                <option value="{{ question }}">{{ question }}</option>
+                    <option value="{{ question }}">{{ question }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -28,7 +28,7 @@
         <div class="mb-3">
             <select class="form-control mx-auto w-auto" name="security_question_2">
                 {% for question in get_questions_2 %}
-                <option value="{{ question }}">{{ question }}</option>
+                    <option value="{{ question }}">{{ question }}</option>
                 {% endfor %}
             </select>
         </div>

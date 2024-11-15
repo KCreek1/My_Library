@@ -6,7 +6,7 @@
 
 {% block content %}
 <h1>Add Book</h1>
-<p>Add a new book to your library.  Title, author, and genre are required.  You may also add a year, series name, rating, and review.  
+<p>Add a new book to your library. Title, author, and genre are required. You may also add a year, series name, rating, and review. 
     You may select "private" if you do not want your book to appear in a search for ratings and reviews.</p>
 <form method="post" action="add_book"> <!-- add book form suggested by codeium -->
     <div class="mb-3">
@@ -27,7 +27,7 @@
     </div>  
     <div class="mb-3">
         <label for="genre">Genre:</label>
-        <input type="text" class="form-control" id="genre" name="genre">
+        <input type="text" class="form-control" id="genre" name="genre" required>
     </div>
     <div class="mb-3"> 
         <label for="rating">Rating:</label> 

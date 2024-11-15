@@ -1,10 +1,6 @@
-<!-- framework pulled from finance pset to be reworked-->
 <!DOCTYPE html>
-
 <html lang="en">
-
     <head>
-
         <meta charset="utf-8">
         <meta name="viewport" content="initial-scale=1, width=device-width">
 
@@ -15,11 +11,8 @@
         <link href="/static/styles.css" rel="stylesheet">
 
         <title>My Library {% block title %}{% endblock %}</title>
-
     </head>
-
     <body>
-
         <nav class="bg-light border navbar navbar-expand-md navbar-light">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">My Library</a>
@@ -27,11 +20,11 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbar">
-                    {% if session["user_id"]%}    
+                    {% if session["user_id"] %}    
                         <ul class="navbar-nav me-auto mt-2">
                             <li class="nav-item"><a class="nav-link" href="/library">My Library</a></li>
                             <li class="nav-item"><a class="nav-link" href="/wishlist">Wishlist</a></li>
-                            <li class="nav-item"><a class="nav-link" href="/search">Search</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/search">Reviews</a></li>
                         </ul>
                         <ul class="navbar-nav ms-auto mt-2">
                             <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
@@ -51,13 +44,12 @@
         {% for category in ["success", "info", "error"] %}
             {% with messages = get_flashed_messages(category_filter=[category]) %}
                 {% if messages %}
-                     <div class="alert alert-{{ category }} mb-0 text-center" role="alert">
+                    <div class="alert alert-{{ category }} mb-0 text-center" role="alert">
                         {{ messages | join(" ") }}
                     </div>
                 {% endif %}
             {% endwith %}
         {% endfor %}
-              
 
         <main class="container py-5 text-center">
             {% block main %}{% endblock %}
@@ -82,7 +74,5 @@
                 });
             </script>
         </footer>
-
     </body>
-
 </html>

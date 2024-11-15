@@ -11,7 +11,7 @@ def apology(message, code=400):
     def escape(s):
         """
         Escape special characters
-        https://gihub.com/jacebrowning/memgen#special-characters
+        https://github.com/jacebrowning/memgen#special-characters
         """
             
         for old, new in [

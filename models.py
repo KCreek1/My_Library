@@ -1,13 +1,5 @@
-# from gist.github.com/mayukh18/2223bc8fc15263120abd7cbf1efdd41/
-# https://gist.github.com/mayukh18/2223bc8fc15263120abd7cbf1efdd41
-
 from database import db
 from app import app
-
-# declaring models with db.Model - flask-sqalchemy.readthedocs.io
-# https://docs.sqlalchemy.org/en/20/orm/backref.html
-# guidance from codieum 
-# using db.relationship allows for sqlalchemy to see relationships between tables when querying
 
 class User(db.Model):
     """ table for user personal info"""
@@ -19,6 +11,7 @@ class User(db.Model):
     security_question_2 = db.Column(db.String(100), nullable=False)
     security_answer_1 = db.Column(db.String(100), nullable=False)
     security_answer_2 = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100)) # not currently in use - but may be in the future
     
 class Book(db.Model):
     """ table for books entered into library by any user"""

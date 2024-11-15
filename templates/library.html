@@ -1,5 +1,5 @@
 <!-- homepage of user to display their library of books-->
- <!-- table copied from finance pset and refactored -->
+<!-- table copied from finance pset and refactored -->
 
 {% extends 'layout.html' %}
 
@@ -32,7 +32,7 @@
             <td>none</td>
           {% endif %}
           {% if book.series_name %}
-            <td>{{ book.series_name}}</td>
+            <td>{{ book.series_name }}</td>
           {% else %}
             <td>none</td>
           {% endif %}
@@ -42,21 +42,21 @@
           {% else %}
             <td>none</td>
           {% endif %}
-          {% if book.review%}
+          {% if book.review %}
             <td>{{ book.review }}</td>
           {% else %}
             <td>none</td>
           {% endif %}
           <td>
-            <form method="post" action="update_book"> <!-- update book form suggested by codeium -->
-                <input type="hidden" name="book_id" value="{{ book.id }}">
-                <button class="btn btn-primary" type="submit">Update</button>
+            <form method="post" action="update_book">
+              <input type="hidden" name="book_id" value="{{ book.id }}">
+              <button class="btn btn-primary" type="submit">Update</button>
             </form>
           </td>
           <td>
-            <form method="post" action="delete_book"> <!-- delete book form suggested by codeium -->
-                <input type="hidden" name="book_id" value="{{ item.id }}">
-                <button class="btn btn-primary" type="submit">Delete</button>
+            <form method="post" action="delete_book">
+              <input type="hidden" name="book_id" value="{{ book.id }}">
+              <button class="btn btn-primary" type="submit">Delete</button>
             </form>
           </td>
         </tr>

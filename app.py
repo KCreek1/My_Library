@@ -9,7 +9,7 @@ from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from database import db, init_db
-from helpers import apology, get_current_user,login_required
+from helpers import apology, get_current_user, login_required
 from models import Book, User, Wishlist, Review
 
 app = Flask(__name__)
@@ -33,25 +33,18 @@ def after_request(response):
 @app.route("/")
 def index():
     """ will display generic info about app """
-    
-    # what do I want the page to display
     return render_template("index.html")
-   
-@app.route("/mybooks")
+
+@app.route("/library")
 @login_required
-def mybooks():
+def library():
     """ will display a table of books for the logged in user"""
-    
-   # TODO: ADD SEARCH BUTTON TO THIS PAGE
-    books = Book.query.filter_by(private=False).all()
-    
-    return render_template('mybooks.html', books=books)
-    
-# using login route from finance pset
+    user = get_current_user()
+    books = Book.query.filter_by(username_id=user.id).all()
+    return render_template('library.html', books=books)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    
     # Forget any user_id
     session.clear()
     
@@ -70,9 +63,7 @@ def login():
         user = User.query.filter_by(username=username).first()
         
         # make sure username exists and password correct
-        # improved for sqlalchemy per copilot
-        if user is None or not check_password_hash(
-            user.hash, request.form.get("password")):
+        if user is None or not check_password_hash(user.hash, request.form.get("password")):
             return apology("invalid username and/or password", 403)
         
         # remember user
@@ -83,20 +74,18 @@ def login():
     # if by GET
     else:
         return render_template("login.html")
-    
+
 @app.route("/logout")
 def logout():
-    
     # forget user
     session.clear()
-    
     return redirect("/")
 
-@app.route("/passwordreset")
+@app.route("/passwordreset", methods=["GET", "POST"])
 @login_required
 def passwordreset():
     """ reset password """
-    if request.method  == "POST":
+    if request.method == "POST":
         user = get_current_user()
         username = user.username
         
@@ -115,7 +104,6 @@ def passwordreset():
             return render_template("new_password.html", username=username)
         
     return redirect("/passwordreset")
-
 
 @app.route("/wishlist", methods=["GET", "POST"])
 @login_required
@@ -140,13 +128,10 @@ def wishlist():
         db.session.add(new_book)
         db.session.commit()
         return redirect("/wishlist")
-        
-# need to add a db interaction for adding to/deleting from wishlist
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """ register a new user """
-    
     if request.method == "POST":
         # set username
         username = request.form.get("username")
@@ -171,58 +156,48 @@ def register():
        
         # insert into db for login
         try:
-            # need to set up sqlalchemy db
-            # ddb advice how to convert db.execute to sqlalchemy
-           new_user = User(
-               username=username, 
-               hash=hash, 
-               security_question_1=security_question_1, 
-               security_question_2=security_question_2, 
-               security_answer_1=security_answer_1, 
-               security_answer_2=security_answer_2
+            new_user = User(
+                username=username, 
+                hash=hash, 
+                security_question_1=security_question_1, 
+                security_question_2=security_question_2, 
+                security_answer_1=security_answer_1, 
+                security_answer_2=security_answer_2
             )
-           db.session.add(new_user)
-           db.session.commit()
-        # MUST set username as a UNIQUE identifier
+            db.session.add(new_user)
+            db.session.commit()
         except Exception:
             return apology("Username already in use")
     
         # success message
-        flash("You have succesfully registered and may log in now!", "success")
-        # send to login
+        flash("You have successfully registered and may log in now!", "success")
         return redirect("/login")
 
     return render_template("register.html")
 
-@app.route("/library")
+@app.route("/reviews")
 @login_required
-def library():
-    """ will return a list of books for the particular user who is signed in """
-    
-    user = get_current_user()
-    books = Book.query.filter_by(username_id=user.id).all()
-    return render_template('library.html', books=books)    
-    
-
-@app.route("/search")
-@login_required
-def search():
-    # TODO
+def reviews():
+    """ enables users to see reviews for certain books """
     return apology("to do")
 
-@app.route("/delete_book", methods=["POST"])
+@app.route("/delete_book/<string:book_type>", methods=["POST"])
 @login_required
-def delete_book():
+def delete_book(book_type):
     """ Enables user to delete books from wishlist or library """
-    book_id = request.form["book_id"]  # assigns book_id from unique id in table
-    book = Book.query.filter_by(username_id=get_current_user().id).filter_by(id=book_id).first()
-    if book:
-        db.session.delete(book)
-        db.session.commit
-        flash("Book deleted", "success")
-        return redirect("/library")
-    else:
-        wishlist_book = Wishlist.query.filter_by(username_id=get_current_user().id).filter_by(id=book_id).first()
+    user = get_current_user()
+    book_id = request.form["book_id"]
+    if book_type == "library":
+        book = Book.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
+        if book:
+            db.session.delete(book)
+            db.session.commit()
+            flash("Book deleted", "success")
+            return redirect("/library")
+        else:
+            flash("Book not found", "error")
+    elif book_type == "wishlist":
+        wishlist_book = Wishlist.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
         if wishlist_book:
             db.session.delete(wishlist_book)
             db.session.commit()
@@ -230,58 +205,53 @@ def delete_book():
             return redirect("/wishlist")
         else:
             flash("Book not found", "error")
-            
+
 @app.route("/update_book", methods=["POST"])
 @login_required    
 def update_book():
     """ Allows user to update the details of a book """
-    book_id = request.form["book_id"]  # assigns book_id from unique id in table
-    book = Book.query.filter_by(username_id=get_current_user().id).filter_by(id=book_id).first()
+    user = get_current_user()
+    book_id = request.form["book_id"]
+    book = Book.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
     if book:
-        if request.method == "POST":
-        # update book if form is submitted
-            #codieum assistance with method to be used
-            title = request.form.get("title")
-            author = request.form.get("author")
-            series_name = request.form.get("series_name")
-            year = request.form.get("year")
-            genre = request.form.get("genre")
-            rating = request.form.get("rating")
-            review = request.form.get("review")
-            private = request.form.get("private") == "on"
+        title = request.form.get("title")
+        author = request.form.get("author")
+        series_name = request.form.get("series_name")
+        year = request.form.get("year")
+        genre = request.form.get("genre")
+        rating = request.form.get("rating")
+        review = request.form.get("review")
+        private = request.form.get("private") == "on"
         
-        
-            if title:
-                book.title = title
-            if author:
-                book.author = author
-            if year:
-                book.year = year
-            if series_name:
-                book.series_name = series_name
-            if genre:
-                book.genre = genre
-            if rating:
-                book.rating = rating
-            if review:
-                book.review = review
-            if private:
-                book.private = private
-    
-            db.session.commit()
-            flash("Book details updated", "success")
-            return redirect("/library")
-        else:
-            # will just resubmit the same data
-            return render_template("update_book.html", book=book)
+        if title:
+            book.title = title
+        if author:
+            book.author = author
+        if year:
+            book.year = year
+        if series_name:
+            book.series_name = series_name
+        if genre:
+            book.genre = genre
+        if rating:
+            book.rating = rating
+        if review:
+            book.review = review
+        if private:
+            book.private = private
+
+        db.session.commit()
+        flash("Book details updated", "success")
+        return redirect("/library")
     else:
         flash("Book not found", "error")
         return redirect("/library")
-    
-@app.route("/add_book", methods=["GET", "POST"])
+
+@app.route("/add_book/<string:book_type>", methods=["GET", "POST"])
 @login_required
-def add_book():
+def add_book(book_type):
     """ User adds new book to the library """
+    user = get_current_user()
     if request.method == "POST":
         title = request.form.get("title")
         author = request.form.get("author")
@@ -290,22 +260,27 @@ def add_book():
         genre = request.form.get("genre")
         rating = request.form.get("rating")
         review = request.form.get("review")
-        private = request.form.get("private") == "on" # if box is checked, private is true
+        private = request.form.get("private") == "on"
+        
         if not title or not author or not genre: 
             flash("Title, Author, and Genre are required", "error")
             return render_template("add_book.html")
-        new_book = Book(title=title, author=author, series_name=series_name, year=year, genre=genre, rating=rating, review=review)
+        
+        if book_type == "library":
+            new_book = Book(username_id=user.id, title=title, author=author, series_name=series_name, year=year, genre=genre, rating=rating, review=review, private=private)
+        elif book_type == "wishlist":
+            new_book = Wishlist(username_id=user.id, title=title, author=author, series_name=series_name, year=year)
+            
         db.session.add(new_book)
         db.session.commit()
-        return redirect("/library")
+        return redirect("/library" if book_type == "library" else "/wishlist")
     else:
         return render_template("add_book.html")
-    
+
 @app.route("/new_password", methods=["GET", "POST"])
 @login_required
 def new_password():
     """ User can change password """
-    # copying code from register since it is the same method
     if request.method == "POST":
         user = get_current_user()
         password = request.form.get("password")
@@ -318,5 +293,5 @@ def new_password():
         user.hash = hash
         db.session.commit()
         flash("Password updated", "success")
-        return redirect("/library")
+        return redirect("/login")
     return render_template("new_password.html")
