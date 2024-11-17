@@ -1,9 +1,63 @@
-<!-- search results -->
-{% extends "layout.html" %}
+<!-- homepage of user to display their library of books-->
+<!-- table copied from finance pset and refactored -->
 
-{% block title %}Home{% endblock %}
+{% extends 'layout.html' %}
 
-{% block main %}
-    <h1>My Library</h1>
-    <p>Under construction - check back soon</p>
+{% block title %}My Library{% endblock %}
+
+{% block content %}
+  <h1>Reviews</h1>
+  <p>Search for books by title, author, or series name</p>
+<form action="/reviews" method="post">
+    <div class="mb-3">
+        <select class="form-control mx-auto w-auto" name="selection">
+            {% for value in select_value %}
+                <option value="{{ value }}">{{ value }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <input type="text" name="value" placeholder="Title, Author, or Series">
+    <button type="submit">Search</button>
+</form>
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Year</th>
+        <th>Series</th>
+        <th>Genre</th>
+        <th>Rating</th>
+        <th>Review</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for book in results %}
+        <tr>
+          <td>{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          {% if book.year %}
+            <td>{{ book.year }}</td>
+          {% else %}
+            <td>none</td>
+          {% endif %}
+          {% if book.series_name %}
+            <td>{{ book.series_name }}</td>
+          {% else %}
+            <td>none</td>
+          {% endif %}
+          <td>{{ book.genre }}</td>
+          {% if book.rating %}
+            <td>{{ book.rating }}</td>
+          {% else %}
+            <td>none</td>
+          {% endif %}
+          {% if book.review %}
+            <td>{{ book.review }}</td>
+          {% else %}
+            <td>none</td>
+          {% endif %}
+        {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}

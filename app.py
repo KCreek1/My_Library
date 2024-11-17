@@ -10,7 +10,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from database import db, init_db
 from helpers import apology, get_current_user, login_required
-from models import Book, User, Wishlist, Review
+from models import Book, User, Wishlist
 
 app = Flask(__name__)
 # setting up db for sqlalchemy
@@ -175,11 +175,23 @@ def register():
 
     return render_template("register.html")
 
-@app.route("/reviews")
+@app.route("/reviews", methods=["GET", "POST"])
 @login_required
 def reviews():
     """ enables users to see reviews for certain books """
-    return apology("to do")
+    if request.method == "POST":
+        selection = request.form.get("selection")
+        value = request.form.get("value").lower()
+        attributes = {
+            'title' : Book.title,
+            'author' : Book.author,
+            'series' : Book.series_name
+        }
+        results = Book.query.filter(attributes[selection].like('%' + value + '%'), Book.private == False).all()
+        if not results:
+            return apology("No results found", 403)
+        return render_template("reviews.html", results=results)
+    return redirect("/reviews")    
 
 @app.route("/delete_book/<string:book_type>", methods=["POST"])
 @login_required

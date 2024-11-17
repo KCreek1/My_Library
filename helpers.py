@@ -65,3 +65,10 @@ def get_questions_2():
         'What is your favorite animal?',
         'What is your favorite band?',
     ]
+    
+def select_value():
+    return [
+        'Title',
+        'Author',
+        'Series Name',
+    ]
