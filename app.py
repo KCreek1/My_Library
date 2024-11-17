@@ -179,6 +179,8 @@ def register():
 @login_required
 def reviews():
     """ enables users to see reviews for certain books """
+    select_value = ['title', 'author', 'series']
+    
     if request.method == "POST":
         selection = request.form.get("selection")
         value = request.form.get("value").lower()
@@ -190,8 +192,8 @@ def reviews():
         results = Book.query.filter(attributes[selection].like('%' + value + '%'), Book.private == False).all()
         if not results:
             return apology("No results found", 403)
-        return render_template("reviews.html", results=results)
-    return redirect("/reviews")    
+        return render_template("reviews.html", select_value=select_value, results=results)
+    return render_template("reviews.html", select_value=select_value, results=None)    
 
 @app.route("/delete_book/<string:book_type>", methods=["POST"])
 @login_required
