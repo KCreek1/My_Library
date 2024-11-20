@@ -11,7 +11,7 @@ from sqlalchemy.exc import IntegrityError
 
 from database import db, init_db
 from helpers import apology, get_current_user, get_questions_1, get_questions_2, login_required, select_value
-from models import Book, User, Wishlist
+from models import Book, Review, User, Wishlist
 
 app = Flask(__name__)
 
@@ -198,9 +198,11 @@ def reviews():
         attributes = {
             'Title' : Book.title,
             'Author' : Book.author,
-            'Series' : Book.series_name
+            'Series' : Book.series_name,
+            'Genre' : Book.genre,
+            'Rating' : Book.rating
         }
-        results = Book.query.filter(attributes[selection].like('%' + value + '%'), Book.private == False).all()
+        results = Review.query.join(Book).filter(attributes[selection].like('%' + value + '%'), Book.private == False).all()
         if not results:
             return apology("No results found", 403)
         return render_template("reviews.html", select_value=select_value(), results=results)

@@ -16,7 +16,7 @@
             {% endfor %}
         </select>
     </div>
-    <input type="text" name="value" placeholder="Title, Author, or Series">
+    <input type="text" name="value" placeholder="Title, Author, Genre, Rating, or Series">
     <button type="submit">Search</button>
 </form>
   <table>
@@ -33,28 +33,28 @@
     </thead>
     <tbody>
       {% if results %}
-        {% for book in results %}
+        {% for review in results %}
           <tr>
-            <td>{{ book.title }}</td>
-            <td>{{ book.author }}</td>
-            {% if book.year %}
-              <td>{{ book.year }}</td>
+            <td>{{ review.book.title }}</td>
+            <td>{{ review.book.author }}</td>
+            {% if review.book.year %}
+              <td>{{ review.book.year }}</td>
             {% else %}
               <td>none</td>
             {% endif %}
-            {% if book.series_name %}
-              <td>{{ book.series_name }}</td>
+            {% if review.book.series_name %}
+              <td>{{ review.book.series_name }}</td>
             {% else %}
               <td>none</td>
             {% endif %}
-            <td>{{ book.genre }}</td>
-            {% if book.rating %}
-              <td>{{ book.rating }}</td>
+            <td>{{ review.book.genre }}</td>
+            {% if review.book.rating %}
+              <td>{{ review.book.rating }}</td>
             {% else %}
               <td>none</td>
             {% endif %}
-            {% if book.review %}
-              <td>{{ book.review }}</td>
+            {% if review.book.review %}
+              <td>{{ review.book.review }}</td>
             {% else %}
               <td>none</td>
             {% endif %}

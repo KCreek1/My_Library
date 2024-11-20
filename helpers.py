@@ -69,4 +69,6 @@ def select_value():
         'Title',
         'Author',
         'Series Name',
+        'Genre',
+        'Rating',
     ]

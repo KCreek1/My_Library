@@ -78,7 +78,7 @@ class Review(db.Model):
     """ table for reviews of books"""    
     __tablename__ = 'review'
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), primary_key=True)
-    book = db.relationship('Book', backref='reviews')
+    book = db.relationship('Book', backref='reviews', primaryjoin="and_(Review.book_id==Book.id, Book.private==False)")
     username_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User', backref='reviews')
     rating = db.Column(db.Integer, nullable=False)
@@ -86,4 +86,5 @@ class Review(db.Model):
 
     __table_args__ = (
         db.UniqueConstraint('book_id', 'username_id', name='unique_review'),
+        CheckConstraint(rating >= 0 and rating <= 5, name='rating_range')
     )
