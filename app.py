@@ -136,9 +136,16 @@ def wishlist():
         series_name = request.form["series_name"]
         year = request.form["year"]
         new_book = Wishlist(title=title, author=author, series_name=series_name, year=year)
-        db.session.add(new_book)
-        db.session.commit()
-        return redirect("/wishlist")
+        try:
+            db.session.add(new_book)
+            db.session.commit()
+            flash("Book added to wishlist", "success")
+            return redirect("/wishlist")
+        except Exception as e:
+            db.session.rollback()
+            flash("Error adding book to wishlist", "error")
+            app.logger.error(f"Error adding book to wishlist: {e}")
+            return redirect("/wishlist")        
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -213,62 +220,65 @@ def reviews():
 def delete_book(book_type):
     """ Enables user to delete books from wishlist or library """
     user = get_current_user()
-    book_id = request.form["book_id"]
-    if book_type == "library":
-        book = Book.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
-        if book:
-            db.session.delete(book)
-            db.session.commit()
-            flash("Book deleted", "success")
-            return redirect("/library")
-        else:
-            flash("Book not found", "error")
-    elif book_type == "wishlist":
-        wishlist_book = Wishlist.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
-        if wishlist_book:
-            db.session.delete(wishlist_book)
-            db.session.commit()
-            flash("Book deleted", "success")
-            return redirect("/wishlist")
-        else:
-            flash("Book not found", "error")
+    book_id = request.form.get("book_id")
+    try:
+        if book_type == "library":
+            book = Book.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
+            if book:
+                db.session.delete(book)
+                db.session.commit()
+                flash("Book deleted", "success")
+                return redirect("/library")
+            else:
+                flash("Book not found", "error")
+        elif book_type == "wishlist":
+            wishlist_book = Wishlist.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
+            if wishlist_book:
+                db.session.delete(wishlist_book)
+                db.session.commit()
+                flash("Book deleted", "success")
+                return redirect("/wishlist")
+            else:
+                flash("Book not found", "error")
+    except Exception as e:
+        db.session.rollback()
+        flash("Error deleting book", "error")
+        app.logger.error(f"Error deleting book: {e}")
+    return redirect("/library" if book_type == "library" else "/wishlist")
 
 @app.route("/update_book", methods=["POST"])
 @login_required    
 def update_book():
     """ Allows user to update the details of a book """
     user = get_current_user()
-    book_id = request.form["book_id"]
+    book_id = request.form.get("book_id")
     book = Book.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
     if book:
-        title = request.form.get("title")
-        author = request.form.get("author")
-        series_name = request.form.get("series_name")
-        year = request.form.get("year")
-        genre = request.form.get("genre")
-        rating = request.form.get("rating")
-        review = request.form.get("review")
-        private = request.form.get("private") == "on"
+        # simplify with dictionary per codieum
+        book_data = {
+            "title" : request.form.get("title"),
+            "author" : request.form.get("author"),
+            "series_name" : request.form.get("series_name"),
+            "year" : request.form.get("year"),
+            "genre" : request.form.get("genre"),
+            "rating" : request.form.get("rating"),
+            "review" : request.form.get("review"),
+            "private" : request.form.get("private") == "on"
+        }
         
-        if title:
-            book.title = title
-        if author:
-            book.author = author
-        if year:
-            book.year = year
-        if series_name:
-            book.series_name = series_name
-        if genre:
-            book.genre = genre
-        if rating:
-            book.rating = rating
-        if review:
-            book.review = review
-        if private:
-            book.private = private
-
-        db.session.commit()
-        flash("Book details updated", "success")
+        # update book details
+        for attr, value in book_data.items():
+            if value:
+                setattr(book, attr, value)  # Use setattr to set the attribute dynamically based on the key in the dictionary.title:
+            
+        try:
+            db.session.commit()
+            flash("Book details updated", "success")
+        except Exception as e:
+            db.session.rollback()
+            flash("Error updating book details", "error")
+            app.logger.error(f"Error updating book details: {e}")
+            
         return redirect("/library")
     else:
         flash("Book not found", "error")
@@ -298,9 +308,16 @@ def add_book(book_type):
         elif book_type == "wishlist":
             new_book = Wishlist(username_id=user.id, title=title, author=author, series_name=series_name, year=year)
             
-        db.session.add(new_book)
-        db.session.commit()
-        return redirect("/library" if book_type == "library" else "/wishlist")
+        try:
+            db.session.add(new_book)
+            db.session.commit()
+            flash("Book added", "success")
+            return redirect("/library" if book_type == "library" else "/wishlist")
+        except Exception as e:
+            db.session.rollback()
+            flash("Error adding book", "error")
+            app.logger.error(f"Error adding book: {e}")
+            return redirect("/library" if book_type == "library" else "/wishlist")
     else:
         return render_template("add_book.html")
 
@@ -318,9 +335,16 @@ def new_password():
             return apology("Passwords do not match")
         hash = generate_password_hash(password, method="pbkdf2:sha1", salt_length=8)
         user.hash = hash
-        db.session.commit()
-        flash("Password updated", "success")
-        return redirect("/login")
+        
+        try:
+            db.session.commit()
+            flash("Password updated", "success")
+            return redirect("/login")
+        except Exception as e:
+            db.session.rollback()
+            flash("Error updating password", "error")
+            app.logger.error(f"Error updating password: {e}")
+            return redirect("/new_password")
     return render_template("new_password.html")
 
 # copied from chat gpt to log errors
