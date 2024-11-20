@@ -1,5 +1,6 @@
+from enum import Enum
+from sqlalchemy import Enum as SQLAlchemyEnum
 from database import db
-from app import app
 
 class User(db.Model):
     """ table for user personal info"""
@@ -11,7 +12,41 @@ class User(db.Model):
     security_question_2 = db.Column(db.String(100), nullable=False)
     security_answer_1 = db.Column(db.String(100), nullable=False)
     security_answer_2 = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(100)) # not currently in use - but may be in the future
+    email = db.Column(db.String(254)) # not currently in use - but may be in the future
+    about_me = db.Column(db.String(300)) # nost currently in use - but may be in the future
+    
+    # copied from chatgpt for ease in typing the enums
+class BookGenre(Enum):
+    FICTION = "Fiction"
+    NON_FICTION = "Non-Fiction"
+    FANTASY = "Fantasy"
+    SCIENCE_FICTION = "Science Fiction"
+    MYSTERY = "Mystery"
+    ROMANCE = "Romance"
+    HISTORICAL = "Historical"
+    BIOGRAPHY = "Biography"
+    SELF_HELP = "Self-Help"
+    CHILDREN = "Children"
+    YOUNG_ADULT = "Young Adult"
+    HORROR = "Horror"
+    POETRY = "Poetry"
+    CLASSICS = "Classics"
+    COMICS = "Comics"
+    COOKING = "Cooking"
+    TRAVEL = "Travel"
+    ART = "Art"
+    RELIGION = "Religion"
+    PHILOSOPHY = "Philosophy"
+    SCIENCE = "Science"
+    HEALTH = "Health"
+    BUSINESS = "Business"
+    TECHNOLOGY = "Technology"
+    MUSIC = "Music"
+    SPORTS = "Sports"
+    PARENTING = "Parenting"
+    LITERATURE = "Literature"
+    ADVENTURE = "Adventure"
+    SPIRITUALITY = "Spirituality"
     
 class Book(db.Model):
     """ table for books entered into library by any user"""
@@ -19,10 +54,10 @@ class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     username_id = db.Column(db.Integer, db.ForeignKey('user.id')) # how to reference other tables
     user = db.relationship('User', backref='books') # per codieum, try backref, plural for many books
-    title = db.Column(db.String(50), nullable=False)
+    title = db.Column(db.String(150), nullable=False)
     author = db.Column(db.String(50), nullable=False)
     year = db.Column(db.Integer)
-    genre = db.Column(db.String(50), nullable=False)
+    genre = db.Column(SQLAlchemyEnum(BookGenre), nullable=False) # using enum to ensure limited choices
     series_name = db.Column(db.String(50))
     rating = db.Column(db.Integer)
     review = db.Column(db.String(300))

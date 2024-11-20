@@ -5,14 +5,25 @@ from flask import Flask, flash, redirect, render_template, request, session
 # all sqlalchemy info from: flask-sqlalchemy.palletsprojects.com
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
-from datetime import datetime
 from werkzeug.security import check_password_hash, generate_password_hash
+import logging
+from sqlalchemy.exc import IntegrityError
 
 from database import db, init_db
-from helpers import apology, get_current_user, login_required
+from helpers import apology, get_current_user, get_questions_1, get_questions_2, login_required, select_value
 from models import Book, User, Wishlist
 
 app = Flask(__name__)
+
+# from chatgpt for development purposes and debugging
+# Set the environment to development for local development or production for deployment
+os.environ['FLASK_ENV'] = 'development'  # Change to 'production' when deploying
+
+# Configure debug mode based on the environment
+debug_mode = os.environ.get('FLASK_ENV') == 'development'
+app.config['DEBUG'] = debug_mode  # This is equivalent to `debug=True`
+
+
 # setting up db for sqlalchemy
 init_db(app)
 
@@ -166,34 +177,34 @@ def register():
             )
             db.session.add(new_user)
             db.session.commit()
-        except Exception:
+        except IntegrityError:
             return apology("Username already in use")
     
         # success message
         flash("You have successfully registered and may log in now!", "success")
         return redirect("/login")
 
-    return render_template("register.html")
+    return render_template("register.html", get_questions_1=get_questions_1, get_questions_2=get_questions_2)
 
 @app.route("/reviews", methods=["GET", "POST"])
 @login_required
 def reviews():
     """ enables users to see reviews for certain books """
-    select_value = ['title', 'author', 'series']
-    
+    select_options = select_value()
+        
     if request.method == "POST":
         selection = request.form.get("selection")
         value = request.form.get("value").lower()
         attributes = {
-            'title' : Book.title,
-            'author' : Book.author,
-            'series' : Book.series_name
+            'Title' : Book.title,
+            'Author' : Book.author,
+            'Series' : Book.series_name
         }
         results = Book.query.filter(attributes[selection].like('%' + value + '%'), Book.private == False).all()
         if not results:
             return apology("No results found", 403)
-        return render_template("reviews.html", select_value=select_value, results=results)
-    return render_template("reviews.html", select_value=select_value, results=None)    
+        return render_template("reviews.html", select_value=select_value(), results=results)
+    return render_template("reviews.html", select_value=select_value(), results=None)    
 
 @app.route("/delete_book/<string:book_type>", methods=["POST"])
 @login_required
@@ -309,3 +320,21 @@ def new_password():
         flash("Password updated", "success")
         return redirect("/login")
     return render_template("new_password.html")
+
+# copied from chat gpt to log errors
+# 404 Error Handler
+@app.errorhandler(404)
+def page_not_found(e):
+    app.logger.error(f"404 Error: {e}, Route: {request.url}")  # Log with route
+    return apology("Page not found", 404)
+
+# 500 Error Handler
+@app.errorhandler(500)
+def internal_error(e):
+    app.logger.error(f"500 Error: {e}, Route: {request.url}")  # Log with route
+    return apology("Internal server error", 500)
+
+# Running the app
+if __name__ == '__main__':
+    app.run(debug=debug_mode)  # Will automatically set debug=True in development mode
+    

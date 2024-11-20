@@ -24,7 +24,11 @@
         </div>
         <div class="mb-3">
             <label for="genre">Genre:</label>
-            <input type="text" id="genre" name="genre" value="{{ book.genre }}" required="required">
+            <select class="form-control" id="genre" name="genre" required>
+                {% for genre in BookGenre %}
+                    <option value="{{ genre.value }}">{{ genre.name.replace('_', ' ') }}</option>
+                {% endfor %}
+            </select>
         </div>
         <div class="mb-3">
             <label for="series_name">Series:</label>
