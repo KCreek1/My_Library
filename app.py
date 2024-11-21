@@ -109,12 +109,12 @@ def passwordreset():
         security_answer_1 = request.form.get("security_answer_1")   
         security_answer_2 = request.form.get("security_answer_2")
         
-        if security_answer_1 != user.security_answer_1 or security_answer_2 != user.security_answer_2:
-            return apology("invalid security answers", 403)
-        elif security_answer_1 == user.security_answer_1 and security_answer_2 == user.security_answer_2:
+        if not check_password_hash(user.security_answer_1, security_answer_1) or not check_password_hash(user.security_answer_2, security_answer_2):
+            return apology("incorrect answer", 403)
+        else:
             return render_template("new_password.html", username=username)
         
-    return redirect("/passwordreset")
+    return render_template("passwordreset.html")
 
 @app.route("/wishlist", methods=["GET", "POST"])
 @login_required
@@ -171,6 +171,10 @@ def register():
         security_question_2 = request.form.get("security_question_2")
         security_answer_1 = request.form.get("security_answer_1")
         security_answer_2 = request.form.get("security_answer_2")
+        
+        # has security answers
+        hashed_security_answer_1 = generate_password_hash(security_answer_1, method="pbkdf2:sha1", salt_length=8)
+        hashed_security_answer_2 = generate_password_hash(security_answer_2, method="pbkdf2:sha1", salt_length=8)
        
         # insert into db for login
         try:
@@ -179,8 +183,8 @@ def register():
                 hash=hash, 
                 security_question_1=security_question_1, 
                 security_question_2=security_question_2, 
-                security_answer_1=security_answer_1, 
-                security_answer_2=security_answer_2
+                security_answer_1=hashed_security_answer_1, 
+                security_answer_2=hashed_security_answer_2
             )
             db.session.add(new_user)
             db.session.commit()

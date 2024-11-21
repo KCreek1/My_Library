@@ -1,5 +1,5 @@
 from enum import Enum
-from sqlalchemy import Enum as SQLAlchemyEnum
+from sqlalchemy import Enum as SQLAlchemyEnum, CheckConstraint
 from database import db
 
 class User(db.Model):
