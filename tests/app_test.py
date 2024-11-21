@@ -1,6 +1,6 @@
 import pytest
 from app import app
-from config import TestConfig
+from config_test import TestConfig
 from flask_sqlalchemy import SQLAlchemy
 from models import User
 
