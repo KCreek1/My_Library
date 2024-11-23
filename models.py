@@ -86,5 +86,5 @@ class Review(db.Model):
 
     __table_args__ = (
         db.UniqueConstraint('book_id', 'username_id', name='unique_review'),
-        CheckConstraint(rating >= 0 and rating <= 5, name='rating_range')
+        CheckConstraint('rating >= 0 and rating <= 5', name='rating_range')
     )
