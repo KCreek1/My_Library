@@ -7,6 +7,8 @@ from flask_sqlalchemy import SQLAlchemy
 load_dotenv(dotenv_path='./.env')
 database_url = os.getenv('DATABASE_URL')
 
+print(f"Database URL: {database_url}")
+
 db = SQLAlchemy()
 
 # do not run until ready to start tables. This will create the tables in the database

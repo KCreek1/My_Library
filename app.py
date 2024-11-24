@@ -17,12 +17,7 @@ app = Flask(__name__)
 
 # from chatgpt for development purposes and debugging
 # Set the environment to development for local development or production for deployment
-os.environ['FLASK_ENV'] = 'development'  # Change to 'production' when deploying
-
-# Configure debug mode based on the environment
-debug_mode = os.environ.get('FLASK_ENV') == 'development'
-app.config['DEBUG'] = debug_mode  # This is equivalent to `debug=True`
-
+# os.environ['FLASK_ENV'] = 'development'  # Change to 'production' when deploying
 
 # setting up db for sqlalchemy
 init_db(app)
@@ -365,6 +360,6 @@ def internal_error(e):
     return apology("Internal server error", 500)
 
 # Running the app
-if __name__ == '__main__':
-    app.run(debug=debug_mode)  # Will automatically set debug=True in development mode
+# if __name__ == '__main__':
+    # app.run(debug=debug_mode)  # Will automatically set debug=True in development mode
     
