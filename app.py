@@ -190,7 +190,7 @@ def register():
         flash("You have successfully registered and may log in now!", "success")
         return redirect("/login")
 
-    return render_template("register.html", get_questions_1=get_questions_1, get_questions_2=get_questions_2)
+    return render_template("register.html", get_questions_1=get_questions_1(), get_questions_2=get_questions_2())
 
 @app.route("/reviews", methods=["GET", "POST"])
 @login_required
