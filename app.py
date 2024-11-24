@@ -88,29 +88,31 @@ def logout():
     return redirect("/")
 
 @app.route("/passwordreset", methods=["GET", "POST"])
-@login_required
 def passwordreset():
     """ reset password """
     if request.method == "POST":
-        user = get_current_user()
-        username = user.username
-        
-        # check if security questions are correct
-        if not request.form.get("security_answer_1"):
-            return apology("must provide answer", 403)
-        elif not request.form.get("security_answer_2"):
-            return apology("must provide answer", 403)
-        
-        security_answer_1 = request.form.get("security_answer_1")   
+        username = request.form.get("username")
+        user = User.query.filter_by(username=username).first()
+        if user:
+            security_question_1 = user.security_question_1
+            security_question_2 = user.security_question_2
+            return render_template("passwordreset.html", username=username, security_question_1=security_question_1, security_question_2=security_question_2)
+        else:
+            return apology("Invalid username")
+    
+    elif "security_answer_1" in request.form and "security_answer_2" in request.form:
+        username = request.form.get("username")
+        security_answer_1 = request.form.get("security_answer_1")
         security_answer_2 = request.form.get("security_answer_2")
-        
+        user = User.query.filter_by(username=username).first()
+    if user:
         if not check_password_hash(user.security_answer_1, security_answer_1) or not check_password_hash(user.security_answer_2, security_answer_2):
             return apology("incorrect answer", 403)
         else:
             return render_template("new_password.html", username=username)
         
     return render_template("passwordreset.html")
-
+        
 @app.route("/wishlist", methods=["GET", "POST"])
 @login_required
 def wishlist():
