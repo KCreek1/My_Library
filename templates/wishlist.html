@@ -8,36 +8,36 @@
 {% block content %}
     <h1>My Wishlist</h1>
     <!-- field to enter new book -->
-    <a href="{{ url_for('add_book', book_type='wishlist') }}" class="btn btn-primary">Add Book</a>
+    <a href="{{ url_for('add_book', book_type='wishlist') }}" class="btn btn-primary button">Add Book</a>
     
-    <table>
+    <table class='table', style="width:100%">
         <thead>
             <tr>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Series</th>
-                <th>Year</th>
+                <th style="width:20%">Title</th>
+                <th style="width:10%">Author</th>
+                <th style="width:20%">Series</th>
+                <th style="width:10%">Year</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            {% for item in wishlist %}
+            {% for book in books %}
                 <tr>
-                    <td>{{ item.title }}</td>
-                    <td>{{ item.author }}</td>
-                    {% if item.series_name %} <!-- since this column is nullable, check for null -->
-                        <td>{{ item.series_name }}</td>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    {% if book.series_name %} <!-- since this column is nullable, check for null -->
+                        <td>{{ book.series_name }}</td>
                     {% else %}
                         <td>none</td>
                     {% endif %}
-                    {% if item.year %} <!-- since this column is nullable, check for null-->
-                        <td>{{ item.year }}</td>
+                    {% if book.year %} <!-- since this column is nullable, check for null-->
+                        <td>{{ book.year }}</td>
                     {% else %}
                         <td>none</td>
                     {% endif %}
                     <td>
                         <form method="post" action="delete_book"> <!-- delete book form suggested by codeium -->
-                            <input type="hidden" name="book_id" value="{{ item.id }}">
+                            <input type="hidden" name="book_id" value="{{ book.id }}">
                             <button class="btn btn-primary" type="submit">Delete</button>
                         </form>
                     </td>

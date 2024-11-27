@@ -118,32 +118,10 @@ def passwordreset():
 @login_required
 def wishlist():
     """ will return a list of books that the user has added to their wishlist"""      
-    if request.method == "GET":
-        user = get_current_user()
-        username = user.username
-        wishlist = Wishlist.query.filter_by(username_id=username).all()
-        return render_template('wishlist.html', wishlist=wishlist)
 
-    elif request.method == "POST":
-        if not request.form["title"]:
-            return apology("must provide title", 403)
-        elif not request.form["author"]:
-            return apology("must provide author", 403)
-        title = request.form["title"]
-        author = request.form["author"]
-        series_name = request.form["series_name"]
-        year = request.form["year"]
-        new_book = Wishlist(title=title, author=author, series_name=series_name, year=year)
-        try:
-            db.session.add(new_book)
-            db.session.commit()
-            flash("Book added to wishlist", "success")
-            return redirect("/wishlist")
-        except Exception as e:
-            db.session.rollback()
-            flash("Error adding book to wishlist", "error")
-            app.logger.error(f"Error adding book to wishlist: {e}")
-            return redirect("/wishlist")        
+    user = get_current_user()
+    books = Wishlist.query.filter_by(username_id=user.id).all()
+    return render_template('wishlist.html', books=books, user=user)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
