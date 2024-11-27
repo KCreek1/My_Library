@@ -57,7 +57,7 @@ class Book(db.Model):
     user = db.relationship('User', backref='books') # per codieum, try backref, plural for many books
     title = db.Column(db.String(150), nullable=False, default='Untitled')
     author = db.Column(db.String(50), nullable=False, default='Unknown')
-    year = db.Column(db.String(4), default='None')
+    year = db.Column(db.Integer, default=0)
     genre = db.Column(SQLAlchemyEnum(BookGenre), nullable=False, default=BookGenre.FICTION) # using enum to ensure limited choices
     series_name = db.Column(db.String(50), default='None')
     rating = db.Column(db.Integer, default=0)
@@ -73,7 +73,7 @@ class Wishlist(db.Model):
     title = db.Column(db.String(50), nullable=False)
     author = db.Column(db.String(50), nullable=False)
     series_name = db.Column(db.String(50), nullable=True)
-    year = db.Column(db.String(4), default='None')
+    year = db.Column(db.Integer, default=0)
     
 class Review(db.Model):
     """ table for reviews of books"""    

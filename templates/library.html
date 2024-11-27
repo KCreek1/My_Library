@@ -37,7 +37,7 @@
           {% else %}
             <td>none</td>
           {% endif %}
-          <td>{{ book.genre }}</td>
+          <td>{{ book.genre.value }}</td>
           {% if book.rating %}
             <td>{{ book.rating }}</td>
           {% else %}

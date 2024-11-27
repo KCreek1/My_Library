@@ -301,12 +301,13 @@ def add_book(book_type):
             genre = BookGenre[genre.upper().replace(' ', '_')]
         except KeyError:
             flash("Invalid genre selected", "error")
-            return render_template("add_book.html")
+            return render_template("add_book.html", book_type=book_type, genres=BookGenre)
         rating = request.form.get("rating")
         review = request.form.get("review")
         private = request.form.get("private") == "on"
         
          # Convert year and rating to integers if they are provided
+        year = int(year) if year else 0  # Default to 0 if no year provided
         rating = int(rating) if rating else 0  # Default to 0 if no rating provided
         
         if not title or not author or not genre: 
