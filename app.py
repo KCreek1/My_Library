@@ -12,7 +12,7 @@ from sqlalchemy.exc import IntegrityError
 
 from database import db, init_db
 from helpers import apology, get_current_user, get_questions_1, get_questions_2, login_required, select_value
-from models import Book, Review, User, Wishlist
+from models import Book, BookGenre, Review, User, Wishlist
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -297,13 +297,21 @@ def add_book(book_type):
         year = request.form.get("year")
         series_name = request.form.get("series_name")
         genre = request.form.get("genre")
+        try:
+            genre = BookGenre[genre.upper().replace(' ', '_')]
+        except KeyError:
+            flash("Invalid genre selected", "error")
+            return render_template("add_book.html")
         rating = request.form.get("rating")
         review = request.form.get("review")
         private = request.form.get("private") == "on"
         
+         # Convert year and rating to integers if they are provided
+        rating = int(rating) if rating else 0  # Default to 0 if no rating provided
+        
         if not title or not author or not genre: 
             flash("Title, Author, and Genre are required", "error")
-            return render_template("add_book.html")
+            return render_template("add_book.html", book_type=book_type, genres=BookGenre)
         
         if book_type == "library":
             new_book = Book(username_id=user.id, title=title, author=author, series_name=series_name, year=year, genre=genre, rating=rating, review=review, private=private)
@@ -321,7 +329,7 @@ def add_book(book_type):
             app.logger.error(f"Error adding book: {e}")
             return redirect("/library" if book_type == "library" else "/wishlist")
     else:
-        return render_template("add_book.html", book_type=book_type)
+        return render_template("add_book.html", book_type=book_type, genres=BookGenre)
 
 @app.route("/new_password", methods=["GET", "POST"])
 @login_required
