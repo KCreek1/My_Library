@@ -226,43 +226,50 @@ def delete_book(book_type):
         app.logger.error(f"Error deleting book: {e}")
     return redirect("/library" if book_type == "library" else "/wishlist")
 
-@app.route("/update_book", methods=["POST"])
+@app.route("/update_book", methods=["GET","POST"])
 @login_required    
 def update_book():
     """ Allows user to update the details of a book """
     user = get_current_user()
-    book_id = request.form.get("book_id")
-    book = Book.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
-    if book:
-        # simplify with dictionary per codieum
-        book_data = {
-            "title" : request.form.get("title"),
-            "author" : request.form.get("author"),
-            "series_name" : request.form.get("series_name"),
-            "year" : request.form.get("year"),
-            "genre" : request.form.get("genre"),
-            "rating" : request.form.get("rating"),
-            "review" : request.form.get("review"),
-            "private" : request.form.get("private") == "on"
-        }
-        
-        # update book details
-        for attr, value in book_data.items():
-            if value:
-                setattr(book, attr, value)  # Use setattr to set the attribute dynamically based on the key in the dictionary.title:
+    if request.method == "POST":
+        book_id = request.form.get("book_id")
+        book = Book.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
+        if book:
+            book.title = request.form.get("title")
+            book.author = request.form.get("author")
+            book.series_name = request.form.get("series_name")
+            book.year = request.form.get("year")
+            book.genre = request.form.get("genre")
+            try:
+                book.genre = BookGenre[book.genre.upper().replace(' ', '_')]
+            except KeyError:
+                flash("Invalid genre selected", "error")
+                return render_template("update_book.html", book=book, genres=BookGenre)
+            book.rating = request.form.get("rating")
+            book.review = request.form.get("review")
+            book.private = request.form.get("private") == "on"
             
-        try:
-            db.session.commit()
-            flash("Book details updated", "success")
-        except Exception as e:
-            db.session.rollback()
-            flash("Error updating book details", "error")
-            app.logger.error(f"Error updating book details: {e}")
+            try:
+                db.session.commit()
+                flash("Book details updated", "success")
+            except Exception as e:
+                db.session.rollback()
+                flash("Error updating book details", "error")
+                app.logger.error(f"Error updating book details: {e}")
             
+        else:
+            flash("Book not found", "error")
         return redirect("/library")
+    
     else:
-        flash("Book not found", "error")
-        return redirect("/library")
+        book_id = request.args.get("book_id")
+        book = Book.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
+        if book:
+            genres = [{"value": genre.value, "name": genre.name} for genre in BookGenre]  # Prepare genres
+            return render_template("update_book.html", book=book, genres=genres)
+        else:
+            flash("Book not found", "error")
+            return redirect("/library")
 
 @app.route("/add_book/<string:book_type>", methods=["GET", "POST"])
 @login_required

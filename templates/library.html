@@ -49,15 +49,15 @@
             <td>none</td>
           {% endif %}
           <td>
-            <form method="post" action="update_book">
+            <form method="get" action="{{ url_for('update_book') }}">
               <input type="hidden" name="book_id" value="{{ book.id }}">
-              <button class="btn btn-primary" type="submit">Update</button>
+              <button type="submit">Update</button>
             </form>
           </td>
           <td>
-            <form method="post" action="delete_book">
+            <form method="post" action="{{ url_for('delete_book', book_type='library') }}">
               <input type="hidden" name="book_id" value="{{ book.id }}">
-              <button class="btn btn-primary" type="submit">Delete</button>
+              <button type="submit">Delete</button>
             </form>
           </td>
         </tr>
