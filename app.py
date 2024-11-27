@@ -2,6 +2,7 @@
 import os
 
 from flask import Flask, flash, redirect, render_template, request, session
+from flask_bootstrap import Bootstrap
 # all sqlalchemy info from: flask-sqlalchemy.palletsprojects.com
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
@@ -14,6 +15,7 @@ from helpers import apology, get_current_user, get_questions_1, get_questions_2,
 from models import Book, Review, User, Wishlist
 
 app = Flask(__name__)
+bootstrap = Bootstrap(app)
 
 # from chatgpt for development purposes and debugging
 # Set the environment to development for local development or production for deployment
@@ -30,7 +32,6 @@ Session(app)
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
-    response.headers["Content-Type"] = "text/html; charset=utf-8"  # Ensure correct content-type
     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     response.headers["Expires"] = 0
     response.headers["Pragma"] = "no-cache"
