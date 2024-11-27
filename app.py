@@ -186,9 +186,9 @@ def reviews():
             'Genre' : Book.genre,
             'Rating' : Book.rating
         }
-        results = Review.query.join(Book).filter(attributes[selection].like('%' + value + '%'), Book.private == False).all()
+        results = Review.query.join(Book).filter(attributes[selection].ilike('%' + value + '%'), Book.private == False).all()
         if not results:
-            return apology("No results found", 403)
+            flash("No results found", "error")
         return render_template("reviews.html", select_value=select_values, results=results)
     return render_template("reviews.html", select_value=select_values, results=None)    
 
