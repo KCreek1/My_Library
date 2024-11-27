@@ -48,7 +48,7 @@ def library():
     """ will display a table of books for the logged in user"""
     user = get_current_user()
     books = Book.query.filter_by(username_id=user.id).all()
-    return render_template('library.html', books=books)
+    return render_template('library.html', books=books, user=user)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -321,7 +321,7 @@ def add_book(book_type):
             app.logger.error(f"Error adding book: {e}")
             return redirect("/library" if book_type == "library" else "/wishlist")
     else:
-        return render_template("add_book.html")
+        return render_template("add_book.html", book_type=book_type)
 
 @app.route("/new_password", methods=["GET", "POST"])
 @login_required
