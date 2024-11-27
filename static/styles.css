@@ -1,7 +1,7 @@
 /* stylesheet for mylibrary */
 a.navbar-brand {
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: orangered;
+    color: rgb(241, 152, 35);
     font-size: 40px;
 }
 
@@ -36,4 +36,17 @@ p {
   .form-control {
     flex: 1 0 80%;
     margin-right: 1rem;
+  }
+
+  .button {
+    float: right;
+    background-color: rgb(5, 131, 5)
+  }
+
+  table {
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    border: 1px solid #ccc;
   }
