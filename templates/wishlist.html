@@ -35,12 +35,19 @@
                     {% else %}
                         <td>none</td>
                     {% endif %}
-                    <td>
-                        <form method="post" action="delete_book"> <!-- delete book form suggested by codeium -->
+                    <td> <!-- chatgpt help in adding confirmDelete() function-->
+                        <form method="post" action="{{ url_for('delete_book', book_type='wishlist') }}">
                             <input type="hidden" name="book_id" value="{{ book.id }}">
-                            <button class="btn btn-primary" type="submit">Delete</button>
+                            <button type="submit" onclick="return confirmDelete()">Delete</button>
                         </form>
                     </td>
+                    
+                    <script>
+                        function confirmDelete() {
+                            return confirm("Are you sure you want to delete this book?");
+                        }
+                    </script>
+                    
                 </tr>
             {% endfor %}
         </tbody>
