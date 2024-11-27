@@ -95,6 +95,7 @@ def passwordreset():
         username = request.form.get("username")
         user = User.query.filter_by(username=username).first()
         if user:
+            session['username'] = username
             security_question_1 = user.security_question_1
             security_question_2 = user.security_question_2
             if "security_answer_1" in request.form and "security_answer_2" in request.form:
@@ -314,23 +315,39 @@ def add_book(book_type):
         return render_template("add_book.html", book_type=book_type, genres=BookGenre)
 
 @app.route("/new_password", methods=["GET", "POST"])
-@login_required
 def new_password():
     """ User can change password """
+    username = session.get("username")
+    
+    if not username:
+        flash("Session expired or no username", "error")
+        return redirect("/passwordreset")
+    
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        flash("Invalid username", "error")
+        return redirect("/passwordreset")
+    
     if request.method == "POST":
-        user = get_current_user()
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
         if password == "":
-            return apology("Enter a valid password")
+            flash("Enter a valid password", "error")
+            return redirect("/new_password")
         if password != confirmation:
-            return apology("Passwords do not match")
+            flash("Passwords do not match", "error")
+            return redirect("/new_password")
+        
         hash = generate_password_hash(password, method="pbkdf2:sha1", salt_length=8)
         user.hash = hash
         
         try:
             db.session.commit()
             flash("Password updated", "success")
+            
+            # Remove the username from the session after the password is successfully updated
+            session.pop('username', None)
+            
             return redirect("/login")
         except Exception as e:
             db.session.rollback()
