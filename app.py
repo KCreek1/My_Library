@@ -97,23 +97,19 @@ def passwordreset():
         if user:
             security_question_1 = user.security_question_1
             security_question_2 = user.security_question_2
+            if "security_answer_1" in request.form and "security_answer_2" in request.form:
+                security_answer_1 = request.form.get("security_answer_1")
+                security_answer_2 = request.form.get("security_answer_2")
+                if not check_password_hash(user.security_answer_1, security_answer_1) or not check_password_hash(user.security_answer_2, security_answer_2):
+                    flash("Incorrect answer(s)", "error")
+                    return render_template("passwordreset.html", username=username)
+                else:
+                    return render_template("new_password.html", username=username)
             return render_template("passwordreset.html", username=username, security_question_1=security_question_1, security_question_2=security_question_2)
         else:
-            return apology("Invalid username")
-    
-    elif "security_answer_1" in request.form and "security_answer_2" in request.form:
-        username = request.form.get("username")
-        security_answer_1 = request.form.get("security_answer_1")
-        security_answer_2 = request.form.get("security_answer_2")
-        user = User.query.filter_by(username=username).first()
-    if user:
-        if not check_password_hash(user.security_answer_1, security_answer_1) or not check_password_hash(user.security_answer_2, security_answer_2):
-            return apology("incorrect answer", 403)
-        else:
-            return render_template("new_password.html", username=username)
-        
+            flash("Invalid user name", "error")
+            return render_template("passwordreset.html")
     return render_template("passwordreset.html")
-        
 @app.route("/wishlist", methods=["GET", "POST"])
 @login_required
 def wishlist():
