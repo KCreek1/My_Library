@@ -48,6 +48,7 @@ class BookGenre(Enum):
     ADVENTURE = "Adventure"
     SPIRITUALITY = "Spirituality"
     DRAMA = "Drama"
+    NONE = "None"
     
 class Book(db.Model):
     """ table for books entered into library by any user"""

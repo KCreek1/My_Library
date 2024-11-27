@@ -342,7 +342,50 @@ def new_password():
             app.logger.error(f"Error updating password: {e}")
             return redirect("/new_password")
     return render_template("new_password.html")
-
+                           
+@app.route("/move_to_library", methods=["POST"])
+@login_required
+def move_to_library():
+    """ Move book from wishlist to library """
+    user = get_current_user()
+    book_id = request.form.get("book_id")
+    
+    try:
+        wishlist_book = Wishlist.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
+        
+        if wishlist_book:
+            # create new book using wishlist info
+            default_genre = BookGenre.FICTION
+            
+            new_book = Book(
+                username_id=user.id,
+                title=wishlist_book.title,
+                author=wishlist_book.author,
+                year=wishlist_book.year,
+                genre=default_genre,
+                rating=1,
+                review=None,
+                private=False
+            )                                                              
+            # add to library
+            db.session.add(new_book)
+            
+            # delete from wishlist
+            db.session.delete(wishlist_book)
+            
+            db.session.commit()
+            flash("Book moved to library", "success")
+            return redirect("/library")
+        else:
+            flash("Book not found", "error")
+            return redirect("/wishlist")
+    except Exception as e:
+        db.session.rollback()
+        flash("Error moving book", "error")
+        app.logger.error(f"Error moving book: {e}")
+    
+    return redirect("/wishlist")
+    
 # copied from chat gpt to log errors
 # 404 Error Handler
 @app.errorhandler(404)
@@ -356,7 +399,3 @@ def internal_error(e):
     app.logger.error(f"500 Error: {e}, Route: {request.url}")  # Log with route
     return apology("Internal server error", 500)
 
-# Running the app
-# if __name__ == '__main__':
-    # app.run(debug=debug_mode)  # Will automatically set debug=True in development mode
-    
