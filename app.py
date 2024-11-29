@@ -221,12 +221,19 @@ def delete_book(book_type):
         if book_type == "library":
             book = Book.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
             if book:
+                # Delete reviews associated with the book
+                reviews = Review.query.filter_by(book_id=book.id).all()
+                for review in reviews:
+                    db.session.delete(review)
+
+                # Delete the book itself
                 db.session.delete(book)
                 db.session.commit()
-                flash("Book deleted", "success")
+                flash("Book and associated reviews deleted", "success")
                 return redirect("/library")
             else:
                 flash("Book not found", "error")
+            
         elif book_type == "wishlist":
             wishlist_book = Wishlist.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
             if wishlist_book:
@@ -264,6 +271,23 @@ def update_book():
             book.rating = request.form.get("rating")
             book.review = request.form.get("review")
             book.private = request.form.get("private") == "on"
+            
+            if book.rating and book.review:
+                existing_review = Review.query.filter_by(book_id=book.id, username_id=user.id).first()
+                
+                if existing_review:
+                    # Update the existing review
+                    existing_review.rating = book.rating
+                    existing_review.review = book.review
+                else:
+                    # Add new review
+                    new_review = Review(
+                        book_id=book.id,
+                        review=book.review,
+                        rating=book.rating,
+                        username_id=user.id
+                    )
+                    db.session.add(new_review)
             
             try:
                 db.session.commit()
@@ -303,51 +327,68 @@ def add_book(book_type):
         except KeyError:
             flash("Invalid genre selected", "error")
             return render_template("add_book.html", book_type=book_type, genres=BookGenre)
+        
         rating = request.form.get("rating")
         review = request.form.get("review")
         private = request.form.get("private") == "on"
         
-         # Convert year and rating to integers if they are provided
+        # Convert year and rating to integers if they are provided
         year = int(year) if year else 0  # Default to 0 if no year provided
         rating = int(rating) if rating else 0  # Default to 0 if no rating provided
         
-        if not title or not author or not genre: 
+        if not title or not author or not genre:
             flash("Title, Author, and Genre are required", "error")
             return render_template("add_book.html", book_type=book_type, genres=BookGenre)
         
-        if book_type == "library":
-            new_book = Book(username_id=user.id, title=title, author=author, series_name=series_name, year=year, genre=genre, rating=rating, review=review, private=private)
-        elif book_type == "wishlist":
-            new_book = Wishlist(username_id=user.id, title=title, author=author, series_name=series_name, year=year)
+        # Check if the book already exists
+        existing_book = Book.query.filter_by(title=title, author=author).first()
+        
+        if not existing_book:
+            # Create new book if it doesn't exist
+            if book_type == "library":
+                new_book = Book(username_id=user.id, title=title, author=author, series_name=series_name, year=year, genre=genre, rating=rating, review=review, private=private)
+            elif book_type == "wishlist":
+                new_book = Wishlist(username_id=user.id, title=title, author=author, series_name=series_name, year=year)
             
-        try:
-            db.session.add(new_book)
-            db.session.commit()
+            try:
+                db.session.add(new_book)
+                db.session.commit()
+                book_id = new_book.id  # Use the newly created book's ID
+            except Exception as e:
+                db.session.rollback()
+                flash("Error adding book", "error")
+                app.logger.error(f"Error adding book: {e}")
+                return redirect("/library" if book_type == "library" else "/wishlist")
+        else:
+            # Use existing book if it already exists
+            book_id = existing_book.id
+        
+        # Add a review entry only if the user provided a review and book is in library
+        if rating and review and book_type == "library":
+            existing_review = Review.query.filter_by(book_id=book_id, username_id=user.id).first()
             
-            # Add a review entry only if the user provided a review -from chat to populate review table
-            if rating and review and book_type == "library":
-                existing_review = Review.query.filter_by(book_id=new_book.id, username_id=user.id).first()
-                
-                # Add review only if it doesn't already exist
-                if not existing_review:
-                    new_review = Review(
-                        book_id=new_book.id,   # Link to the new book
-                        review=review,    # Review text from form
-                        rating=rating,         # Rating from form
-                        username_id=user.id    # The user who added the review
-                    )
+            # Add review only if it doesn't already exist
+            if not existing_review:
+                new_review = Review(
+                    book_id=book_id,  # Link to the existing or new book
+                    review=review,    # Review text from form
+                    rating=rating,    # Rating from form
+                    username_id=user.id  # The user who added the review
+                )
+                try:
                     db.session.add(new_review)
                     db.session.commit()
-                
-            flash("Book added", "success")
-            return redirect("/library" if book_type == "library" else "/wishlist")
-        except Exception as e:
-            db.session.rollback()
-            flash("Error adding book", "error")
-            app.logger.error(f"Error adding book: {e}")
-            return redirect("/library" if book_type == "library" else "/wishlist")
+                except Exception as e:
+                    db.session.rollback()
+                    flash("Error adding review", "error")
+                    app.logger.error(f"Error adding review: {e}")
+        
+        flash("Book added", "success")
+        return redirect("/library" if book_type == "library" else "/wishlist")
+    
     else:
         return render_template("add_book.html", book_type=book_type, genres=BookGenre)
+
 
 @app.route("/new_password", methods=["GET", "POST"])
 def new_password():
