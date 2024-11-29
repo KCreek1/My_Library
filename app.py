@@ -17,10 +17,6 @@ from models import Book, BookGenre, Review, User, Wishlist
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
 
-# from chatgpt for development purposes and debugging
-# Set the environment to development for local development or production for deployment
-# os.environ['FLASK_ENV'] = 'development'  # Change to 'production' when deploying
-
 # setting up db for sqlalchemy
 init_db(app)
 
@@ -186,7 +182,7 @@ def reviews():
             'Genre' : Book.genre,
             'Rating' : Book.rating
         }
-        results = Review.query.join(Book).filter(attributes[selection].ilike('%' + value + '%'), Book.private == False).all()
+        results = Review.query.join(Book).filter(attributes[value].ilike('%' + selection + '%'), Book.private == False).all()
         if not results:
             flash("No results found", "error")
         return render_template("reviews.html", select_value=select_values, results=results)
