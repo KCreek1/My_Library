@@ -33,37 +33,22 @@
     </thead>
     <tbody>
       {% if results %}
-        {% for review in results %}
-          <tr>
-            <td>{{ review.book.title }}</td>
-            <td>{{ review.book.author }}</td>
-            {% if review.book.year %}
-              <td>{{ review.book.year }}</td>
-            {% else %}
-              <td>none</td>
-            {% endif %}
-            {% if review.book.series_name %}
-              <td>{{ review.book.series_name }}</td>
-            {% else %}
-              <td>none</td>
-            {% endif %}
-            <td>{{ review.book.genre }}</td>
-            {% if review.book.rating %}
-              <td>{{ review.book.rating }}</td>
-            {% else %}
-              <td>none</td>
-            {% endif %}
-            {% if review.book.review %}
-              <td>{{ review.book.review }}</td>
-            {% else %}
-              <td>none</td>
-            {% endif %}
-          {% endfor %}
-        {% else %}
-          <tr>
-            <td colspan="7">No results to display.</td>
-          </tr>
-        {% endif %} 
+      {% for review in results %}
+        <tr>
+          <td>{{ review.book.title }}</td>
+          <td>{{ review.book.author }}</td>
+          <td>{{ review.book.year or 'None' }}</td>
+          <td>{{ review.book.series_name or 'None' }}</td>
+          <td>{{ review.book.genre.name.replace('_', ' ').title() }}</td>
+          <td>{{ review.rating }}</td>
+          <td>{{ review.review }}</td>
+        </tr>
+      {% endfor %}
+    {% else %}
+      <tr>
+        <td colspan="8">No reviews found.</td>
+      </tr>
+    {% endif %}
     </tbody>
   </table>
 {% endblock %}

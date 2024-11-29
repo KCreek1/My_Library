@@ -169,25 +169,48 @@ def register():
 @app.route("/reviews", methods=["GET", "POST"])
 @login_required
 def reviews():
-    """ enables users to see reviews for certain books """
+    """ enables users to see reviews for certain books from all users """
     select_values = select_value()
+    results = None # default to None for get requests
         
     if request.method == "POST":
-        selection = request.form.get("selection")
-        value = request.form.get("value")
+        selection = request.form.get("selection","").strip() # remove whitespace to avoid empty string
+        value = request.form.get("value", "").strip()
+        
         attributes = {
-            'Title' : Book.title,
-            'Author' : Book.author,
-            'Series' : Book.series_name,
-            'Genre' : Book.genre,
-            'Rating' : Book.rating
+            'Title': Book.title,
+            'Author': Book.author,
+            'Series Name': Book.series_name,
+            'Genre': Book.genre,
+            'Rating': Review.rating,  
         }
-        results = Review.query.join(Book).filter(attributes[value].ilike('%' + selection + '%'), Book.private == False).all()
-        if not results:
-            flash("No results found", "error")
-        return render_template("reviews.html", select_value=select_values, results=results)
-    return render_template("reviews.html", select_value=select_values, results=None)    
 
+        if not selection:
+            flash("Please enter a search term.", "error")
+        elif value not in attributes:
+            flash("Invalid search criteria. Please try again.", "error")
+        else:
+            try:
+                # Query reviews for books that match the criteria
+                query = (
+                    db.session.query(Review)
+                    .join(Book, Review.book_id == Book.id)
+                    .filter(
+                    attributes[value].ilike(f"%{selection.strip()}%"),
+                    Book.private == False
+                    )
+                )
+
+                print(query.statement)
+                # Fetch all matching results
+                results = query.all()
+
+                if not results:
+                    flash("No reviews found for the selected criteria.", "error")
+            except Exception as e:
+                flash(f"An error occurred: {str(e)}", "error")
+
+    return render_template("reviews.html", select_value=select_values, results=results)
 @app.route("/delete_book/<string:book_type>", methods=["POST"])
 @login_required
 def delete_book(book_type):
@@ -300,6 +323,22 @@ def add_book(book_type):
         try:
             db.session.add(new_book)
             db.session.commit()
+            
+            # Add a review entry only if the user provided a review -from chat to populate review table
+            if rating and review and book_type == "library":
+                existing_review = Review.query.filter_by(book_id=new_book.id, username_id=user.id).first()
+                
+                # Add review only if it doesn't already exist
+                if not existing_review:
+                    new_review = Review(
+                        book_id=new_book.id,   # Link to the new book
+                        review=review,    # Review text from form
+                        rating=rating,         # Rating from form
+                        username_id=user.id    # The user who added the review
+                    )
+                    db.session.add(new_review)
+                    db.session.commit()
+                
             flash("Book added", "success")
             return redirect("/library" if book_type == "library" else "/wishlist")
         except Exception as e:
