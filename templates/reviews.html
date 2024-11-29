@@ -3,22 +3,22 @@
 
 {% extends 'layout.html' %}
 
-{% block title %}My Library{% endblock %}
+{% block title %}/reviews{% endblock %}
 
 {% block content %}
   <h1>Reviews</h1>
   <p>Search for books by title, author, or series name</p>
-<form action="{{ url_for('reviews') }}" method="post">
+  <form action="{{ url_for('reviews') }}" method="post">
     <div class="mb-3">
-        <select class="form-control mx-auto w-auto" name="value">
-            {% for value in select_value %}
-                <option value="{{ value }}">{{ value }}</option>
-            {% endfor %}
-        </select>
+      <select class="form-control mx-auto w-auto" name="value">
+        {% for value in select_value %}
+          <option value="{{ value }}">{{ value }}</option>
+        {% endfor %}
+      </select>
     </div>
     <input type="text" name="selection" placeholder="Title, Author, Genre, Rating, or Series">
     <button type="submit">Search</button>
-</form>
+  </form>
   <table>
     <thead>
       <tr>
@@ -33,22 +33,22 @@
     </thead>
     <tbody>
       {% if results %}
-      {% for review in results %}
+        {% for review in results %}
+          <tr>
+            <td>{{ review.book.title }}</td>
+            <td>{{ review.book.author }}</td>
+            <td>{{ review.book.year or 'None' }}</td>
+            <td>{{ review.book.series_name or 'None' }}</td>
+            <td>{{ review.book.genre.name.replace('_', ' ').title() }}</td>
+            <td>{{ review.rating }}</td>
+            <td>{{ review.review }}</td>
+          </tr>
+        {% endfor %}
+      {% else %}
         <tr>
-          <td>{{ review.book.title }}</td>
-          <td>{{ review.book.author }}</td>
-          <td>{{ review.book.year or 'None' }}</td>
-          <td>{{ review.book.series_name or 'None' }}</td>
-          <td>{{ review.book.genre.name.replace('_', ' ').title() }}</td>
-          <td>{{ review.rating }}</td>
-          <td>{{ review.review }}</td>
+          <td colspan="8">No reviews found.</td>
         </tr>
-      {% endfor %}
-    {% else %}
-      <tr>
-        <td colspan="8">No reviews found.</td>
-      </tr>
-    {% endif %}
+      {% endif %}
     </tbody>
   </table>
 {% endblock %}

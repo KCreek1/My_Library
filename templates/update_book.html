@@ -2,7 +2,7 @@
 
 {% extends 'layout.html' %}
 
-{% block title %}Update{% endblock %}
+{% block title %}/update book{% endblock %}
 
 {% block content %}
     <h1>Update Book</h1>
@@ -12,7 +12,7 @@
         <input type="hidden" name="book_id" value="{{ book.id }}">
         <div class="mb-3">
             <label for="title" class="form-label">Title:</label>
-            <input type="text" class="form-control" id="title" name="title" value="{{ book.title }}" required="required">
+            <input type="text" id="title" name="title" value="{{ book.title }}" required="required">
         </div>
         <div class="mb-3">
             <label for="author">Author:</label>
@@ -24,10 +24,10 @@
         </div>
         <div class="mb-3">
             <label for="genre">Genre:</label>
-            <select class="form-control" id="genre" name="genre" required>
+            <select id="genre" name="genre" required>
                 {% for genre in genres %}
-                    <option value="{{ genre.value }}" {% if book.genre == genre.value %}selected{% endif %}{{ genre.name.replace('_', ' ') }}>
-                        {{ genre.name }}
+                    <option value="{{ genre.value }}" {% if book.genre == genre.value %}selected{% endif %}>
+                        {{ genre.name.replace('_', ' ') }}
                     </option>
                 {% endfor %}
             </select>

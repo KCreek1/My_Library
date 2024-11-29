@@ -107,11 +107,11 @@ def passwordreset():
             flash("Invalid user name", "error")
             return render_template("passwordreset.html")
     return render_template("passwordreset.html")
+
 @app.route("/wishlist", methods=["GET", "POST"])
 @login_required
 def wishlist():
     """ will return a list of books that the user has added to their wishlist"""      
-
     user = get_current_user()
     books = Wishlist.query.filter_by(username_id=user.id).all()
     return render_template('wishlist.html', books=books, user=user)
@@ -211,6 +211,7 @@ def reviews():
                 flash(f"An error occurred: {str(e)}", "error")
 
     return render_template("reviews.html", select_value=select_values, results=results)
+
 @app.route("/delete_book/<string:book_type>", methods=["POST"])
 @login_required
 def delete_book(book_type):
