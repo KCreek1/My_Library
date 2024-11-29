@@ -79,6 +79,6 @@ The following is a description of the routes:
 
 **Planned Future Improvements:**
 
-    **Profile Page:** This will include an about me page as well as the ability to reset password.
-    
-    **Borrow:**  Added functionality to request to borrow books from users that you are familiar with in your local area.
+Profile Page: This will include an about me page as well as the ability to reset password.
+
+Borrow:  Added functionality to request to borrow books from users that you are familiar with in your local area.
