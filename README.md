@@ -1,5 +1,5 @@
 # My_Library 
-#### Video Demo: <url here>
+#### Video Demo: <https://youtu.be/aaVh062R8iM?feature=shared>
 #### Description: 
 
 This is intended to be a personal use library for bookworms.  Maybe you have dozens or even hundreds of books.  How do you keep track of them?
@@ -8,12 +8,12 @@ With this web app you will have easy access to a database of books you own, book
 
 #### Design Choices:
 
-I chose a flask app because we not only used it in class but because python is very intuitive for me.
-I chose sqalchemy for the orm models and because I have beta tested and assisted with codecommits in a webapp with sqlalchemy.
-Although not overly familiar, I thought a good starting point so as to not be overwhelmed.
+I chose a flask app because we not only used it in class but because python feels very intuitive for me.
+I chose sqalchemy for the orm models and because I have beta tested and assisted with code/commits in a webapp with sqlalchemy.
+Although not overly familiar, I thought it would be a good starting point so as to not be overwhelmed.
 Likewise for Heroku postgresql. I wanted a cloudbased server that I myself did not have to maintain. And I want users to be able to use the app whenever they choose. 
-The app is heavy on the user's ability to add to and update their information, so it seemed a wise choice.
-In addition, I would like to be able to make the app publicly available and Heroku offers app hosting.
+The app is heavy on the user's ability to add to and update their information so it seemed a logical choice.
+In addition, I would like to be able to make the app publicly available in the future and Heroku offers hosting services.
 For me, a flask-sqlalchemy-postgresql structure seemed most logical.
 
 #### Project Structure:
@@ -23,7 +23,7 @@ For me, a flask-sqlalchemy-postgresql structure seemed most logical.
 
 **Gitignore:**  This folder is to place files that are not to be passed to other potential developers.  It includes the following standard files and folders:
 
-- .env:  I have placed the Heroku database credentials in this folder so that I can then put it in gitignore.  This way it will be obscured for security.  As well as allowing for ease in changing credentials if needed.
+- .env:  I have placed the Heroku database credentials in this folder so that I can then put them in gitignore.  This way it will be obscured for security.  As well as allowing for ease in changing credentials if needed.
 
 - .venv:**  To place the local virtual environment.
 
@@ -46,7 +46,7 @@ For me, a flask-sqlalchemy-postgresql structure seemed most logical.
 
 - get_current_user: retrieves user_id to use in queries.
 
-- get_questions_1() and get_questions_2():  provides security questions list to be used in the register and password_reset routes/templates. 
+- get_questions_1() and get_questions_2():  provides security questions lists to be used in the register and password_reset routes/templates. 
 
 - select_values(): provides list of options for search menu in the reviews route/template.
 
@@ -59,9 +59,9 @@ For me, a flask-sqlalchemy-postgresql structure seemed most logical.
 
 - Wishlist:  table model for books that a user would like to own. The data contained therein are the book title, author, year published, and series name (if applicable).
 
-- Review: table model designed to allow for a user to see all ratings and reviews from all users for a particular book (that are not set to private). 
+- Review: table model designed to allow for a user to see all ratings and reviews from all users for a particular book. (Unless a book is set to private - those are not included.) 
 
-- BookGenre: this is and enum designed to limit the selection of genres that can be chosed to facilitate ease in searching for ratings and reviews.
+- BookGenre: this is an enum designed to limit the selection of genres that can be chosed to facilitate ease in input and searching for ratings and reviews.
 
 
 **app.py:**  This is the flask/python code that contains all the routes for this program.  There is standard setup that was used as a guide from the original finance project. This includes the app.config, init_db(app), app= Flask(__name__). 
@@ -80,7 +80,7 @@ The following is a description of the routes:
 
 - index: The page a user will first come upon.  It contains basic info as to what the app does and how it can be used.
 
-- library: Once a user is logged in a homepage is displayed.  This queries the book table and passes the values to a table of books owned by the user.  It includes the ability to add new books, update current books, and delete books.
+- library: Once a user is logged in a homepage is displayed.  This queries the book table and passes the values to a table of books owned by the user.  It includes the ability to add new books, update current books, and delete books. As well as to search your library by title, author, genre, series, and rating.
 
 - wishlist:  This queries the wishlist table and passes the values to a table of books the user wishes to own.  It includes the ability to add new books, move books from the wishlist to the library, and delete books.
 
@@ -88,7 +88,7 @@ The following is a description of the routes:
 
 - add_book: This takes an argument of book_type.  Depending on whether a user is adding a book from library or wishlist - once the user inputs the book info it will be saved to the correct table.  Title, author, and genre are required.  Other fields are populated by default values if the user does not input them.  Books in library may also be set to private to prevent them from being queried by other users in reviews.
 
-- delete_book:  This also takes an argument of book_type.  It is connected in the row of the table via the book_id so when it is clicked it will deleted the associated book from the correct table.  Withint the template is a launched confirmation popup to avoid unintended deletion.
+- delete_book:  This also takes an argument of book_type.  It is connected in the row of the table via the book_id so when it is clicked it will deleted the associated book from the correct table.  Within the template is a launched confirmation popup to avoid unintended deletion.
 
 - update_book: This is available in library so a user may update book details and add any you may be missing.  Updating the book table.
 
@@ -97,9 +97,9 @@ The following is a description of the routes:
 - app.errorhandler:  Throughout the routes I have implemented this route so errors can be logged to aid in debugging.  This in conjuction with try/except and db.session.rollback() will help handle errors while assisting in debugging and maintains the integrity of the database when errors do occur.
 
 
-**Templates:**  Standard html/jinja2 templates designed to workd with the routes.
+**Templates:**  Standard html/jinja2 templates designed to work with the routes.
 
-- layout: Sets the basics of the pages to be extended.  It does source bootstrap.  It contains a navbar for which only Register and Login appear when a user is not logged in.  Once a user is logged in, additional options of My Library, Wishlist, Reviews, and Logout appear.
+- layout: Sets the basics of the pages to be extended.  It does source bootstrap.  It contains a navbar for which only Register and Login appear when a user is not logged in.  Once a user is logged in, additional options of My Books, Wishlist, Reviews, and Logout appear.
 
 - register:  Form with user information fields including username, password, confirmation, security questions dropdowns (x2), and security answers (x2).
 
@@ -111,9 +111,9 @@ The following is a description of the routes:
 
 - index:  A simple text page that contains information on the web app.
 
-- library:  Once a user logs in, this page displays a table of the books and user currently owns and the details of the books.  It also contains an "Add Book" button as well as "Update Book" and "Delete" buttons - all of which launch their associated templates, if they exist. "Delete" launches a confirmation popup so avoid unintended deletions.
+- library:  (aka My Books) Once a user logs in, this page displays a table of the books and user currently owns and the details of the books.  It also contains an "Add Book" button as well as "Update Book" and "Delete" buttons - all of which launch their associated templates, if they exist. "Delete" launches a confirmation popup so avoid unintended deletions.  There is also a search field to narrow the list of books you are currently viewing.
 
-- wishlist:  This page contains a table of books a user would like to own and the details of those books. Like the Library page, it also has an "Add Book" and a "Delete" button with the same functions.  It also has a "Move to Library" button that a user can click to move the selected book from Wishlist to Library.
+- wishlist:  This page contains a table of books a user would like to own and the details of those books. Like the My Books page, it also has an "Add Book" and a "Delete" button with the same functions.  It also has a "Move to Library" button that a user can click to move the selected book from Wishlist to My Books.
 
 - reviews:  This allows a user to query for ratings and review of books based on selected criteria: Title, Author, Genre, Series.  It will then populate a table of all reviews for all users meeting that criteria.  It will filter out any books marked "private".
 
@@ -129,3 +129,5 @@ The following is a description of the routes:
 - Profile Page: This will include an about me page as well as the ability to reset password.
 
 - Borrow:  Added functionality to request to borrow books from users that you are familiar with in your local area.
+
+- Delete user:  Allow users to leave the site permanently, if they wish.
