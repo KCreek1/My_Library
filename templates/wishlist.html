@@ -52,6 +52,11 @@
                     </td>
                 </tr>
             {% endfor %}
+            {% if not books %}
+                <tr>
+                    <td colspan="5">No books in your wishlist.</td>
+                </tr>
+            {% endif %}
         </tbody>
     </table>
     <script>

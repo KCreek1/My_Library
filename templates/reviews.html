@@ -16,7 +16,7 @@
         {% endfor %}
       </select>
     </div>
-    <input type="text" name="selection" placeholder="Title, Author, Genre, Rating, or Series">
+    <input type="text" name="selection" placeholder="Title, Author, Rating, or Series">
     <button type="submit">Search</button>
   </form>
   <table>
@@ -26,7 +26,7 @@
         <th style="width:10%">Author</th>
         <th style="width:5%">Year</th>
         <th style="width:10%">Series</th>
-        <th style="width:10%">Genre</th>
+        <th style="width:10%">User</th>
         <th style="width:5%">Rating</th>
         <th style="width:30%">Review</th>
       </tr>
@@ -39,14 +39,15 @@
             <td>{{ review.book.author }}</td>
             <td>{{ review.book.year or 'None' }}</td>
             <td>{{ review.book.series_name or 'None' }}</td>
-            <td>{{ review.book.genre.name.replace('_', ' ').title() }}</td>
+            
+            <td>{{ review.book.user.username }}</td>
             <td>{{ review.rating }}</td>
             <td>{{ review.review }}</td>
           </tr>
         {% endfor %}
       {% else %}
         <tr>
-          <td colspan="8">No reviews found.</td>
+          <td colspan="8">Search to find reviews.</td>
         </tr>
       {% endif %}
     </tbody>

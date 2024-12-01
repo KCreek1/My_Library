@@ -38,13 +38,39 @@ def index():
     """ will display generic info about app """
     return render_template("index.html")
 
-@app.route("/library")
+@app.route("/library", methods=["GET", "POST"])
 @login_required
 def library():
-    """ will display a table of books for the logged in user"""
+    """Display a table of books in the user's library with advanced search functionality."""
     user = get_current_user()
-    books = Book.query.filter_by(username_id=user.id).all()
-    return render_template('library.html', books=books, user=user)
+    books_query = Book.query.filter_by(username_id=user.id)  # Base query for the user's books
+    search_term = None  # Default search term
+
+    if request.method == "POST":
+        # Check if the "Clear Search" button was pressed
+        if request.form.get("clear") == "true":
+            # Clear the search by resetting the search term
+            search_term = ""
+        else:
+            search_term = request.form.get("search", "").strip()  # Get the search term and strip whitespace
+
+        if search_term:
+            # Dynamically filter by multiple attributes
+            try:
+                search_rating = int(search_term)  # Try to interpret the search term as an integer
+            except ValueError:
+                search_rating = None  # If conversion fails, it's not a number
+            
+            books_query = books_query.filter(
+                (Book.title.ilike(f"%{search_term}%")) | 
+                (Book.author.ilike(f"%{search_term}%")) |
+                (Book.series_name.ilike(f"%{search_term}%")) |
+                (db.cast(Book.genre, db.String).ilike(f"%{search_term}%")) |  # Handles genre appropriately|
+                ((Book.rating == search_rating) if search_rating is not None else False)  # Exact match for integer ratings
+            )
+
+    books = books_query.all()
+    return render_template("library.html", books=books, user=user, search_term=search_term)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -181,7 +207,6 @@ def reviews():
             'Title': Book.title,
             'Author': Book.author,
             'Series Name': Book.series_name,
-            'Genre': Book.genre,
             'Rating': Review.rating,  
         }
 
@@ -192,16 +217,29 @@ def reviews():
         else:
             try:
                 # Query reviews for books that match the criteria
-                query = (
-                    db.session.query(Review)
-                    .join(Book, Review.book_id == Book.id)
-                    .filter(
-                    attributes[value].ilike(f"%{selection.strip()}%"),
-                    Book.private == False
+                if value == "Rating" and selection.isdigit():
+                    query = (
+                        db.session.query(Review)
+                        .join(Book, Review.book_id == Book.id)  # Join the review and book tables        
+                        .filter(Review.rating == int(selection), 
+                        Book.private == False)
                     )
-                )
+                    
+                elif value != "Rating":
+                    query = (
+                        db.session.query(Review)
+                        .join(Book, Review.book_id == Book.id)
+                        .filter(
+                        attributes[value].ilike(f"%{selection.strip()}%"),
+                        Book.private == False
+                     )
+                    )
+                    
+                else:
+                    flash("Invalid rating input. Please enter a valid number.", "error")
+                    query = None
 
-                print(query.statement)
+                print(query.statement) # print the SQL statement for debugging
                 # Fetch all matching results
                 results = query.all()
 
