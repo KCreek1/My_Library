@@ -60,7 +60,7 @@ class Book(db.Model):
     title = db.Column(db.String(150), nullable=False, default='Untitled')
     author = db.Column(db.String(50), nullable=False, default='Unknown')
     year = db.Column(db.Integer, default=0)
-    genre = db.Column(SQLAlchemyEnum(BookGenre), nullable=False, default=BookGenre.FICTION) # using enum to ensure limited choices
+    genre = db.Column(SQLAlchemyEnum(BookGenre), nullable=False, default=BookGenre.fiction) # using enum to ensure limited choices
     series_name = db.Column(db.String(50), default='None')
     rating = db.Column(db.Integer, default=0)
     review = db.Column(db.String(300), default='No review yet') 
