@@ -12,7 +12,7 @@ from sqlalchemy.exc import IntegrityError
 
 from database import db, init_db
 from helpers import apology, get_current_user, get_questions_1, get_questions_2, login_required, select_value
-from models import Book, BookGenre, Review, User, Wishlist
+from models import Book, BookGenre, Review, Users, Wishlist
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -89,7 +89,7 @@ def login():
         
         # query db for username
         username = request.form.get("username")
-        user = User.query.filter_by(username=username).first()
+        user = Users.query.filter_by(username=username).first()
         
         # make sure username exists and password correct
         if user is None or not check_password_hash(user.hash, request.form.get("password")):
@@ -115,7 +115,7 @@ def passwordreset():
     """ reset password """
     if request.method == "POST":
         username = request.form.get("username")
-        user = User.query.filter_by(username=username).first()
+        user = Users.query.filter_by(username=username).first()
         if user:
             session['username'] = username
             security_question_1 = user.security_question_1
@@ -173,7 +173,7 @@ def register():
        
         # insert into db for login
         try:
-            new_user = User(
+            new_user = Users(
                 username=username, 
                 hash=hash, 
                 security_question_1=security_question_1, 
@@ -311,7 +311,7 @@ def update_book():
             book.review = request.form.get("review")
             book.private = request.form.get("private") == "on"
             
-            if book.rating and book.review:
+            if book.review:
                 existing_review = Review.query.filter_by(book_id=book.id, username_id=user.id).first()
                 
                 if existing_review:
@@ -438,7 +438,7 @@ def new_password():
         flash("Session expired or no username", "error")
         return redirect("/passwordreset")
     
-    user = User.query.filter_by(username=username).first()
+    user = Users.query.filter_by(username=username).first()
     if not user:
         flash("Invalid username", "error")
         return redirect("/passwordreset")

@@ -1,7 +1,7 @@
 from flask import redirect, render_template, session
 from functools import wraps
 
-from models import User
+from models import Users
 
 # using apology helper from finance pset
 def apology(message, code=400):
@@ -35,14 +35,14 @@ def login_required(f):
     """        
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if session.get("user_id") is None:
+        if session.get("users_id") is None:
             return redirect("/login")
         return f(*args, **kwargs)
     return decorated_function
 
 def get_current_user():
-    user_id = session["user_id"]
-    return User.query.get(user_id)
+    users_id = session["users_id"]
+    return Users.query.get(users_id)
 
 def get_questions_1():
     return [
