@@ -35,13 +35,13 @@ def login_required(f):
     """        
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if session.get("users_id") is None:
+        if session.get("user_id") is None:
             return redirect("/login")
         return f(*args, **kwargs)
     return decorated_function
 
 def get_current_user():
-    users_id = session["users_id"]
+    users_id = session["user_id"]
     return Users.query.get(users_id)
 
 def get_questions_1():
