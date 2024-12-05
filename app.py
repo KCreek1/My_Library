@@ -207,7 +207,7 @@ def reviews():
             'Title': Book.title,
             'Author': Book.author,
             'Series Name': Book.series_name,
-            'Rating': Review.rating,  
+            'Rating': Review.rating,
         }
 
         if not selection:
@@ -303,7 +303,7 @@ def update_book():
             book.year = request.form.get("year")
             book.genre = request.form.get("genre")
             try:
-                book.genre = BookGenre[book.genre.upper().replace(' ', '_')]
+                book.genre = book.genre.lower().replace(' ', '_')
             except KeyError:
                 flash("Invalid genre selected", "error")
                 return render_template("update_book.html", book=book, genres=BookGenre)
@@ -362,7 +362,7 @@ def add_book(book_type):
         series_name = request.form.get("series_name")
         genre = request.form.get("genre")
         try:
-            genre = BookGenre[genre.upper().replace(' ', '_')]
+            genre = genre.lower().replace(' ', '_')
         except KeyError:
             flash("Invalid genre selected", "error")
             return render_template("add_book.html", book_type=book_type, genres=BookGenre)
@@ -483,7 +483,7 @@ def move_to_library():
         
         if wishlist_book:
             # create new book using wishlist info
-            default_genre = BookGenre.FICTION
+            default_genre = BookGenre.fiction
             
             new_book = Book(
                 username_id=user.id,
