@@ -50,3 +50,10 @@ p {
   th, td {
     border: 1px solid #ccc;
   }
+
+  img {
+    display: block;
+    width: 200px;
+    height: 100px;
+    margin: 0 auto;
+  }
