@@ -15,42 +15,6 @@ class Users(db.Model):
     email = db.Column(db.String(254), default=None) # not currently in use - but may be in the future
     about_me = db.Column(db.String(300), default=None) # nost currently in use - but may be in the future
     
-    # copied from chatgpt for ease in typing the enums
-class BookGenre(Enum):
-    fiction = "Fiction"
-    non_fiction = "Non-Fiction"
-    fantasy = "Fantasy"
-    science_fiction = "Science Fiction"
-    mystery = "Mystery"
-    romance = "Romance"
-    historical = "Historical"
-    biography = "Biography"
-    self_help = "Self-Help"
-    children = "Children"
-    young_adult = "Young Adult"
-    horror = "Horror"
-    poetry = "Poetry"
-    classics = "Classics"
-    comics = "Comics"
-    cooking = "Cooking"
-    travel = "Travel"
-    art = "Art"
-    religion = "Religion"
-    philosophy = "Philosophy"
-    science = "Science"
-    health = "Health"
-    business = "Business"
-    technology = "Technology"
-    music = "Music"
-    sports = "Sports"
-    parenting = "Parenting"
-    literature = "Literature"
-    adventure = "Adventure"
-    spirituality = "Spirituality"
-    drama = "Drama"
-    none = "None"
-
-    
 class Book(db.Model):
     """ table for books entered into library by any user"""
     __tablename__ = 'book'
@@ -59,8 +23,8 @@ class Book(db.Model):
     user = db.relationship('Users', backref='books') # per codieum, try backref, plural for many books
     title = db.Column(db.String(150), nullable=False, default='Untitled')
     author = db.Column(db.String(50), nullable=False, default='Unknown')
-    year = db.Column(db.Integer, default=0)
-    genre = db.Column(SQLAlchemyEnum(BookGenre), nullable=False, default=BookGenre.fiction) # using enum to ensure limited choices
+    year = db.Column(db.String(4), default='Unknown')
+    genre = db.Column(db.String(50), nullable=False, default='None') # will use list to limit choices
     series_name = db.Column(db.String(50), default='None')
     rating = db.Column(db.Integer, default=0)
     review = db.Column(db.String(300), default='No review yet') 

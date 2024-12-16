@@ -362,7 +362,7 @@ def add_book(book_type):
         series_name = request.form.get("series_name")
         genre = request.form.get("genre")
         try:
-            genre = genre.lower().replace(' ', '_')
+            genre = BookGenre.value.lower().replace(' ', '_').replace('-', '_')
         except KeyError:
             flash("Invalid genre selected", "error")
             return render_template("add_book.html", book_type=book_type, genres=BookGenre)
