@@ -20,14 +20,14 @@
         </div>
         <div class="mb-3">
             <label for="year">Year:</label>
-            <input type="number" id="year" name="year" value="{{ book.year }}">
+            <input type="text" id="year" name="year" value="{{ book.year }}">
         </div>
         <div class="mb-3">
             <label for="genre">Genre:</label>
             <select id="genre" name="genre" required>
                 {% for genre in genres %}
-                    <option value="{{ genre.value }}" {% if book.genre == genre.value %}selected{% endif %}>
-                        {{ genre.name.replace('_', ' ') }}
+                    <option value="{{ genre }}" {% if book.genre == genre %}selected{% endif %}>
+                        {{ genre }}
                     </option>
                 {% endfor %}
             </select>

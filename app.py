@@ -11,8 +11,8 @@ import logging
 from sqlalchemy.exc import IntegrityError
 
 from database import db, init_db
-from helpers import apology, get_current_user, get_questions_1, get_questions_2, login_required, select_value
-from models import Book, BookGenre, Review, Users, Wishlist
+from helpers import apology, get_current_user, get_questions_1, get_questions_2, login_required, select_value, genre_selection
+from models import Book, Review, Users, Wishlist
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
@@ -65,7 +65,7 @@ def library():
                 (Book.title.ilike(f"%{search_term}%")) | 
                 (Book.author.ilike(f"%{search_term}%")) |
                 (Book.series_name.ilike(f"%{search_term}%")) |
-                (db.cast(Book.genre, db.String).ilike(f"%{search_term}%")) |  # Handles genre appropriately|
+                (Book.genre.ilike(f"%{search_term}%")) |
                 ((Book.rating == search_rating) if search_rating is not None else False)  # Exact match for integer ratings
             )
 
@@ -207,6 +207,7 @@ def reviews():
             'Title': Book.title,
             'Author': Book.author,
             'Series Name': Book.series_name,
+            'Genre': Book.genre,
             'Rating': Review.rating,
         }
 
@@ -293,6 +294,7 @@ def delete_book(book_type):
 def update_book():
     """ Allows user to update the details of a book """
     user = get_current_user()
+    genres = genre_selection()
     if request.method == "POST":
         book_id = request.form.get("book_id")
         book = Book.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
@@ -302,11 +304,6 @@ def update_book():
             book.series_name = request.form.get("series_name")
             book.year = request.form.get("year")
             book.genre = request.form.get("genre")
-            try:
-                book.genre = book.genre.lower().replace(' ', '_')
-            except KeyError:
-                flash("Invalid genre selected", "error")
-                return render_template("update_book.html", book=book, genres=BookGenre)
             book.rating = request.form.get("rating")
             book.review = request.form.get("review")
             book.private = request.form.get("private") == "on"
@@ -343,41 +340,31 @@ def update_book():
     else:
         book_id = request.args.get("book_id")
         book = Book.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
-        if book:
-            genres = [{"value": genre.value, "name": genre.name} for genre in BookGenre]  # Prepare genres
-            return render_template("update_book.html", book=book, genres=genres)
-        else:
-            flash("Book not found", "error")
-            return redirect("/library")
+        return render_template("update_book.html", book=book, genres=genres)
 
 @app.route("/add_book/<string:book_type>", methods=["GET", "POST"])
 @login_required
 def add_book(book_type):
     """ User adds new book to the library """
     user = get_current_user()
+    genres = genre_selection()
+    
     if request.method == "POST":
         title = request.form.get("title")
         author = request.form.get("author")
         year = request.form.get("year")
         series_name = request.form.get("series_name")
         genre = request.form.get("genre")
-        try:
-            genre = BookGenre.value.lower().replace(' ', '_').replace('-', '_')
-        except KeyError:
-            flash("Invalid genre selected", "error")
-            return render_template("add_book.html", book_type=book_type, genres=BookGenre)
-        
         rating = request.form.get("rating")
         review = request.form.get("review")
         private = request.form.get("private") == "on"
         
-        # Convert year and rating to integers if they are provided
-        year = int(year) if year else 0  # Default to 0 if no year provided
+        # Convert rating to integer if it is provided
         rating = int(rating) if rating else 0  # Default to 0 if no rating provided
         
         if not title or not author or not genre:
             flash("Title, Author, and Genre are required", "error")
-            return render_template("add_book.html", book_type=book_type, genres=BookGenre)
+            return render_template("add_book.html", book_type=book_type)
         
         # Check if the book already exists
         existing_book = Book.query.filter_by(title=title, author=author).first()
@@ -426,7 +413,7 @@ def add_book(book_type):
         return redirect("/library" if book_type == "library" else "/wishlist")
     
     else:
-        return render_template("add_book.html", book_type=book_type, genres=BookGenre)
+        return render_template("add_book.html", book_type=book_type, genres=genres)
 
 
 @app.route("/new_password", methods=["GET", "POST"])
@@ -483,7 +470,7 @@ def move_to_library():
         
         if wishlist_book:
             # create new book using wishlist info
-            default_genre = BookGenre.fiction
+            default_genre = 'None'
             
             new_book = Book(
                 username_id=user.id,

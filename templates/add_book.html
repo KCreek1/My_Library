@@ -29,7 +29,7 @@
             <label for="genre">Genre:</label>
             <select id="genre" name="genre" required>
                 {% for genre in genres %}
-                    <option value="{{ genre.value }}">{{ genre.name.replace('_', ' ') }}</option>
+                    <option value="{{ genre }}">{{ genre }}</option>
                 {% endfor %}
             </select>
         </div>

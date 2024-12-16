@@ -39,7 +39,7 @@ class Wishlist(db.Model):
     title = db.Column(db.String(50), nullable=False)
     author = db.Column(db.String(50), nullable=False)
     series_name = db.Column(db.String(50), nullable=True)
-    year = db.Column(db.Integer, default=0)
+    year = db.Column(db.String(4), default='None')
     
 class Review(db.Model):
     """ table for reviews of books"""    
