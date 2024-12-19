@@ -75,7 +75,7 @@ def library():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     # Forget any user_id
-    session.clear()
+    # session.clear()
     
     # If via POST (using form)
     if request.method == "POST":
@@ -108,6 +108,7 @@ def login():
 def logout():
     # forget user
     session.clear()
+    flash("You have been logged out", "success")
     return redirect("/")
 
 @app.route("/passwordreset", methods=["GET", "POST"])
