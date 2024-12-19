@@ -1,8 +1,9 @@
 /* stylesheet for mylibrary */
 a.navbar-brand {
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: rgb(241, 152, 35);
-    font-size: 40px;
+    color: rgb(214, 132, 25);
+    font-size: 45px;
+    text-shadow: 0 1px rgb(134, 59, 9), 1px 0 rgb(134, 59, 9);
 }
 
 li.nav-item {
@@ -56,4 +57,12 @@ p {
     width: 200px;
     height: 100px;
     margin: 0 auto;
+  }
+
+  body {
+    background-color: rgb(248, 223, 152);
+  }
+
+  h1 {
+    margin-bottom: 30px;
   }
