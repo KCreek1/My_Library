@@ -5,7 +5,7 @@ import os
 from flask_sqlalchemy import SQLAlchemy 
 
 #load_dotenv(dotenv_path='./.env')
-database_url = os.getenv('DATABASE_URL')
+database_url = os.getenv('DATABASE_URL').replace("postgres://", "postgresql://", 1)
 
 # print(f"Database URL: {database_url}")
 
