@@ -17,7 +17,7 @@
             <input class="form-control mx-auto w-auto" name="confirmation" placeholder="Confirm Password" type="password">
         </div>
         <div class="mb-3">
-            <select class="form-control mx-auto w-auto" name="security_question_1">
+            <select class="form-select mx-auto w-auto" name="security_question_1">
                 {% for question in get_questions_1 %}
                     <option value="{{ question }}">{{ question }}</option>
                 {% endfor %}
@@ -27,7 +27,7 @@
             <input class="form-control mx-auto w-auto" name="security_answer_1" placeholder="Answer (case sensitive)" type="text">
         </div>
         <div class="mb-3">
-            <select class="form-control mx-auto w-auto" name="security_question_2">
+            <select class="form-select mx-auto w-auto" name="security_question_2">
                 {% for question in get_questions_2 %}
                     <option value="{{ question }}">{{ question }}</option>
                 {% endfor %}
