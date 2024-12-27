@@ -7,49 +7,55 @@
 
 {% block content %}
   <h1>Reviews</h1>
-  <p>Search for books by title, author, or series name</p>
+  <p>Search for books by title, author, genre, series name, or rating</p>
   <form action="{{ url_for('reviews') }}" method="post">
     <div class="mb-3">
-      <select class="form-control mx-auto w-auto" name="value">
+      <select class="form-select mx-auto w-auto" name="value">
+        <option value="" disabled selected>Select Search Category</option>
         {% for value in select_value %}
           <option value="{{ value }}">{{ value }}</option>
         {% endfor %}
       </select>
-    </div>
-    <input type="text" name="selection" placeholder="Title, Author, Rating, or Series">
+    
+    <input type="text" name="selection" placeholder="Search criteria">
     <button type="submit">Search</button>
+    </div>
   </form>
-  <table>
-    <thead>
-      <tr>
-        <th style="width:20%">Title</th>
-        <th style="width:10%">Author</th>
-        <th style="width:5%">Year</th>
-        <th style="width:10%">Series</th>
-        <th style="width:10%">User</th>
-        <th style="width:5%">Rating</th>
-        <th style="width:30%">Review</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% if results %}
-        {% for review in results %}
+
+  <div class="container-fluid">
+    <div class="table-responsive">
+     <table class='table' style="width:100%">
+        <thead>
           <tr>
-            <td>{{ review.book.title }}</td>
-            <td>{{ review.book.author }}</td>
-            <td>{{ review.book.year or 'None' }}</td>
-            <td>{{ review.book.series_name or 'None' }}</td>
-            
-            <td>{{ review.book.user.username }}</td>
-            <td>{{ review.rating }}</td>
-            <td>{{ review.review }}</td>
+            <th style="width:20%">Title</th>
+            <th style="width:10%">Author</th>
+            <th style="width:5%">Year</th>
+            <th style="width:10%">Series</th>
+            <th style="width:10%">User</th>
+            <th style="width:5%">Rating</th>
+            <th style="width:30%">Review</th>
           </tr>
-        {% endfor %}
-      {% else %}
-        <tr>
-          <td colspan="8">Search to find reviews.</td>
-        </tr>
-      {% endif %}
-    </tbody>
-  </table>
+        </thead>
+        <tbody>
+          {% if results %}
+            {% for review in results %}
+              <tr>
+                <td>{{ review.book.title }}</td>
+                <td>{{ review.book.author }}</td>
+                <td>{{ review.book.year or 'None' }}</td>
+                <td>{{ review.book.series_name or 'None' }}</td>
+                <td>{{ review.book.user.username }}</td>
+                <td>{{ review.rating }}</td>
+                <td>{{ review.review }}</td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="8">Search to find reviews.</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 {% endblock %}

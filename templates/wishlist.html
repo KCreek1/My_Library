@@ -9,56 +9,67 @@
 {% block content %}
     <h1>My Wishlist</h1>
     <!-- field to enter new book -->
-    <a href="{{ url_for('add_book', book_type='wishlist') }}" class="btn btn-primary button">Add Book</a>
-    
-    <table class='table' style="width:100%">
-        <thead>
-            <tr>
-                <th style="width:20%">Title</th>
-                <th style="width:10%">Author</th>
-                <th style="width:20%">Series</th>
-                <th style="width:10%">Year</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for book in books %}
-                <tr>
-                    <td>{{ book.title }}</td>
-                    <td>{{ book.author }}</td>
-                    {% if book.series_name %} <!-- since this column is nullable, check for null -->
-                        <td>{{ book.series_name }}</td>
-                    {% else %}
-                        <td>none</td>
+    <div class="container-fluid">
+        <div class="d-flex justify-content-end mb-3">
+          <a href="{{ url_for('add_book', book_type='library') }}" class="btn btn-primary button">Add Book</a>
+        </div>
+        
+        <div class="table-responsive">
+            <table class='table' style="width:100%">
+                <thead>
+                    <tr>
+                        <th style="width:20%">Title</th>
+                        <th style="width:10%">Author</th>
+                        <th style="width:20%">Series</th>
+                        <th style="width:10%">Year</th>
+                        <th style="width:10%">Genre</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in books %}
+                        <tr>
+                            <td>{{ book.title }}</td>
+                            <td>{{ book.author }}</td>
+                            {% if book.series_name %} <!-- since this column is nullable, check for null -->
+                                <td>{{ book.series_name }}</td>
+                            {% else %}
+                                <td>none</td>
+                            {% endif %}
+                            {% if book.year %} <!-- since this column is nullable, check for null-->
+                                <td>{{ book.year }}</td>
+                            {% else %}
+                                <td>none</td>
+                            {% endif %}
+                            {% if book.genre %}
+                                <td>{{ book.genre }}</td>
+                            {% else %}
+                                <td>none</td>
+                            {% endif %}
+                            <td>
+                                <!-- Button to move the book to the library -->
+                                <form method="post" action="{{ url_for('move_to_library') }}">
+                                    <input type="hidden" name="book_id" value="{{ book.id }}">
+                                    <button type="submit" class="btn btn-primary btn-sm">Move to Library</button>
+                                </form>
+                            </td>
+                            <td> <!-- chatgpt help in adding confirmDelete() function-->
+                                <form method="post" action="{{ url_for('delete_book', book_type='wishlist') }}">
+                                    <input type="hidden" name="book_id" value="{{ book.id }}">
+                                    <button type="submit" class="btn btn-primary btn-sm"onclick="return confirmDelete()">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    {% if not books %}
+                        <tr>
+                            <td colspan="5">No books in your wishlist.</td>
+                        </tr>
                     {% endif %}
-                    {% if book.year %} <!-- since this column is nullable, check for null-->
-                        <td>{{ book.year }}</td>
-                    {% else %}
-                        <td>none</td>
-                    {% endif %}
-                    <td>{{ book.genre }}</td>
-                    <td>
-                        <!-- Button to move the book to the library -->
-                        <form method="post" action="{{ url_for('move_to_library') }}">
-                            <input type="hidden" name="book_id" value="{{ book.id }}">
-                            <button type="submit">Move to Library</button>
-                        </form>
-                    </td>
-                    <td> <!-- chatgpt help in adding confirmDelete() function-->
-                        <form method="post" action="{{ url_for('delete_book', book_type='wishlist') }}">
-                            <input type="hidden" name="book_id" value="{{ book.id }}">
-                            <button type="submit" onclick="return confirmDelete()">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-            {% if not books %}
-                <tr>
-                    <td colspan="5">No books in your wishlist.</td>
-                </tr>
-            {% endif %}
-        </tbody>
-    </table>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <script>
         function confirmDelete() {
             return confirm("Are you sure you want to delete this book?");
