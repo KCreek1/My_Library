@@ -1,5 +1,4 @@
-<!-- homepage of user to display their library of books-->
-<!-- table copied from finance pset and refactored -->
+<!-- search page for reviews-->
 
 {% extends 'layout.html' %}
 
@@ -7,7 +6,7 @@
 
 {% block content %}
   <h1>Reviews</h1>
-  <p>Search for books by title, author, genre, series name, or rating</p>
+  <p>Search for books by title, author, genre, series name, or rating - books marked private will not appear</p>
   <form action="{{ url_for('reviews') }}" method="post">
     <div class="mb-3">
       <select class="form-select mx-auto w-auto" name="value">
@@ -26,7 +25,7 @@
 
   <div class="container-fluid">
     <div class="table-responsive">
-     <table class='table' style="width:100%">
+     <table class='table' width="100%">
         <thead>
           <tr>
             <th style="width:20%">Title</th>
@@ -35,7 +34,7 @@
             <th style="width:10%">Series</th>
             <th style="width:10%">User</th>
             <th style="width:5%">Rating</th>
-            <th style="width:30%">Review</th>
+            <th style="width:45%">Review</th>
           </tr>
         </thead>
         <tbody>

@@ -1,6 +1,4 @@
 <!-- table of books on users wishlist -->
-<!-- table copied from finance pset and refactored -->
-<!-- additional syntax for suggestion from codeium on if else for items -->
 
 {% extends 'layout.html' %}
 
@@ -11,7 +9,7 @@
     <!-- field to enter new book -->
     <div class="container-fluid">
         <div class="d-flex justify-content-end mb-3">
-          <a href="{{ url_for('add_book', book_type='library') }}" class="btn btn-primary button">Add Book</a>
+          <a href="{{ url_for('add_book', book_type='wishlist') }}" class="btn btn-primary button">Add Book</a>
         </div>
         
         <div class="table-responsive">
@@ -20,8 +18,8 @@
                     <tr>
                         <th style="width:20%">Title</th>
                         <th style="width:10%">Author</th>
-                        <th style="width:20%">Series</th>
-                        <th style="width:10%">Year</th>
+                        <th style="width:10%">Series</th>
+                        <th style="width:5%">Year</th>
                         <th style="width:10%">Genre</th>
                         <th></th>
                         <th></th>

@@ -33,14 +33,16 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="mb-3"> 
-            <label for="rating">Rating:</label> 
-            <input type="number" id="rating" name="rating" min="0" max="5">
-        </div>
-        <div class="mb-3">  
-            <label for="review">Review:</label>
-            <input type="text" id="review" name="review">
-        </div> 
+        {% if book_type != 'wishlist' %}
+            <div class="mb-3"> 
+                <label for="rating">Rating:</label> 
+                <input type="number" id="rating" name="rating" min="0" max="5">
+            </div>
+            <div class="mb-3">  
+                <label for="review">Review:</label>
+                <input type="text" id="review" name="review">
+            </div> 
+        {% endif %}
         <div class="mb-3">
             <label for="private">Private:</label>
             <input type="checkbox" id="private" name="private" value="on">
