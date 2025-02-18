@@ -514,3 +514,6 @@ def page_not_found(e):
 def internal_error(e):
     app.logger.error(f"500 Error: {e}, Route: {request.url}")  # Log with route
     return apology("Internal server error", 500)
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)
