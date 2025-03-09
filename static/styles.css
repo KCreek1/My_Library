@@ -1,68 +1,157 @@
 /* stylesheet for mylibrary */
 a.navbar-brand {
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: rgb(214, 132, 25);
-    font-size: 45px;
-    text-shadow: 0 1px rgb(134, 59, 9), 1px 0 rgb(134, 59, 9);
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: rgb(214, 132, 25);
+  font-size: 45px;
+  text-shadow: 0 1px rgb(134, 59, 9), 1px 0 rgb(134, 59, 9);
 }
 
 li.nav-item {
-    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 p {
-    font-size: 20px;
+  font-size: 20px;
 }
 
 /* these are copied from codieum as a placeholder for me to figure out my format -CHANGE */
 .form-row {
-    display: flex;
-    flex-wrap: wrap;
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .form-row:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-    margin-bottom: 0;
-  }
-  
-  .form-label {
-    flex: 0 0 20%;
-    margin-right: 1rem;
-  }
-  
-  .form-control {
-    flex: 1 0 80%;
-    margin-right: 1rem;
-  }
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
+}
 
-  .button {
-    float: right;
-    background-color: rgb(5, 131, 5)
-  }
+.form-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
 
-  table {
-    border-collapse: collapse;
-  }
-  
-  th, td {
-    border: 1px solid #ccc;
-  }
+.form-label {
+  flex: 0 0 20%;
+  margin-right: 1rem;
+}
 
-  img {
-    display: block;
-    width: 200px;
-    height: 100px;
-    margin: 0 auto;
-  }
+.form-control {
+  flex: 1 0 80%;
+  margin-right: 1rem;
+}
 
-  body {
-    background-color: rgb(248, 223, 152);
-  }
+.button {
+  float: right;
+  background-color: rgb(5, 131, 5)
+}
 
-  h1 {
-    margin-bottom: 30px;
+table {
+  width: 100%; /* Ensure the table takes up full width */
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+img {
+  display: block;
+  width: 200px;
+  height: 100px;
+  margin: 0 auto;
+}
+
+body {
+  background-color: rgb(248, 223, 152);
+}
+
+h1 {
+  margin-bottom: 30px;
+}
+
+/* Responsive Table Styles */
+@media (max-width: 768px) {
+/* For mobile devices: make columns more flexible */
+th, td {
+  white-space: nowrap;
+  padding: 6px;
+  font-size: 14px;  /* Reduce font size for better readability */
+}
+
+.table thead th {
+  width: auto !important;
+}
+
+/* Set custom widths for each column based on importance */
+th:nth-child(1), td:nth-child(1) {
+  width: 30%;  /* Title */
+}
+
+th:nth-child(2), td:nth-child(2) {
+  width: 20%;  /* Author */
+}
+
+th:nth-child(3), td:nth-child(3) {
+  width: 15%;  /* Year */
+}
+
+th:nth-child(4), td:nth-child(4) {
+  width: 15%;  /* Series */
+}
+
+th:nth-child(5), td:nth-child(5) {
+  width: 15%;  /* User */
+}
+
+th:nth-child(6), td:nth-child(6) {
+  width: 15%;  /* Rating */
+}
+
+th:nth-child(7), td:nth-child(7) {
+  max-width: 100%;  /* Allow review column to be responsive */
+  min-width: 200px;  /* Prevent it from being too narrow */
+  word-wrap: break-word;  /* Allow text to wrap */
+  overflow-wrap: break-word;  /* Prevent long words from overflowing */
+  word-break: break-word;  /* Break long words if necessary */
+  white-space: normal;  /* Ensure text wraps properly */
+}
+}
+
+@media (min-width: 769px) {  
+
+  .table thead th {
+    width: auto !important;
   }
+ 
+
+
+/* For larger screens (laptop/PC), keep the review column wider */
+th:nth-child(1), td:nth-child(1) {
+  width: 15%;  /* Title */
+}
+
+th:nth-child(2), td:nth-child(2) {
+  width: 15%;  /* Author */
+}
+
+th:nth-child(3), td:nth-child(3) {
+  width: 10%;  /* Year */
+}
+
+th:nth-child(4), td:nth-child(4) {
+  width: 15%;  /* Series */
+}
+
+th:nth-child(5), td:nth-child(5) {
+  width: 15%;  /* User */
+}
+
+th:nth-child(6), td:nth-child(6) {
+  width: 10%;  /* Rating */
+}
+
+th:nth-child(7), td:nth-child(7) {
+  width: 50% !important;  /* Review (make it wider) */
+}
+}

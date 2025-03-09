@@ -52,10 +52,10 @@
                                     <button type="submit" class="btn btn-primary btn-sm">Move to Library</button>
                                 </form>
                             </td>
-                            <td> <!-- chatgpt help in adding confirmDelete() function-->
+                            <td style="text-align: center;"> <!-- chatgpt help in adding confirmDelete() function-->
                                 <form method="post" action="{{ url_for('delete_book', book_type='wishlist') }}">
                                     <input type="hidden" name="book_id" value="{{ book.id }}">
-                                    <button type="submit" class="btn btn-primary btn-sm"onclick="return confirmDelete()">Delete</button>
+                                    <button type="submit" class="btn btn-primary btn-sm"onclick="return confirmDelete()">Delete Book</button>
                                 </form>
                             </td>
                         </tr>

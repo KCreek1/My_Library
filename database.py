@@ -1,11 +1,11 @@
 # database configuration - separate file per duck suggestion
 import os
 
-# comment out lines 5 & 8 for local development
-#from dotenv import load_dotenv
+# take out comments for lines 5 & 8 for local development
+# from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy 
 
-#load_dotenv(dotenv_path='./.env')
+# load_dotenv(dotenv_path='./.env')
 database_url = os.getenv('DATABASE_URL').replace("postgres://", "postgresql://", 1)
 
 # print(f"Database URL: {database_url}")
