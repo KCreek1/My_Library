@@ -1,11 +1,27 @@
-<!-- apology page from finance pset -->
- 
 {% extends "layout.html" %}
 
 {% block title %}/apology{% endblock %}
 
 {% block content %}
-    <!-- https://memegen.link/ -->
-    <!-- https://knowyourmeme.com/memes/grumpy-cat -->
-    <img alt="{{ top }}" class="border img-fluid" src="https://api.memegen.link/images/custom/{{ top | urlencode }}/{{ bottom | urlencode }}.jpg?background=https://i.imgur.com/CsCgN7Ll.png&width=400" title="{{ top }}">
+    <!-- Container for image and messages -->
+    <div style="text-align: center;">
+
+        <!-- Top message box with limited width -->
+        <div style="display: inline-block; background-color: rgba(0, 0, 0, 0.2); color: white; padding: 10px 20px; 
+                    border-radius: 5px; font-size: 24px; margin-bottom: 10px; max-width: 200px; width: 100%;">
+            {{ top }} <!-- Top message like "Invalid Username/Password" -->
+        </div>
+
+        <!-- Image -->
+        <img alt="{{ top }}" class="border img-fluid" 
+             src="{{ url_for('static', filename='surprise.jpg') }}" 
+             title="{{ top }}">
+
+        <!-- Bottom message box with limited width -->
+        <div style="display: inline-block; background-color: rgba(0, 0, 0, 0.2); color: white; padding: 10px 20px; 
+                    border-radius: 5px; font-size: 20px; margin-top: 10px; max-width: 400px; width: 100%;">
+            {{ bottom }} <!-- Bottom message -->
+        </div>
+    </div>
 {% endblock %}
+

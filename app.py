@@ -1,4 +1,3 @@
-# using framework of finance pset to outline my app
 import os
 
 from flask import Flask, flash, redirect, render_template, request, session
@@ -20,11 +19,10 @@ bootstrap = Bootstrap(app)
 # setting up db for sqlalchemy
 init_db(app)
 
-# from finance - Configure session to use filesystem (instead of signed cookies)
+# Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-# from finance
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
@@ -93,7 +91,7 @@ def login():
         
         # make sure username exists and password correct
         if user is None or not check_password_hash(user.hash, request.form.get("password")):
-            return apology("invalid username and/or password", 403)
+            return apology("Invalid username and/or password", 403)
         
         # remember user
         session["user_id"] = user.id
