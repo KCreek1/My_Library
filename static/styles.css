@@ -155,3 +155,17 @@ th:nth-child(7), td:nth-child(7) {
   width: 50% !important;  /* Review (make it wider) */
 }
 }
+
+/* Default style for smaller screens (no indentation) */
+.indent-list {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+/* Apply indentation on larger screens */
+@media (min-width: 768px) {
+  .indent-list {
+    margin-left: 20px;
+    padding-left: 20px;
+  }
+}
