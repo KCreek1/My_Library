@@ -1,7 +1,7 @@
 # database configuration - separate file per duck suggestion
 import os
 
-# take out comments for lines 5 & 8 for local development
+# take out comments for lines 5 & 7 for local development
 # from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy 
 
