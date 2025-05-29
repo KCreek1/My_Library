@@ -67,7 +67,7 @@ def library():
                 ((Book.rating == search_rating) if search_rating is not None else False)  # Exact match for integer ratings
             )
 
-    books = books_query.all()
+    books = books_query.order_by(Book.title.asc()).all()
     return render_template("library.html", books=books, user=user, search_term=search_term)
 
 @app.route("/login", methods=["GET", "POST"])
@@ -138,7 +138,7 @@ def passwordreset():
 def wishlist():
     """ will return a list of books that the user has added to their wishlist"""      
     user = get_current_user()
-    books = Wishlist.query.filter_by(username_id=user.id).all()
+    books = Wishlist.query.filter_by(username_id=user.id).order_by(Wishlist.title.asc()).all()
     return render_template('wishlist.html', books=books, user=user)
 
 @app.route("/register", methods=["GET", "POST"])
@@ -241,7 +241,7 @@ def reviews():
 
                 print(query.statement) # print the SQL statement for debugging
                 # Fetch all matching results
-                results = query.all()
+                results = query.order_by(Book.title.asc()).all()
 
                 if not results:
                     flash("No reviews found for the selected criteria.", "error")
