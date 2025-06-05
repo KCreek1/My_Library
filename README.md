@@ -97,3 +97,6 @@ git push heroku master
 ```
 
 Once deployed, your app will be accessible via the Heroku URL.
+
+### Link to test sheet
+https://docs.google.com/spreadsheets/d/1oI64fKkLgGjBmIqVZ3b9Xh9YvQ1HvZDY44hCYNW75Iw/edit
