@@ -67,8 +67,12 @@ def library():
                 ((Book.rating == search_rating) if search_rating is not None else False)  # Exact match for integer ratings
             )
 
-    books = books_query.order_by(Book.title.asc()).all()
-    return render_template("library.html", books=books, user=user, search_term=search_term)
+    page = request.args.get('page', 1, type=int)
+    per_page = 25
+    pagination = books_query.order_by(Book.title.asc()).paginate(page=page, per_page=per_page)
+    books = pagination.items
+
+    return render_template("library.html", books=books, user=user, search_term=search_term, pagination=pagination)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
