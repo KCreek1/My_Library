@@ -9,7 +9,7 @@
     <!-- field to enter new book -->
     <div class="container-fluid">
         <div class="d-flex justify-content-end mb-3">
-          <a href="{{ url_for('add_book', book_type='wishlist') }}" class="btn btn-primary button">Add Book</a>
+            <a href="{{ url_for('add_book', book_type='wishlist') }}" class="btn btn-primary button">Add Book</a>
         </div>
         
         <div class="table-responsive">
@@ -28,12 +28,12 @@
                         <tr>
                             <td>{{ book.title }}</td>
                             <td>{{ book.author }}</td>
-                            {% if book.series_name %} <!-- since this column is nullable, check for null -->
+                            {% if book.series_name %}
                                 <td>{{ book.series_name }}</td>
                             {% else %}
                                 <td>none</td>
                             {% endif %}
-                            {% if book.year %} <!-- since this column is nullable, check for null-->
+                            {% if book.year %}
                                 <td>{{ book.year }}</td>
                             {% else %}
                                 <td>none</td>
@@ -44,7 +44,7 @@
                                 <td>none</td>
                             {% endif %}
                             <td>
-                                <form action="https://www.google.com/search" method=""get" target=""_blank">
+                                <form action="https://www.google.com/search" method="get" target="_blank"></form>
                                     <input type="hidden" name="q" value="{{ book.title }}">
                                     <button type="submit" class="btn btn-primary btn-sm">Search Web</button>
                                 </form>
@@ -56,10 +56,10 @@
                                     <button type="submit" class="btn btn-primary btn-sm">Move Book to Library</button>
                                 </form>
                             </td>
-                            <td style="text-align: center;"> <!-- chatgpt help in adding confirmDelete() function-->
+                            <td style="text-align: center;"></td>
                                 <form method="post" action="{{ url_for('delete_book', book_type='wishlist') }}">
                                     <input type="hidden" name="book_id" value="{{ book.id }}">
-                                    <button type="submit" class="btn btn-primary btn-sm"onclick="return confirmDelete()">Delete Book</button>
+                                    <button type="submit" class="btn btn-primary btn-sm" onclick="return confirmDelete()">Delete Book</button>
                                 </form>
                             </td>
                         </tr>
@@ -72,6 +72,37 @@
                 </tbody>
             </table>
         </div>
+        {% if pagination and pagination.pages > 1 %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if pagination.has_prev %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('wishlist', page=pagination.prev_num) }}">Previous</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">Previous</span></li>
+                    {% endif %}
+                    {% for p in pagination.iter_pages(left_edge=2, right_edge=2, left_current=2, right_current=2) %}
+                        {% if p %}
+                            {% if p == pagination.page %}
+                                <li class="page-item active"><span class="page-link">{{ p }}</span></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="{{ url_for('wishlist', page=p) }}">{{ p }}</a></li>
+                            {% endif %}
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">…</span></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if pagination.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('wishlist', page=pagination.next_num) }}">Next</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled"><span class="page-link">Next</span></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
     </div>
     <script>
         function confirmDelete() {

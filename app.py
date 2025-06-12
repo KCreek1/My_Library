@@ -140,10 +140,14 @@ def passwordreset():
 @app.route("/wishlist", methods=["GET", "POST"])
 @login_required
 def wishlist():
-    """ will return a list of books that the user has added to their wishlist"""      
+    """ will return a list of books that the user has added to their wishlist with pagination"""      
     user = get_current_user()
-    books = Wishlist.query.filter_by(username_id=user.id).order_by(Wishlist.title.asc()).all()
-    return render_template('wishlist.html', books=books, user=user)
+    page = request.args.get('page', 1, type=int)
+    per_page = 25
+    books_query = Wishlist.query.filter_by(username_id=user.id).order_by(Wishlist.title.asc())
+    pagination = books_query.paginate(page=page, per_page=per_page)
+    books = pagination.items
+    return render_template('wishlist.html', books=books, user=user, pagination=pagination)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -201,6 +205,10 @@ def reviews():
     """ enables users to see reviews for certain books from all users """
     select_values = select_value()
     results = None # default to None for get requests
+    pagination = None
+
+    page = request.args.get('page', 1, type=int)
+    per_page = 25
         
     if request.method == "POST":
         selection = request.form.get("selection","").strip() # remove whitespace to avoid empty string
@@ -243,16 +251,20 @@ def reviews():
                     flash("Invalid rating input. Please enter a valid number.", "error")
                     query = None
 
-                print(query.statement) # print the SQL statement for debugging
-                # Fetch all matching results
-                results = query.order_by(Book.title.asc()).all()
+                #pagination
+                if query is not None:
+                    pagination = query.order_by(Book.title.asc()).paginate(page=page, per_page=per_page)
+                    results = pagination.items
+                    if not results:
+                        flash("No reviews found for the selected criteria.", "error")
+                else:
+                    results = []    
 
-                if not results:
-                    flash("No reviews found for the selected criteria.", "error")
             except Exception as e:
                 flash(f"An error occurred: {str(e)}", "error")
+                results = []
 
-    return render_template("reviews.html", select_value=select_values, results=results)
+    return render_template("reviews.html", select_value=select_values, results=results, pagination=pagination)
 
 @app.route("/delete_book/<string:book_type>", methods=["POST"])
 @login_required
