@@ -18,9 +18,9 @@
 
   <div class="container-fluid">
     <div class="d-flex justify-content-end mb-3">
-      <a href="{{ url_for('add_book', book_type='library') }}" class="btn btn-primary button">Add Book</a>
+      <a href="{{ url_for('add_book', book_type='library') }}" class="btn btn-addbook button">Add Book</a>
     </div>
-
+  
     <div class="table-responsive">
       <table class='table' style="width:100%">
         <thead>
@@ -32,8 +32,6 @@
             <th style="width:10%">Genre</th>
             <th style="width:5%">Rating</th>
             <th style="width:45%">Review</th>
-            <th></th>
-            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -65,56 +63,55 @@
               <td>
                 <form method="get" action="{{ url_for('update_book') }}">
                   <input type="hidden" name="book_id" value="{{ book.id }}">
-                  <button type="submit" class="btn btn-primary btn-sm">Update</button>
+                  <button type="submit" class="btn btn-update btn-sm">Update</button>
                 </form>
               </td>
               <td>
                 <form method="post" action="{{ url_for('delete_book', book_type='library') }}">
                   <input type="hidden" name="book_id" value="{{ book.id }}">
-                  <button type="submit" class="btn btn-primary btn-sm" onclick="return confirmDelete()">Delete</button>
+                  <button type="submit" class="btn btn-delete btn-sm" onclick="return confirmDelete()">Delete</button>
                 </form>
               </td>
             </tr>
           {% endfor %}
           {% if not books %}
             <tr>
-              <td colspan="9">No books in your library.</td>
+              <td colspan="8">No books in your library.</td>
             </tr>
           {% endif %}
         </tbody>
       </table>
     </div>
-
     {% if pagination and pagination.pages > 1 %}
-      <nav aria-label="Page navigation">
-        <ul class="pagination justify-content-center">
-          {% if pagination.has_prev %}
-            <li class="page-item">
-              <a class="page-link" href="{{ url_for('library', page=pagination.prev_num) }}{% if search_term %}&search={{ search_term }}{% endif %}">Previous</a>
-            </li>
-          {% else %}
-            <li class="page-item disabled"><span class="page-link">Previous</span></li>
-          {% endif %}
-          {% for p in pagination.iter_pages(left_edge=2, right_edge=2, left_current=2, right_current=2) %}
-            {% if p %}
-              {% if p == pagination.page %}
-                <li class="page-item active"><span class="page-link">{{ p }}</span></li>
-              {% else %}
-                <li class="page-item"><a class="page-link" href="{{ url_for('library', page=p) }}{% if search_term %}&search={{ search_term }}{% endif %}">{{ p }}</a></li>
-              {% endif %}
+    <nav aria-label="Page navigation">
+      <ul class="pagination justify-content-center">
+        {% if pagination.has_prev %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('library', page=pagination.prev_num) }}{% if search_term %}&search={{ search_term }}{% endif %}">Previous</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">Previous</span></li>
+        {% endif %}
+        {% for p in pagination.iter_pages(left_edge=2, right_edge=2, left_current=2, right_current=2) %}
+          {% if p %}
+            {% if p == pagination.page %}
+              <li class="page-item active"><span class="page-link">{{ p }}</span></li>
             {% else %}
-              <li class="page-item disabled"><span class="page-link">…</span></li>
+              <li class="page-item"><a class="page-link" href="{{ url_for('library', page=p) }}{% if search_term %}&search={{ search_term }}{% endif %}">{{ p }}</a></li>
             {% endif %}
-          {% endfor %}
-          {% if pagination.has_next %}
-            <li class="page-item">
-              <a class="page-link" href="{{ url_for('library', page=pagination.next_num) }}{% if search_term %}&search={{ search_term }}{% endif %}">Next</a>
-            </li>
           {% else %}
-            <li class="page-item disabled"><span class="page-link">Next</span></li>
+            <li class="page-item disabled"><span class="page-link">…</span></li>
           {% endif %}
-        </ul>
-      </nav>
+        {% endfor %}
+        {% if pagination.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="{{ url_for('library', page=pagination.next_num) }}{% if search_term %}&search={{ search_term }}{% endif %}">Next</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled"><span class="page-link">Next</span></li>
+        {% endif %}
+      </ul>
+    </nav>
     {% endif %}
   </div>
 

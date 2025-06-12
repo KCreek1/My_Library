@@ -169,3 +169,33 @@ th:nth-child(7), td:nth-child(7) {
     padding-left: 20px;
   }
 }
+
+.btn-update {
+  background-color: #3c8fed !important;  /* Subdued blue */
+  color: #fff !important;
+  border: none;
+}
+
+.btn-delete {
+  background-color: #e4181c !important;  /* Subdued blue */
+  color: #fff !important;
+  border: none;
+}
+
+.btn-addbook {
+  background-color: #1f9d0e !important;  /* Subdued blue */
+  color: #fff !important;
+  border: none;
+}
+
+.btn-move {
+  background-color: #3c8fed !important;  /* Subdued blue */
+  color: #fff !important;
+  border: none;
+}
+
+.btn-web {
+  background-color: #3c8fed !important;  /* Subdued blue */
+  color: #fff !important;
+  border: none;
+}
