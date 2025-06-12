@@ -13,6 +13,8 @@ from database import db, init_db
 from helpers import apology, get_current_user, get_questions_1, get_questions_2, login_required, select_value, genre_selection
 from models import Book, Review, Users, Wishlist
 
+__version__ = "1.0.0"
+
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
 
@@ -34,7 +36,7 @@ def after_request(response):
 @app.route("/")
 def index():
     """ will display generic info about app """
-    return render_template("index.html")
+    return render_template("index.html", version=__version__)
 
 @app.route("/library", methods=["GET", "POST"])
 @login_required
