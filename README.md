@@ -34,7 +34,7 @@ my-library/
 ### Prerequisites:
 -Python 3.x
 
--(Optional) Heroku account (for deployment)
+-(Optional) Heroku account (https://www.heroku.com/) (for deployment)
 
 
 ## Local Development
@@ -48,7 +48,10 @@ cd my-library
 ### 2. Set up a virtual environment:
 ```bash
 python3 -m venv .venv
-source .venv\Scripts\activate
+# On macOS/Linux:
+source .venv/bin/activate
+# On Windows:
+.venv\Scripts\activate
 ```
 
 ### 3. Install dependencies:
@@ -65,38 +68,26 @@ SECRET_KEY=your-secret-key
 ```
 Note: Keep your `.env` file private and excluded via `.gitignore`.
 
-### 5. Run the app:
+
+### 5. Run the app locally:
 ```
-flask run
+python app.py
 ```
+Notice comments in `database.py`
+
 Open http://localhost:5000 in your browser to view the app.
 
 
-## Deploying to Heroku
+## Deployment
+This app is currently deployed using Heroku’s GitHub Integration. You can:
 
-### 1. Initialize your Heroku app
-```bash
-heroku login
-heroku create your-app-name
-```
+- Push changes to the main branch on GitHub
+- Visit your Heroku dashboard → Deploy tab
+- Click Deploy Branch to publish updates
 
-### 2. Add Heroku remote and deploy
-```bash
-git remote add heroku https://git.heroku.com/your-app-name.git
-git push heroku master
-```
+If you prefer to use the Heroku CLI, you can also follow manual deployment instructions (not required in this setup).
 
-### 3. Set Heroku enbironment variables
-```bash
-heroku config:set DATABASE_URL=your-postgres-url
-heroku config:set SECRET_KEY=your-secret-key
-```
 
-### 4. Open the live app
-```bash
-heroku open
-```
-Once deployed, your app will be accessible via the Heroku URL.
 
 ## Testing
 You can view or contribute to test tracking using the link to the test sheet:
