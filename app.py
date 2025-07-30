@@ -18,12 +18,13 @@ __version__ = "1.0.0"
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
 
-# setting up db for sqlalchemy
+# initiate db
 init_db(app)
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+
 
 @app.after_request
 def after_request(response):
@@ -33,33 +34,33 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
+
 @app.route("/")
 def index():
     """ will display generic info about app """
     return render_template("index.html", version=__version__)
 
+
 @app.route("/library", methods=["GET", "POST"])
 @login_required
 def library():
-    """Display a table of books in the user's library with advanced search functionality."""
+    """Display a table of books in the user's library with advanced search functionality"""
     user = get_current_user()
     books_query = Book.query.filter_by(username_id=user.id)  # Base query for the user's books
-    search_term = None  # Default search term
+    search_term = None
 
     if request.method == "POST":
-        # Check if the "Clear Search" button was pressed
         if request.form.get("clear") == "true":
-            # Clear the search by resetting the search term
             search_term = ""
         else:
-            search_term = request.form.get("search", "").strip()  # Get the search term and strip whitespace
+            search_term = request.form.get("search", "").strip()
 
         if search_term:
             # Dynamically filter by multiple attributes
             try:
-                search_rating = int(search_term)  # Try to interpret the search term as an integer
+                search_rating = int(search_term) 
             except ValueError:
-                search_rating = None  # If conversion fails, it's not a number
+                search_rating = None
             
             books_query = books_query.filter(
                 (Book.title.ilike(f"%{search_term}%")) | 
@@ -76,18 +77,13 @@ def library():
 
     return render_template("library.html", books=books, user=user, search_term=search_term, pagination=pagination)
 
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    # Forget any user_id
-    # session.clear()
-    
-    # If via POST (using form)
+    """Log user in"""
     if request.method == "POST":
-        # make sure user name submitted
         if not request.form.get("username"):
             return apology("must provide username", 403)
-        
-        # make sure password submitted
         elif not request.form.get("password"):
             return apology("must provide password", 403)
         
@@ -104,16 +100,17 @@ def login():
         
         return redirect("/library")
     
-    # if by GET
     else:
         return render_template("login.html")
+    
 
 @app.route("/logout")
 def logout():
-    # forget user
+    """Log user out - forget user.id"""
     session.clear()
     flash("You have been logged out", "success")
     return redirect("/")
+
 
 @app.route("/passwordreset", methods=["GET", "POST"])
 def passwordreset():
@@ -139,6 +136,7 @@ def passwordreset():
             return render_template("passwordreset.html")
     return render_template("passwordreset.html")
 
+
 @app.route("/wishlist", methods=["GET", "POST"])
 @login_required
 def wishlist():
@@ -150,6 +148,7 @@ def wishlist():
     pagination = books_query.paginate(page=page, per_page=per_page)
     books = pagination.items
     return render_template('wishlist.html', books=books, user=user, pagination=pagination)
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -195,20 +194,19 @@ def register():
         except IntegrityError:
             return apology("Username already in use")
     
-        # success message
         flash("You have successfully registered and may log in now!", "success")
         return redirect("/login")
 
     return render_template("register.html", get_questions_1=get_questions_1(), get_questions_2=get_questions_2())
+
 
 @app.route("/reviews", methods=["GET", "POST"])
 @login_required
 def reviews():
     """ enables users to see reviews for certain books from all users """
     select_values = select_value()
-    results = None # default to None for get requests
+    results = None
     pagination = None
-
     page = request.args.get('page', 1, type=int)
     per_page = 25
         
@@ -268,12 +266,14 @@ def reviews():
 
     return render_template("reviews.html", select_value=select_values, results=results, pagination=pagination)
 
+
 @app.route("/delete_book/<string:book_type>", methods=["POST"])
 @login_required
 def delete_book(book_type):
     """ Enables user to delete books from wishlist or library """
     user = get_current_user()
     book_id = request.form.get("book_id")
+
     try:
         if book_type == "library":
             book = Book.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
@@ -300,11 +300,14 @@ def delete_book(book_type):
                 return redirect("/wishlist")
             else:
                 flash("Book not found", "error")
+
     except Exception as e:
         db.session.rollback()
         flash("Error deleting book", "error")
         app.logger.error(f"Error deleting book: {e}")
+
     return redirect("/library" if book_type == "library" else "/wishlist")
+
 
 @app.route("/update_book", methods=["GET","POST"])
 @login_required    
@@ -312,6 +315,7 @@ def update_book():
     """ Allows user to update the details of a book """
     user = get_current_user()
     genres = genre_selection()
+
     if request.method == "POST":
         book_id = request.form.get("book_id")
         book = Book.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
@@ -358,6 +362,7 @@ def update_book():
         book_id = request.args.get("book_id")
         book = Book.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
         return render_template("update_book.html", book=book, genres=genres)
+    
 
 @app.route("/add_book/<string:book_type>", methods=["GET", "POST"])
 @login_required
@@ -413,11 +418,12 @@ def add_book(book_type):
             # Add review only if it doesn't already exist
             if not existing_review:
                 new_review = Review(
-                    book_id=book_id,  # Link to the existing or new book
-                    review=review,    # Review text from form
-                    rating=rating,    # Rating from form
-                    username_id=user.id  # The user who added the review
+                    book_id=book_id,  
+                    review=review,    
+                    rating=rating,    
+                    username_id=user.id  
                 )
+
                 try:
                     db.session.add(new_review)
                     db.session.commit()
@@ -474,6 +480,7 @@ def new_password():
             app.logger.error(f"Error updating password: {e}")
             return redirect("/new_password")
     return render_template("new_password.html")
+
                            
 @app.route("/move_to_library", methods=["POST"])
 @login_required
@@ -518,7 +525,7 @@ def move_to_library():
     
     return redirect("/wishlist")
     
-# copied from chat gpt to log errors
+
 # 404 Error Handler
 @app.errorhandler(404)
 def page_not_found(e):

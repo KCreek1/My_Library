@@ -1,10 +1,11 @@
 from flask import redirect, render_template, session
 from functools import wraps
-
 from models import Users
+
 
 def apology(message, code=400):
     return render_template("apology.html", top=code, bottom=message), code
+
 
 def login_required(f):
     """
@@ -18,11 +19,15 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+
 def get_current_user():
+    """Return the current user based on the session."""
     users_id = session["user_id"]
     return Users.query.get(users_id)
 
+
 def get_questions_1():
+    """Return a list of security questions for the user."""
     return [
         'What was your first car?',
         'What is your favorite color?',
@@ -31,8 +36,10 @@ def get_questions_1():
         'Who is your favorite fictional character?',
         'What is your least favorite book?',
     ]
-    
+
+
 def get_questions_2():
+    """Return a list of additional security questions for the user."""
     return [
         'What is your favorite movie?',
         'What was the name of your first school?',
@@ -41,8 +48,10 @@ def get_questions_2():
         'What is your favorite animal?',
         'What is your favorite band?',
     ]
-    
+
+
 def select_value():
+    """Return a list of values for book entry, searches and filters."""
     return [
         'Title',
         'Author',
@@ -51,8 +60,9 @@ def select_value():
         'Rating',
     ]
  
- # genre list for book entry   
+  
 def genre_selection():
+    """Return a list of genres for book entry."""
     return [
         'Fiction',
         'Non Fiction',

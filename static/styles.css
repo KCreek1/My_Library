@@ -14,7 +14,6 @@ p {
   font-size: 20px;
 }
 
-/* these are copied from codieum as a placeholder for me to figure out my format -CHANGE */
 .form-row {
   display: flex;
   flex-wrap: wrap;
@@ -44,8 +43,9 @@ p {
   background-color: rgb(5, 131, 5)
 }
 
+/* Ensure the table takes up full width */
 table {
-  width: 100%; /* Ensure the table takes up full width */
+  width: 100%;
   border-collapse: collapse;
 }
 
@@ -76,7 +76,7 @@ h1 {
 th, td {
   white-space: nowrap;
   padding: 6px;
-  font-size: 14px;  /* Reduce font size for better readability */
+  font-size: 14px;
 }
 
 .table thead th {
@@ -84,30 +84,37 @@ th, td {
 }
 
 /* Set custom widths for each column based on importance */
+/* Title */
 th:nth-child(1), td:nth-child(1) {
-  width: 30%;  /* Title */
+  width: 30%;
 }
 
+/* Author */
 th:nth-child(2), td:nth-child(2) {
-  width: 20%;  /* Author */
+  width: 20%;
 }
 
+/* Year */
 th:nth-child(3), td:nth-child(3) {
-  width: 15%;  /* Year */
+  width: 15%;
 }
 
+/* Series */
 th:nth-child(4), td:nth-child(4) {
-  width: 15%;  /* Series */
+  width: 15%;
 }
 
+/* User */
 th:nth-child(5), td:nth-child(5) {
-  width: 15%;  /* User */
+  width: 15%;
 }
 
+/* Rating */
 th:nth-child(6), td:nth-child(6) {
-  width: 15%;  /* Rating */
+  width: 15%;
 }
 
+/* Review */
 th:nth-child(7), td:nth-child(7) {
   max-width: 100%;  /* Allow review column to be responsive */
   min-width: 200px;  /* Prevent it from being too narrow */
@@ -127,32 +134,38 @@ th:nth-child(7), td:nth-child(7) {
 
 
 /* For larger screens (laptop/PC), keep the review column wider */
+/* Title */
 th:nth-child(1), td:nth-child(1) {
-  width: 15%;  /* Title */
+  width: 15%;
 }
 
+/* Author */
 th:nth-child(2), td:nth-child(2) {
-  width: 15%;  /* Author */
+  width: 15%;
 }
 
+/* Year */
 th:nth-child(3), td:nth-child(3) {
-  width: 10%;  /* Year */
+  width: 10%;
 }
 
+/* Series */
 th:nth-child(4), td:nth-child(4) {
-  width: 15%;  /* Series */
+  width: 15%;
 }
 
+/* User */
 th:nth-child(5), td:nth-child(5) {
-  width: 15%;  /* User */
+  width: 15%;
 }
-
+/* Rating */
 th:nth-child(6), td:nth-child(6) {
-  width: 10%;  /* Rating */
+  width: 10%; 
 }
 
+ /* Review */
 th:nth-child(7), td:nth-child(7) {
-  width: 50% !important;  /* Review (make it wider) */
+  width: 50% !important; 
 }
 }
 
@@ -171,31 +184,31 @@ th:nth-child(7), td:nth-child(7) {
 }
 
 .btn-update {
-  background-color: #3c8fed !important;  /* Subdued blue */
+  background-color: #3c8fed !important;
   color: #fff !important;
   border: none;
 }
 
 .btn-delete {
-  background-color: #e4181c !important;  /* Subdued blue */
+  background-color: #e4181c !important;
   color: #fff !important;
   border: none;
 }
 
 .btn-addbook {
-  background-color: #1f9d0e !important;  /* Subdued blue */
+  background-color: #1f9d0e !important;
   color: #fff !important;
   border: none;
 }
 
 .btn-move {
-  background-color: #3c8fed !important;  /* Subdued blue */
+  background-color: #3c8fed !important;
   color: #fff !important;
   border: none;
 }
 
 .btn-web {
-  background-color: #3c8fed !important;  /* Subdued blue */
+  background-color: #3c8fed !important;
   color: #fff !important;
   border: none;
 }

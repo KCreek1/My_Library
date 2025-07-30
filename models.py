@@ -1,6 +1,6 @@
-from enum import Enum
-from sqlalchemy import Enum as SQLAlchemyEnum, CheckConstraint
+from sqlalchemy import CheckConstraint
 from database import db
+
 
 class Users(db.Model):
     """ table for user personal info"""
@@ -13,14 +13,15 @@ class Users(db.Model):
     security_answer_1 = db.Column(db.String(100), nullable=False)
     security_answer_2 = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(254), default=None) # not currently in use - but may be in the future
-    about_me = db.Column(db.String(300), default=None) # nost currently in use - but may be in the future
+    about_me = db.Column(db.String(300), default=None) # not currently in use - but may be in the future
+
     
 class Book(db.Model):
     """ table for books entered into library by any user"""
     __tablename__ = 'book'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False) # how to reference other tables
-    user = db.relationship('Users', backref='books') # per codieum, try backref, plural for many books
+    username_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user = db.relationship('Users', backref='books') # backref, plural for many books
     title = db.Column(db.String(150), nullable=False, default='Untitled')
     author = db.Column(db.String(50), nullable=False, default='Unknown')
     year = db.Column(db.String(4), default='Unknown')
@@ -30,6 +31,7 @@ class Book(db.Model):
     review = db.Column(db.String(300), default='No review yet') 
     private = db.Column(db.Boolean, default=False)
     
+
 class Wishlist(db.Model):
     """ table for wishlist for future purchases"""
     __tablename__ = 'wishlist'
@@ -41,6 +43,7 @@ class Wishlist(db.Model):
     series_name = db.Column(db.String(50), nullable=True)
     year = db.Column(db.String(4), default='None')
     
+
 class Review(db.Model):
     """ table for reviews of books"""    
     __tablename__ = 'review'
