@@ -6,14 +6,13 @@
 - **Wishlist**: Keep track of books you’d like to read or purchase.
 - **User Reviews**: Read and contribute reviews to help others discover great books.
 - **Cloud-Hosted Database**: Uses Heroku PostgreSQL for easy deployment and scaling.
-- **Local Setup Option**: Easily adaptable to SQLite for local testing or lightweight personal use.
   
 ## Tech Stack
 - **Flask**: Minimalist Python web framework for quick and intuitive development.
 - **SQLAlchemy**: ORM for managing relational databases in a Pythonic way.
 - **PostgreSQL (Heroku)**:  Cloud-hosted, scalable database service.
-- **HTML/CSS**: Simple, responsive front-end styling.
-- App can be refactored to run with SQLite for local or smaller-scale use.
+- **HTML/CSS**: Used for templating and basic front-end styling via Flask’s render_template()
+- ⚠️ App can be refactored to use the database of your choice (e.g., SQLite, PostgreSQL, MySQL) by adjusting configuration and installing the appropriate database driver.
 
 ## Project Structure
 ```
@@ -37,7 +36,7 @@ my-library/
 -(Optional) Heroku account (https://www.heroku.com/) (for deployment)
 
 
-## Local Development
+## Local Setup
 
 ### 1. Clone the repository:
 ```bash
@@ -66,7 +65,7 @@ Create a `.env` file in the project root with your configuration. Example (for H
 DATABASE_URL=your-heroku-postgres-url
 SECRET_KEY=your-secret-key
 ```
-Note: Keep your `.env` file private and excluded via `.gitignore`.
+⚠️ Note: Keep your `.env` file private and excluded via `.gitignore`.
 
 
 ### 5. Run the app locally:
@@ -79,13 +78,18 @@ Open http://localhost:5000 in your browser to view the app.
 
 
 ## Deployment
-This app is currently deployed using Heroku’s GitHub Integration. You can:
+This app is currently deployed using Heroku’s GitHub Integration. To set it up, please follow the instructions in the Heroku documentation for:
 
-- Push changes to the main branch on GitHub
-- Visit your Heroku dashboard → Deploy tab
-- Click Deploy Branch to publish updates
+- Creating a new app
+- Connecting your GitHub repository
+- Configuring environment variables
+- Managing add-ons (e.g., Heroku Postgres)
 
-If you prefer to use the Heroku CLI, you can also follow manual deployment instructions (not required in this setup).
+Once configured, push changes to your main branch on GitHub and deploy via the Heroku dashboard’s Deploy tab.
+
+If you prefer, you can also deploy manually using the Heroku CLI.
+
+
 
 
 
