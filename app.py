@@ -13,7 +13,7 @@ from database import db, init_db
 from helpers import apology, get_current_user, get_questions_1, get_questions_2, login_required, select_value, genre_selection
 from models import Book, Review, Users, Wishlist
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
