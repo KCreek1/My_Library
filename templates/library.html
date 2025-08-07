@@ -11,8 +11,8 @@
   <form method="POST" action="{{ url_for('library') }}">
     <div class="mb-3">
       <input type="text" name="search" placeholder="Search by title, author, genre, etc." value="{{ search_term or '' }}">
-      <button type="submit">Search</button>
-      <button type="submit" name="clear" value="true">Clear Search</button>
+      <button type="submit" class='btn btn-search btn-sm'>Search</button>
+      <button type="submit" class='btn btn-search btn-sm' name="clear" value="true">Clear Search</button>
     </div>
   </form>
 
