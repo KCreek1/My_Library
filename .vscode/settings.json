@@ -10,5 +10,6 @@
         "statusBarItem.hoverBackground": "#ff9114",
         "activityBar.background": "#ff9114",
         "activityBar.foreground": "#ffffff",
+        "activityBar.inactiveForeground": "#13100999", 
     },
 }
