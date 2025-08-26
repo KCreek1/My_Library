@@ -6,7 +6,7 @@ from models import Book
 
 bp = Blueprint("library", __name__)
 
-@bp.app.route("/library", methods=["GET", "POST"])
+@bp.route("/library", methods=["GET", "POST"])
 @login_required
 def library():
     """Display a table of books in the user's library with advanced search functionality"""

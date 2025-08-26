@@ -6,10 +6,10 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
-import logging
 from sqlalchemy.exc import IntegrityError
 
 from database import db, init_db
+from routes.errors import page_not_found, internal_error
 from helpers import apology, get_current_user, get_questions_1, get_questions_2, login_required, select_value, genre_selection
 from models import Book, Review, Users, Wishlist
 
@@ -526,17 +526,8 @@ def move_to_library():
     return redirect("/wishlist")
     
 
-# 404 Error Handler
-@app.errorhandler(404)
-def page_not_found(e):
-    app.logger.error(f"404 Error: {e}, Route: {request.url}")  # Log with route
-    return apology("Page not found", 404)
-
-# 500 Error Handler
-@app.errorhandler(500)
-def internal_error(e):
-    app.logger.error(f"500 Error: {e}, Route: {request.url}")  # Log with route
-    return apology("Internal server error", 500)
+app.register_error_handler(404, page_not_found)
+app.register_error_handler(500, internal_error)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
