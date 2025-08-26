@@ -17,3 +17,6 @@ def wishlist():
     pagination = books_query.paginate(page=page, per_page=per_page)
     books = pagination.items
     return render_template('wishlist.html', books=books, user=user, pagination=pagination)
+
+def register_routes(app):
+    app.register_blueprint(bp)

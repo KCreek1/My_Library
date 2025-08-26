@@ -72,3 +72,6 @@ def reviews():
                 results = []
 
     return render_template("reviews.html", select_value=select_values, results=results, pagination=pagination)
+
+def register_routes(app):
+    app.register_blueprint(bp)

@@ -157,3 +157,7 @@ def new_password():
             current_app.logger.error(f"Error updating password: {e}")
             return redirect("/new_password")
     return render_template("new_password.html")
+
+def register_routes(app):
+    app.register_blueprint(bp)
+    

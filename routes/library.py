@@ -41,3 +41,6 @@ def library():
     books = pagination.items
 
     return render_template("library.html", books=books, user=user, search_term=search_term, pagination=pagination)
+
+def register_routes(app):
+    app.register_blueprint(bp)
