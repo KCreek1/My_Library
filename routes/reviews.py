@@ -1,6 +1,13 @@
 # reviews
 
-@app.route("/reviews", methods=["GET", "POST"])
+from flask import Blueprint, render_template, request, flash
+from helpers import login_required, select_value
+from models import Book, Review
+from database import db
+
+bp = Blueprint("reviews", __name__)
+
+@bp.route("/reviews", methods=["GET", "POST"])
 @login_required
 def reviews():
     """ enables users to see reviews for certain books from all users """
@@ -65,45 +72,3 @@ def reviews():
                 results = []
 
     return render_template("reviews.html", select_value=select_values, results=results, pagination=pagination)
-
-
-@app.route("/delete_book/<string:book_type>", methods=["POST"])
-@login_required
-def delete_book(book_type):
-    """ Enables user to delete books from wishlist or library """
-    user = get_current_user()
-    book_id = request.form.get("book_id")
-
-    try:
-        if book_type == "library":
-            book = Book.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
-            if book:
-                # Delete reviews associated with the book
-                reviews = Review.query.filter_by(book_id=book.id).all()
-                for review in reviews:
-                    db.session.delete(review)
-
-                # Delete the book itself
-                db.session.delete(book)
-                db.session.commit()
-                flash("Book and associated reviews deleted", "success")
-                return redirect("/library")
-            else:
-                flash("Book not found", "error")
-            
-        elif book_type == "wishlist":
-            wishlist_book = Wishlist.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
-            if wishlist_book:
-                db.session.delete(wishlist_book)
-                db.session.commit()
-                flash("Book deleted", "success")
-                return redirect("/wishlist")
-            else:
-                flash("Book not found", "error")
-
-    except Exception as e:
-        db.session.rollback()
-        flash("Error deleting book", "error")
-        app.logger.error(f"Error deleting book: {e}")
-
-    return redirect("/library" if book_type == "library" else "/wishlist")
