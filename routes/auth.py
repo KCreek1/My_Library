@@ -1,9 +1,9 @@
 # login, logout, register, password reset
 
-from flask import Blueprint, render_template, request, flash, redirect, session
+from flask import Blueprint, current_app, render_template, request, flash, redirect, session
 from werkzeug.security import check_password_hash, generate_password_hash
 from sqlalchemy.exc import IntegrityError
-from helpers import login_required, apology, get_questions_1, get_questions_2, get_current_user
+from helpers import apology, get_questions_1, get_questions_2
 from models import Users
 from database import db
 
@@ -115,3 +115,45 @@ def register():
         return redirect("/login")
 
     return render_template("register.html", get_questions_1=get_questions_1(), get_questions_2=get_questions_2())
+
+@bp.route("/new_password", methods=["GET", "POST"])
+def new_password():
+    """ User can change password """
+    username = session.get("username")
+    
+    if not username:
+        flash("Session expired or no username", "error")
+        return redirect("/passwordreset")
+    
+    user = Users.query.filter_by(username=username).first()
+    if not user:
+        flash("Invalid username", "error")
+        return redirect("/passwordreset")
+    
+    if request.method == "POST":
+        password = request.form.get("password")
+        confirmation = request.form.get("confirmation")
+        if password == "":
+            flash("Enter a valid password", "error")
+            return redirect("/new_password")
+        if password != confirmation:
+            flash("Passwords do not match", "error")
+            return redirect("/new_password")
+        
+        hash = generate_password_hash(password, method="pbkdf2:sha1", salt_length=8)
+        user.hash = hash
+        
+        try:
+            db.session.commit()
+            flash("Password updated", "success")
+            
+            # Remove the username from the session after the password is successfully updated
+            session.pop('username', None)
+            
+            return redirect("/login")
+        except Exception as e:
+            db.session.rollback()
+            flash("Error updating password", "error")
+            current_app.logger.error(f"Error updating password: {e}")
+            return redirect("/new_password")
+    return render_template("new_password.html")
