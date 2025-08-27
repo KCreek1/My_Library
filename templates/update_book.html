@@ -6,7 +6,7 @@
     <h1>Update Book</h1>
     <p>Update the book details below:</p> 
 
-    <form method="post" action="/update_book">
+    <form method="post" action="{{ url_for('books.update_book') }}">
         <input type="hidden" name="book_id" value="{{ book.id }}">
         <div class="mb-3">
             <label for="title" class="form-label">Title:</label>

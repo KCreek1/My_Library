@@ -9,7 +9,7 @@
     <!-- field to enter new book -->
     <div class="container-fluid">
         <div class="d-flex justify-content-end mb-3">
-          <a href="{{ url_for('add_book', book_type='wishlist') }}" class="btn btn-addbook button">Add Book</a>
+          <a href="{{ url_for('books.add_book', book_type='wishlist') }}" class="btn btn-addbook button">Add Book</a>
         </div>
         
         <div class="table-responsive">
@@ -43,23 +43,23 @@
                             {% else %}
                                 <td>none</td>
                             {% endif %}
-                            <td></form>
+                            <td>
                                 <!-- Button to search the book on Google -->
-                                <form action="https://www.google.com/search" method=""get" target=""_blank">
+                                <form action="https://www.google.com/search" method="get" target="_blank">
                                     <input type="hidden" name="q" value="{{ book.title }}">
                                     <button type="submit" class="btn btn-web btn-sm">Search Web</button>
                                 </form>
                             </td>
                             <td style="text-align: center;">
                                 <!-- Button to move the book to the library -->
-                                <form method="post" action="{{ url_for('move_to_library') }}">
+                                <form method="post" action="{{ url_for('books.move_to_library') }}">
                                     <input type="hidden" name="book_id" value="{{ book.id }}">
                                     <button type="submit" class="btn btn-move btn-sm">Move Book to Library</button>
                                 </form>
                             </td>
                             <td style="text-align: center;">
                                 <!-- Button to delete the book from the wishlist -->
-                                <form method="post" action="{{ url_for('delete_book', book_type='wishlist') }}">
+                                <form method="post" action="{{ url_for('books.delete_book', book_type='wishlist') }}">
                                     <input type="hidden" name="book_id" value="{{ book.id }}">
                                     <button type="submit" class="btn btn-delete btn-sm"onclick="return confirmDelete()">Delete Book</button>
                                 </form>
@@ -79,7 +79,7 @@
     <ul class="pagination justify-content-center">
         {% if pagination.has_prev %}
         <li class="page-item">
-            <a class="page-link" href="{{ url_for('wishlist', page=pagination.prev_num) }}">Previous</a>
+            <a class="page-link" href="{{ url_for('wishlist.wishlist', page=pagination.prev_num) }}">Previous</a>
         </li>
         {% else %}
         <li class="page-item disabled"><span class="page-link">Previous</span></li>
@@ -89,7 +89,7 @@
             {% if p == pagination.page %}
             <li class="page-item active"><span class="page-link">{{ p }}</span></li>
             {% else %}
-            <li class="page-item"><a class="page-link" href="{{ url_for('wishlist', page=p) }}">{{ p }}</a></li>
+            <li class="page-item"><a class="page-link" href="{{ url_for('wishlist.wishlist', page=p) }}">{{ p }}</a></li>
             {% endif %}
         {% else %}
             <li class="page-item disabled"><span class="page-link">…</span></li>
@@ -97,7 +97,7 @@
         {% endfor %}
         {% if pagination.has_next %}
         <li class="page-item">
-            <a class="page-link" href="{{ url_for('wishlist', page=pagination.next_num) }}">Next</a>
+            <a class="page-link" href="{{ url_for('wishlist.wishlist', page=pagination.next_num) }}">Next</a>
         </li>
         {% else %}
         <li class="page-item disabled"><span class="page-link">Next</span></li>
