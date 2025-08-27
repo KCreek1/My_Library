@@ -14,19 +14,6 @@
 - **HTML/CSS**: Used for templating and basic front-end styling via Flask’s render_template()
 - ⚠️ App can be refactored to use the database of your choice (e.g., SQLite, PostgreSQL, MySQL) by adjusting configuration and installing the appropriate database driver.
 
-## Project Structure
-```
-my-library/
-├── static/              # CSS and static assets
-├── templates/           # HTML templates
-├── .env                 # Environment variables (not tracked in version control)
-├── .gitignore           # Git exclusions (e.g., .env, .venv)
-├── app.py               # Main Flask application
-├── database.py          # DB config and model definitions
-├── requirements.txt     # Project dependencies
-└── README.md            # This file
-```
-
 
 ## Setup Instructions
 
