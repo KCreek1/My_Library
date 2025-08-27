@@ -8,7 +8,7 @@
 <h1>Add Book</h1>
 <p>Add a new book to your library. Title, author, and genre are required. You may also add a year, series name, rating, and review. 
     You may select "private" if you do not want your book to appear in a search for ratings and reviews.</p>
-    <form method="POST" action="{{ url_for('add_book', book_type=book_type) }}">
+    <form method="POST" action="{{ url_for('books.add_book', book_type=book_type) }}">
         <div class="mb-3">
             <label for="title">Title:</label>
             <input type="text" id="title" name="title" required>

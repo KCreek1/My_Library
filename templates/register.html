@@ -3,7 +3,7 @@
 {% block title %}/register{% endblock %}
 
 {% block content %}
-    <form action="/register" method="post">
+    <form action="{{ url_for('auth.register') }}" method="post">
         <div class="mb-3">
             <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text">
         </div>
