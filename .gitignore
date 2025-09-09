@@ -1,5 +1,6 @@
 .env
 .venv
+.k
 __pycache__/
 
 flask_session/
