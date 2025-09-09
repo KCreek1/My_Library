@@ -10,6 +10,7 @@ from routes import auth        # login, logout, passwordreset, register, new_pas
 from routes import library     # library route
 from routes import wishlist    # wishlist route
 from routes import reviews     # reviews route
+from routes import legal       # privacy, terms
 from routes.errors import page_not_found, internal_error
 from services import book_services  
 
@@ -45,11 +46,13 @@ wishlist.register_routes(app)
 reviews.register_routes(app)
 auth.register_routes(app)
 
+
 book_services.register_services(app)
 
 
 app.register_error_handler(404, page_not_found)
 app.register_error_handler(500, internal_error)
+app.register_blueprint(legal.bp, url_prefix='/')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

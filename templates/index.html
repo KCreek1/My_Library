@@ -16,9 +16,15 @@
 </ul>
 <p>Register for a free account and get <a href="{{ url_for('auth.register') }}">started!</a></p>
 
-<div style="text-align: right;">
+<footer>
     <small class="text-muted">
-        Developed by Kristina Creek | <a href="mailto:skcreek@outlook.com">Contact</a> | Version {{ version }}
+        Developed by Kristina Creek | 
+        <a href="mailto:skcreek@outlook.com">Contact</a>
+        <br>
+        <a href="{{ url_for('legal.privacy') }}">Privacy Policy</a> | 
+        <a href="{{ url_for('legal.terms') }}">Terms of Service</a>
+        <br> 
+        Version {{ version }}  
     </small>
-</div>
+</footer>
 {% endblock %}

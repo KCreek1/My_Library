@@ -230,3 +230,25 @@ th:nth-child(7), td:nth-child(7) {
   padding: 5px 10px;
   font-size: 14px;
 }
+
+footer {
+  width: 100%;
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  background: transparent;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid #eee;
+  box-sizing: border-box;
+  z-index: 100;
+}
+
+/* Only fix the footer on larger screens */
+@media (min-width: 769px) {
+  footer {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
