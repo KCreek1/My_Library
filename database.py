@@ -1,10 +1,10 @@
 import os
 
 # take out comments for lines 4 & 7 for local development
-from dotenv import load_dotenv
+# from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy 
 
-load_dotenv(dotenv_path='./.env')
+# load_dotenv(dotenv_path='./.env')
 database_url = os.getenv('DATABASE_URL').replace("postgres://", "postgresql://", 1)
 
 db = SQLAlchemy()
