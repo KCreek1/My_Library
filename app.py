@@ -14,7 +14,7 @@ from routes import legal       # privacy, terms
 from routes.errors import page_not_found, internal_error
 from services import book_services  
 
-__version__ = "1.1.1"
+__version__ = "1.1.2"
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)
