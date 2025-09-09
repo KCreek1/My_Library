@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file.
 
 ---
+## [1.1.2]
+### Added
+- Privacy policy and Terms of Service
+
+## [1.1.1]
+### Changed
+- Bumped to python 3.13
+
+## [1.1.0] - 2025-08-26
+### Changed
+- Updated project structure to break routes and services into separate files using Blueprint 
 
 ## [1.0.1] - 2025-08-07
 ### Changed
