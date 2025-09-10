@@ -222,6 +222,44 @@ def move_to_library():
         current_app.logger.error(f"Error moving book: {e}")
     
     return redirect("/wishlist")
+
+@bp.route("/reviews_to_wishlist", methods=["POST"])
+@login_required
+def reviews_to_wishlist():
+    """Add a book from the reviews section to the current user's wishlist."""
+    user = get_current_user()
+    book_id = request.form.get("book_id")
+
+    # Find the book by ID (regardless of owner)
+    book = Book.query.filter_by(id=book_id).first()
+    if not book:
+        flash("Book not found.", "error")
+        return redirect("/reviews")
+
+    # Check if already in user's wishlist
+    existing = Wishlist.query.filter_by(username_id=user.id, title=book.title, author=book.author).first()
+    if existing:
+        flash("Book is already in your wishlist.", "info")
+        return redirect("/reviews")
+
+    # Add to wishlist (copy book info)
+    wishlist_book = Wishlist(
+        username_id=user.id,
+        title=book.title,
+        author=book.author,
+        series_name=book.series_name,
+        year=book.year
+    )
+    try:
+        db.session.add(wishlist_book)
+        db.session.commit()
+        flash("Book added to your wishlist!", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash("Error adding book to wishlist.", "error")
+        current_app.logger.error(f"Error adding book to wishlist: {e}")
+
+    return redirect("/reviews")
     
     
 def register_services(app):

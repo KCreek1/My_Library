@@ -6,11 +6,7 @@ from flask_bootstrap import Bootstrap
 # all sqlalchemy info from: flask-sqlalchemy.palletsprojects.com
 from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
-from routes import auth        # login, logout, passwordreset, register, new_password
-from routes import library     # library route
-from routes import wishlist    # wishlist route
-from routes import reviews     # reviews route
-from routes import legal       # privacy, terms
+from routes import auth, library, wishlist, reviews, legal        # login, logout, passwordreset, register, new_password
 from routes.errors import page_not_found, internal_error
 from services import book_services  
 
