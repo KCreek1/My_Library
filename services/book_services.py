@@ -8,7 +8,6 @@ from database import db
 bp = Blueprint("books", __name__)
 
 
-# Delete book
 @bp.route("/delete_book/<string:book_type>", methods=["POST"])
 @login_required
 def delete_book(book_type):
@@ -167,10 +166,7 @@ def add_book(book_type):
                 return render_template("add_book.html", book_type=book_type)
         else:
             rating = 0  # Default to 0 if no rating provided
-        
-        # Convert rating to integer if it is provided
-        rating = int(rating) if rating else 0  # Default to 0 if no rating provided
-        
+
         if not title or not author or not genre:
             flash("Title, Author, and Genre are required", "error")
             return render_template("add_book.html", book_type=book_type)
