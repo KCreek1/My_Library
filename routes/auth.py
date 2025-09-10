@@ -158,6 +158,91 @@ def new_password():
             return redirect("/new_password")
     return render_template("new_password.html")
 
+@bp.route("/delete_account", methods=["GET", "POST"])
+def delete_account():
+    """Delete user account with password confirmation"""
+    user_id = session.get("user_id")
+    if not user_id:
+        flash("You must be logged in to delete your account.", "error")
+        return redirect("/login")
+    
+    user = Users.query.get(user_id)
+    if not user:
+        flash("User not found.", "error")
+        return redirect("/login")
+    
+    if request.method == "POST":
+        password = request.form.get("password")
+        if not check_password_hash(user.hash, password):
+            flash("Incorrect password.", "error")
+            return render_template("delete_account.html")
+        
+        try:
+            db.session.delete(user)
+            db.session.commit()
+            session.clear()
+            flash("Your account has been deleted.", "success")
+            return redirect("/")
+        except Exception as e:
+            db.session.rollback()
+            flash("Error deleting account.", "error")
+            current_app.logger.error(f"Error deleting account: {e}")
+            return render_template("delete_account.html")
+    
+    return render_template("delete_account.html")
+
+@bp.route("/profile")
+def profile():
+    user_id = session.get("user_id")
+    if not user_id:
+        flash("You must be logged in to view your profile.", "error")
+        return redirect("/login")
+    user = Users.query.get(user_id)
+    if not user:
+        flash("User not found.", "error")
+        return redirect("/login")
+    return render_template("profile.html", username=user.username)
+
+@bp.route("/change_password", methods=["GET", "POST"])
+def change_password():
+    user_id = session.get("user_id")
+    if not user_id:
+        flash("You must be logged in to change your password.", "error")
+        return redirect("/login")
+    
+    user = Users.query.get(user_id)
+    if not user:
+        flash("User not found.", "error")
+        return redirect("/login")
+    
+    if request.method == "POST":
+        current_password = request.form.get("current_password")
+        new_password = request.form.get("new_password")
+        confirmation = request.form.get("confirmation")
+        
+        if not check_password_hash(user.hash, current_password):
+            flash("Incorrect current password.", "error")
+            return render_template("change_password.html")
+        if not new_password:
+            flash("Enter a new password.", "error")
+            return render_template("change_password.html")
+        if new_password != confirmation:
+            flash("New passwords do not match.", "error")
+            return render_template("change_password.html")
+        
+        user.hash = generate_password_hash(new_password, method="pbkdf2:sha1", salt_length=8)
+        try:
+            db.session.commit()
+            flash("Password changed successfully.", "success")
+            return redirect("/profile")
+        except Exception as e:
+            db.session.rollback()
+            flash("Error changing password.", "error")
+            current_app.logger.error(f"Error changing password: {e}")
+            return render_template("change_password.html")
+    
+    return render_template("change_password.html", username=user.username)
+
 def register_routes(app):
     app.register_blueprint(bp)
     

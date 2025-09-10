@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>Delete Account</h2>
+<p class="text-danger"><strong>Are you sure?</strong> Deleting your account will delete all your data, including books in your library.</p>
+<form method="post">
+    <label for="password">Confirm your password:</label>
+    <input type="password" name="password" id="password" required>
+    <button type="submit" class="btn btn-danger">Delete Account</button>
+</form>
+{% endblock %}
