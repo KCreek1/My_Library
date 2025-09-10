@@ -45,10 +45,10 @@
                             {% endif %}
                             <td>
                                 <!-- Button to search the book on Google -->
-                                <form action="https://www.google.com/search" method="get" target="_blank">
-                                    <input type="hidden" name="q" value="{{ book.title }}">
-                                    <button type="submit" class="btn btn-web btn-sm">Search Web</button>
-                                </form>
+                            <form action="https://www.google.com/search" method="get" target="_blank">
+                                <input type="hidden" name="q" value="{{ book.title }} {% if book.author %}{{ book.author }} {% endif %}book">
+                                <button type="submit" class="btn btn-web btn-sm">Search Web</button>
+                            </form>
                             </td>
                             <td style="text-align: center;">
                                 <!-- Button to move the book to the library -->

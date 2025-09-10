@@ -46,6 +46,13 @@
                 <td>{{ review.rating }}</td>
                 <td>{{ review.review }}</td>
                 <td>
+                  <!-- Button to search the book on Google -->
+                  <form action="https://www.google.com/search" method="get" target="_blank">
+                    <input type="hidden" name="q" value="{{ review.book.title }} {% if review.book.author %}{{ review.book.author }} {% endif %}book">
+                    <button type="submit" class="btn btn-web btn-sm">Search Web</button>
+                  </form>
+                </td>
+                <td>
                   <form method="post" action="{{ url_for('books.reviews_to_wishlist') }}">
                     <input type="hidden" name="book_id" value="{{ review.book.id }}">
                   <button type="submit" class="btn btn-move btn-sm">Add to Wishlist</button>
