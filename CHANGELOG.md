@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Added delete account functionality
 - Added change password
 - Added ability to add a book from reviews to wishlist
+- Update to search web
 
 ## [1.1.2]
 ### Added
