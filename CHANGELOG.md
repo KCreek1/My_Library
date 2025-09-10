@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file.
 
 ---
+
+## [1.2.0]
+### Added
+- Validation to avoid errors
+- Added profile page
+- Added delete account functionality
+- Added change password
+- Added ability to add a book from reviews to wishlist
+
 ## [1.1.2]
 ### Added
 - Privacy policy and Terms of Service
