@@ -45,6 +45,12 @@
                 <td>{{ review.book.user.username }}</td>
                 <td>{{ review.rating }}</td>
                 <td>{{ review.review }}</td>
+                <td>
+                  <form method="post" action="{{ url_for('books.reviews_to_wishlist') }}">
+                    <input type="hidden" name="book_id" value="{{ review.book.id }}">
+                  <button type="submit" class="btn btn-move btn-sm">Add to Wishlist</button>
+                  </form>
+                </td>
               </tr>
             {% endfor %}
           {% else %}

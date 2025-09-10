@@ -1,7 +1,7 @@
 # routes for add, delete, move books in library and wishlist and reviews
 
 from flask import Blueprint, render_template, request, flash, redirect, current_app
-from helpers import login_required, get_current_user, genre_selection
+from helpers import login_required, get_current_user, genre_selection, validate_book_id
 from models import Book, Wishlist, Review
 from database import db
 
@@ -13,8 +13,12 @@ bp = Blueprint("books", __name__)
 def delete_book(book_type):
     """ Enables user to delete books from wishlist or library """
     user = get_current_user()
-    book_id = request.form.get("book_id")
+    book_id = validate_book_id(request.form.get("book_id"))
 
+    if book_id is None:
+        flash("Invalid book ID.", "error")
+        return redirect("/library" if book_type == "library" else "/wishlist")
+    
     try:
         if book_type == "library":
             book = Book.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
@@ -58,7 +62,12 @@ def update_book():
     genres = genre_selection()
 
     if request.method == "POST":
-        book_id = request.form.get("book_id")
+        book_id = validate_book_id(request.form.get("book_id"))
+
+        if book_id is None:
+            flash("Invalid book ID.", "error")
+            return redirect("/library")
+
         book = Book.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
         if book:
             book.title = request.form.get("title")
@@ -69,6 +78,21 @@ def update_book():
             book.rating = request.form.get("rating")
             book.review = request.form.get("review")
             book.private = request.form.get("private") == "on"
+
+            # Validate year and rating
+            if book.year:
+                try:
+                    book.year = int(book.year)
+                except ValueError:
+                    flash("Year must be a number.", "error")
+                    return render_template("update_book.html", book=book, genres=genres)
+                
+            if book.rating:
+                try:
+                    book.rating = int(book.rating)
+                except ValueError:
+                    flash("Rating must be a number.", "error")
+                    return render_template("update_book.html", book=book, genres=genres)
             
             if book.review:
                 existing_review = Review.query.filter_by(book_id=book.id, username_id=user.id).first()
@@ -100,7 +124,12 @@ def update_book():
         return redirect("/library")
     
     else:
-        book_id = request.args.get("book_id")
+        book_id = validate_book_id(request.args.get("book_id"))
+
+        if book_id is None:
+            flash("Invalid book ID.", "error")
+            return redirect("/library")
+        
         book = Book.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
         return render_template("update_book.html", book=book, genres=genres)
     
@@ -121,10 +150,23 @@ def add_book(book_type):
         rating = request.form.get("rating")
         review = request.form.get("review")
         private = request.form.get("private") == "on"
-        
-        # Convert rating to integer if it is provided
-        rating = int(rating) if rating else 0  # Default to 0 if no rating provided
-        
+
+        # Validate year and rating
+        if year:
+            try:
+                year = int(year)
+            except ValueError:
+                flash("Year must be a number.", "error")
+                return render_template("add_book.html", book_type=book_type)
+        if rating:
+            try:
+                rating = int(rating)
+            except ValueError:
+                flash("Rating must be a number.", "error")
+                return render_template("add_book.html", book_type=book_type)
+        else:
+            rating = 0  # Default to 0 if no rating provided
+
         if not title or not author or not genre:
             flash("Title, Author, and Genre are required", "error")
             return render_template("add_book.html", book_type=book_type)
@@ -185,7 +227,11 @@ def add_book(book_type):
 def move_to_library():
     """ Move book from wishlist to library """
     user = get_current_user()
-    book_id = request.form.get("book_id")
+    book_id = validate_book_id(request.form.get("book_id"))
+
+    if book_id is None:
+        flash("Invalid book ID.", "error")
+        return redirect("/wishlist")
     
     try:
         wishlist_book = Wishlist.query.filter_by(username_id=user.id).filter_by(id=book_id).first()
@@ -222,6 +268,48 @@ def move_to_library():
         current_app.logger.error(f"Error moving book: {e}")
     
     return redirect("/wishlist")
+
+@bp.route("/reviews_to_wishlist", methods=["POST"])
+@login_required
+def reviews_to_wishlist():
+    """Add a book from the reviews section to the current user's wishlist."""
+    user = get_current_user()
+    book_id = validate_book_id(request.form.get("book_id"))
+
+    if book_id is None:
+        flash("Invalid book ID.", "error")
+        return redirect("/reviews")
+
+    # Find the book by ID (regardless of owner)
+    book = Book.query.filter_by(id=book_id).first()
+    if not book:
+        flash("Book not found.", "error")
+        return redirect("/reviews")
+
+    # Check if already in user's wishlist
+    existing = Wishlist.query.filter_by(username_id=user.id, title=book.title, author=book.author).first()
+    if existing:
+        flash("Book is already in your wishlist.", "info")
+        return redirect("/reviews")
+
+    # Add to wishlist (copy book info)
+    wishlist_book = Wishlist(
+        username_id=user.id,
+        title=book.title,
+        author=book.author,
+        series_name=book.series_name,
+        year=book.year
+    )
+    try:
+        db.session.add(wishlist_book)
+        db.session.commit()
+        flash("Book added to your wishlist!", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash("Error adding book to wishlist.", "error")
+        current_app.logger.error(f"Error adding book to wishlist: {e}")
+
+    return redirect("/reviews")
     
     
 def register_services(app):
