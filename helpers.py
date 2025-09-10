@@ -96,3 +96,11 @@ def genre_selection():
         'Drama',        
         'None',        
     ]
+
+def validate_book_id(book_id):
+    """Try to convert book_id to int. Return int if valid, else None."""
+    try:
+        return int(book_id)
+    except (TypeError, ValueError):
+        return None
+    
