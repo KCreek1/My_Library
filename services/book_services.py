@@ -173,12 +173,20 @@ def add_book(book_type):
         
        # Per-user uniqueness check
         if book_type == "library":
-            user_has_book = Book.query.filter_by(username_id=user.id, title=title, author=author).first()
+            user_has_book = Book.query.filter(
+                Book.username_id == user.id,
+                Book.title.ilike(title),
+                Book.author.ilike(author)
+            ).first()
             if user_has_book:
                 flash("This book is already in your library.", "info")
                 return render_template("add_book.html", book_type=book_type, genres=genres)
         elif book_type == "wishlist":
-            user_has_book = Wishlist.query.filter_by(username_id=user.id, title=title, author=author).first()
+            user_has_book = Wishlist.query.filter(
+                Wishlist.username_id ==user.id, 
+                Wishlist.title.ilike(title),
+                Wishlist.author.ilike(author)
+                ).first()
             if user_has_book:
                 flash("This book is already in your wishlist.", "info")
                 return render_template("add_book.html", book_type=book_type, genres=genres)
