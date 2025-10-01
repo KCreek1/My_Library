@@ -3,6 +3,10 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.2.1]
+- fixed navigation bug on pages
+- improved db loading
+
 ## [1.2.0]
 ### Added
 - Validation to avoid errors
