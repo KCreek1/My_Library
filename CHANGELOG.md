@@ -6,6 +6,8 @@ All notable changes to this project will be documented in this file.
 ## [1.2.1]
 - fixed navigation bug on pages
 - improved db loading
+- message on editions
+- fixed duplicate book entries/overwrite
 
 ## [1.2.0]
 ### Added
