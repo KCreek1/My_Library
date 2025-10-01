@@ -9,7 +9,7 @@
   <h1>My Books</h1>
   <p>Search for books by title, author, genre, series name, or rating</p>
   <p style="font-size: 0.95em; color: #000;">
-  <b>Tip:</b> If you are adding a book that is part of a series, put the main series name in the <b>Series</b> field and the edition or specific book title in the <b>Title</b> field.
+  <b>Since this app checks for duplicate title entries:</b> if you are adding a book that has more than one edition, you can either put the main title in the <b>Series</b> field and the edition in the <b>Title</b> field or add the edition to the end of the title.
 </p>
   <form method="get" action="{{ url_for('library.library') }}">
     <div class="mb-3">
