@@ -8,6 +8,9 @@
   <img src="/static/IMG_6893.jpg" alt="Library">
   <h1>My Books</h1>
   <p>Search for books by title, author, genre, series name, or rating</p>
+  <p style="font-size: 0.95em; color: #000;">
+  <b>Tip:</b> If you are adding a book that is part of a series, put the main series name in the <b>Series</b> field and the edition or specific book title in the <b>Title</b> field.
+</p>
   <form method="get" action="{{ url_for('library.library') }}">
     <div class="mb-3">
       <input type="text" name="search" placeholder="Search by title, author, genre, etc." value="{{ search_term or '' }}">
