@@ -1,11 +1,20 @@
 import os
 
-# take out comments for lines 4 & 7 for local development
-# from dotenv import load_dotenv
-from flask_sqlalchemy import SQLAlchemy 
+# Always load .env if running locally (safe for local, ignored on Heroku)
+try:
+    from dotenv import load_dotenv
+    load_dotenv(dotenv_path='./.env')
+except ImportError:
+    pass
 
-# load_dotenv(dotenv_path='./.env')
-database_url = os.getenv('DATABASE_URL').replace("postgres://", "postgresql://", 1)
+from flask_sqlalchemy import SQLAlchemy
+
+database_url = os.getenv('DATABASE_URL')
+if not database_url:
+    raise RuntimeError("DATABASE_URL is not set in environment variables or .env file.")
+
+if database_url and database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
 
 db = SQLAlchemy()
 
