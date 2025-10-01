@@ -1,24 +1,33 @@
 # main library for user
 
+import os
+
 from flask import Blueprint, render_template, request
 from helpers import get_current_user, login_required
 from models import Book
 
 bp = Blueprint("library", __name__)
 
+OWNER_USER_ID = int(os.getenv("OWNER_USER_ID", 1))
+
 @bp.route("/library", methods=["GET", "POST"])
 @login_required
 def library():
     """Display a table of books in the user's library with advanced search functionality"""
     user = get_current_user()
-    books_query = Book.query.filter_by(username_id=user.id)  # Base query for the user's books
+
+    if user.id == OWNER_USER_ID:
+        # If the logged-in user is the owner, show all books
+        books_query = Book.query
+    else:
+        books_query = Book.query.filter_by(username_id=user.id)  # Base query for the user's books
     search_term = None
 
-    if request.method == "POST":
-        if request.form.get("clear") == "true":
+    if request.method == "GET":
+        if request.args.get("clear") == "true":
             search_term = ""
         else:
-            search_term = request.form.get("search", "").strip()
+            search_term = request.args.get("search", "").strip()
 
         if search_term:
             # Dynamically filter by multiple attributes
