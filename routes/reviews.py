@@ -17,9 +17,9 @@ def reviews():
     page = request.args.get('page', 1, type=int)
     per_page = 25
         
-    if request.method == "POST":
-        selection = request.form.get("selection","").strip() # remove whitespace to avoid empty string
-        value = request.form.get("value", "").strip()
+    if request.method == "GET":
+        selection = request.args.get("selection", "").strip() # remove whitespace to avoid empty string
+        value = request.args.get("value", "").strip()
         
         attributes = {
             'Title': Book.title,

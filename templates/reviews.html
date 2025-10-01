@@ -5,7 +5,7 @@
 {% block content %}
   <h1>Reviews</h1>
   <p>Search for books by title, author, genre, series name, or rating - books marked private will not appear</p>
-  <form action="{{ url_for('reviews.reviews') }}" method="post">
+  <form method="get" action="{{ url_for('reviews.reviews') }}">
     <div class="mb-3">
       <select class="form-select mx-auto w-auto" name="value">
         <option value="" disabled selected>Select Search Category</option>
@@ -74,7 +74,10 @@
         <ul class="pagination justify-content-center">
           {% if pagination.has_prev %}
             <li class="page-item">
-              <a class="page-link" href="{{ url_for('reviews.reviews', page=pagination.prev_num) }}">Previous</a>
+              <a class="page-link"
+                  href="{{ url_for('reviews.reviews', page=pagination.prev_num, selection=request.args.get('selection'), value=request.args.get('value')) }}">
+                  Previous
+              </a>
             </li>
           {% else %}
             <li class="page-item disabled"><span class="page-link">Previous</span></li>
@@ -84,7 +87,12 @@
               {% if p == pagination.page %}
                 <li class="page-item active"><span class="page-link">{{ p }}</span></li>
               {% else %}
-                <li class="page-item"><a class="page-link" href="{{ url_for('reviews.reviews', page=p) }}">{{ p }}</a></li>
+                <li class="page-item">
+                  <a class="page-link"
+                      href="{{ url_for('reviews.reviews', page=p, selection=request.args.get('selection'), value=request.args.get('value')) }}">
+                      {{ p }}
+                  </a>
+                </li>
               {% endif %}
             {% else %}
               <li class="page-item disabled"><span class="page-link">…</span></li>
@@ -92,7 +100,10 @@
           {% endfor %}
           {% if pagination.has_next %}
             <li class="page-item">
-              <a class="page-link" href="{{ url_for('reviews.reviews', page=pagination.next_num) }}">Next</a>
+              <a class="page-link"
+                  href="{{ url_for('reviews.reviews', page=pagination.next_num, selection=request.args.get('selection'), value=request.args.get('value')) }}">
+                  Next
+              </a>
             </li>
           {% else %}
             <li class="page-item disabled"><span class="page-link">Next</span></li>
