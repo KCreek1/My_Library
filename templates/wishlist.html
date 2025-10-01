@@ -26,8 +26,8 @@
                 <tbody>
                     {% for book in books %}
                         <tr>
-                            <td>{{ book.title }}</td>
-                            <td>{{ book.author }}</td>
+                            <td translate="no">{{ book.title }}</td>
+                            <td translate="no" >{{ book.author }}</td>
                             {% if book.series_name %} <!-- since this column is nullable, check for null -->
                                 <td>{{ book.series_name }}</td>
                             {% else %}

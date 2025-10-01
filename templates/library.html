@@ -37,8 +37,8 @@
         <tbody>
           {% for book in books %}
             <tr>
-              <td>{{ book.title }}</td>
-              <td>{{ book.author }}</td>
+              <td translate="no">{{ book.title }}</td>
+              <td translate="no">{{ book.author }}</td>
               {% if book.year %}
                 <td>{{ book.year }}</td>
               {% else %}

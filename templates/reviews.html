@@ -38,8 +38,8 @@
           {% if results %}
             {% for review in results %}
               <tr>
-                <td>{{ review.book.title }}</td>
-                <td>{{ review.book.author }}</td>
+                <td translate="no">{{ review.book.title }}</td>
+                <td translate="no">{{ review.book.author }}</td>
                 <td>{{ review.book.year or 'None' }}</td>
                 <td>{{ review.book.series_name or 'None' }}</td>
                 <td>{{ review.book.user.username }}</td>
