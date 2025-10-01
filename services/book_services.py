@@ -171,31 +171,54 @@ def add_book(book_type):
             flash("Title, Author, and Genre are required", "error")
             return render_template("add_book.html", book_type=book_type)
         
-        # Check if the book already exists
-        existing_book = Book.query.filter_by(title=title, author=author).first()
-        
-        if not existing_book:
-            # Create new book if it doesn't exist
-            if book_type == "library":
-                new_book = Book(username_id=user.id, title=title, author=author, series_name=series_name, year=year, genre=genre, rating=rating, review=review, private=private)
-            elif book_type == "wishlist":
-                new_book = Wishlist(username_id=user.id, title=title, author=author, series_name=series_name, year=year)
-            
-            try:
-                db.session.add(new_book)
-                db.session.commit()
-                book_id = new_book.id  # Use the newly created book's ID
-            except Exception as e:
-                db.session.rollback()
-                flash("Error adding book", "error")
-                current_app.logger.error(f"Error adding book: {e}")
-                return redirect("/library" if book_type == "library" else "/wishlist")
-        else:
-            # Use existing book if it already exists
-            book_id = existing_book.id
+       # Per-user uniqueness check
+        if book_type == "library":
+            user_has_book = Book.query.filter_by(username_id=user.id, title=title, author=author).first()
+            if user_has_book:
+                flash("This book is already in your library.", "info")
+                return render_template("add_book.html", book_type=book_type, genres=genres)
+        elif book_type == "wishlist":
+            user_has_book = Wishlist.query.filter_by(username_id=user.id, title=title, author=author).first()
+            if user_has_book:
+                flash("This book is already in your wishlist.", "info")
+                return render_template("add_book.html", book_type=book_type, genres=genres)
+
+        # If not, add the book for this user
+        if book_type == "library":
+            new_book = Book(
+                username_id=user.id,
+                title=title,
+                author=author,
+                series_name=series_name,
+                year=year,
+                genre=genre,
+                rating=rating,
+                review=review,
+                private=private
+            )
+            model = new_book
+        elif book_type == "wishlist":
+            new_book = Wishlist(
+                username_id=user.id,
+                title=title,
+                author=author,
+                series_name=series_name,
+                year=year
+            )
+            model = new_book
+
+        try:
+            db.session.add(model)
+            db.session.commit()
+            book_id = model.id
+        except Exception as e:
+            db.session.rollback()
+            flash("Error adding book", "error")
+            current_app.logger.error(f"Error adding book: {e}")
+            return redirect("/library" if book_type == "library" else "/wishlist")
         
         # Add a review entry only if the user provided a review and book is in library
-        if rating and review and book_type == "library":
+        if (rating or review) and book_type == "library":
             existing_review = Review.query.filter_by(book_id=book_id, username_id=user.id).first()
             
             # Add review only if it doesn't already exist
