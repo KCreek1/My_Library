@@ -20,7 +20,6 @@
                         <th style="width:10%">Author</th>
                         <th style="width:10%">Series</th>
                         <th style="width:5%">Year</th>
-                        <th style="width:10%">Genre</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -35,11 +34,6 @@
                             {% endif %}
                             {% if book.year %} <!-- since this column is nullable, check for null-->
                                 <td>{{ book.year }}</td>
-                            {% else %}
-                                <td>none</td>
-                            {% endif %}
-                            {% if book.genre %}
-                                <td>{{ book.genre }}</td>
                             {% else %}
                                 <td>none</td>
                             {% endif %}
