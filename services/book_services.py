@@ -233,7 +233,7 @@ def add_book(book_type):
             book_id = model.id
         except Exception as e:
             db.session.rollback()
-            flash("Error adding book", "error")
+            flash("Error adding book - check entry", "error")
             current_app.logger.error(f"Error adding book: {e}")
             return render_template(
                 "add_book.html",
@@ -267,7 +267,7 @@ def add_book(book_type):
                     db.session.commit()
                 except Exception as e:
                     db.session.rollback()
-                    flash("Error adding review", "error")
+                    flash("Error adding review - check entry", "error")
                     current_app.logger.error(f"Error adding review: {e}")
                     return render_template(
                         "add_book.html",
