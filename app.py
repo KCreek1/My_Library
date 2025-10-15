@@ -10,7 +10,7 @@ from routes import auth, library, wishlist, reviews, legal        # login, logou
 from routes.errors import page_not_found, internal_error
 from services import book_services  
 
-__version__ = "1.2.1"
+__version__ = "1.2.2"
 
 app = Flask(__name__)
 bootstrap = Bootstrap(app)

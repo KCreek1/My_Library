@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.2.2]
+- fixed data not transferring from wishlist to library
+- better error handling
+- improved add book screen
+
 ## [1.2.1]
 - fixed navigation bug on pages
 - improved db loading
