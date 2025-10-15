@@ -157,7 +157,19 @@ def add_book(book_type):
                 year = int(year)
             except ValueError:
                 flash("Year must be a number.", "error")
-                return render_template("add_book.html", book_type=book_type)
+                return render_template(
+                    "add_book.html", 
+                    book_type=book_type,
+                    genres=genres,
+                    title=title,
+                    author=author,
+                    year=year,
+                    series_name=series_name,
+                    genre=genre,
+                    rating=rating,
+                    review=review,
+                    private=private
+                )
         if rating:
             try:
                 rating = int(rating)
