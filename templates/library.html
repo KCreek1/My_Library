@@ -36,6 +36,7 @@
             <th style="width:10%">Genre</th>
             <th style="width:5%">Rating</th>
             <th style="width:45%">Review</th>
+            <th style="width:1%">Private</th>
           </tr>
         </thead>
         <tbody>
@@ -64,6 +65,13 @@
               {% else %}
                 <td>No review yet</td>
               {% endif %}
+              <td>
+              {% if book.private %}
+                <span style="color: #b30000; font-weight: bold;">Yes</span>
+              {% else %}
+                No
+              {% endif %}
+              </td>
               <td>
                 <form method="get" action="{{ url_for('books.update_book') }}">
                   <input type="hidden" name="book_id" value="{{ book.id }}">

@@ -18,14 +18,12 @@
 </h1>
 
 {% if book_type == 'library' %}
-<p>Add a new book to your library.</p> 
-<p>You may select "private" if you do not want your book to appear in a search for ratings and reviews.</p>
+    <p style="font-size: 1em;">Select "private" if you do not want your book to appear in a search for ratings and reviews.</p>
 {% elif book_type == 'wishlist' %}
-<p>Add a new book to your wishlist.</p>
+    <p></p>
 {% else %}
-<p>Add a new book to your library.</p> 
-<p>You may select "private" if you do not want your book to appear in a search for ratings and reviews.</p>
-{% endif %}
+    <p style="font-size: 1em;">Select "private" if you do not want your book to appear in a search for ratings and reviews.</p>
+{% endif %}                   
 
 <!-- Show flash messages -->
 {% with messages = get_flashed_messages(with_categories=true) %}
@@ -54,7 +52,8 @@
         <div class="mb-3">
             <label for="series_name">Series:</label>
             <input type="text" id="series_name" name="series_name" value="{{ series_name or '' }}">
-        </div>  
+        </div>
+        {% if book_type != 'wishlist' %}
         <div class="mb-3">
             <label for="genre">Genre:</label>
             <select id="genre" name="genre" required>
@@ -63,20 +62,19 @@
                 {% endfor %}
             </select>
         </div>
-        {% if book_type != 'wishlist' %}
-            <div class="mb-3"> 
-                <label for="rating">Rating:</label> 
-                <input type="number" id="rating" name="rating" min="0" max="5">
-            </div>
-            <div class="mb-3">  
-                <label for="review">Review:</label>
-                <input type="text" id="review" name="review" value="{{ review or '' }}">
-            </div> 
-        {% endif %}
+        <div class="mb-3"> 
+            <label for="rating">Rating:</label> 
+            <input type="number" id="rating" name="rating" min="0" max="5">
+        </div>
+        <div class="mb-3">  
+            <label for="review">Review:</label>
+            <input type="text" id="review" name="review" value="{{ review or '' }}">
+        </div> 
         <div class="mb-3">
             <label for="private">Private:</label>
             <input type="checkbox" id="private" name="private" value="on">
-        </div>                   
+        </div>
+        {% endif %}
         <button class="btn btn-primary" type="submit">Add book</button>
     </form>
 {% endblock %}
