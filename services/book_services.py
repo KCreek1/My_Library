@@ -235,7 +235,19 @@ def add_book(book_type):
             db.session.rollback()
             flash("Error adding book", "error")
             current_app.logger.error(f"Error adding book: {e}")
-            return redirect("/library" if book_type == "library" else "/wishlist")
+            return render_template(
+                "add_book.html",
+                book_type=book_type,
+                genres=genres,
+                title=title,
+                author=author,
+                year=year,
+                series_name=series_name,
+                genre=genre,
+                rating=rating,
+                review=review,
+                private=private
+            )
         
         # Add a review entry only if the user provided a review and book is in library
         if (rating or review) and book_type == "library":
@@ -257,6 +269,19 @@ def add_book(book_type):
                     db.session.rollback()
                     flash("Error adding review", "error")
                     current_app.logger.error(f"Error adding review: {e}")
+                    return render_template(
+                        "add_book.html",
+                        book_type=book_type,
+                        genres=genres,
+                        title=title,
+                        author=author,
+                        year=year,
+                        series_name=series_name,
+                        genre=genre,
+                        rating=rating,
+                        review=review,
+                        private=private
+                    )
         
         flash("Book added", "success")
         return redirect("/library" if book_type == "library" else "/wishlist")
