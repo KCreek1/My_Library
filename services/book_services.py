@@ -276,6 +276,7 @@ def move_to_library():
                 title=wishlist_book.title,
                 author=wishlist_book.author,
                 year=wishlist_book.year,
+                series_name=wishlist_book.series_name,
                 genre=default_genre,
                 rating=0,
                 review=None,
