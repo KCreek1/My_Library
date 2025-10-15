@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - fixed data not transferring from wishlist to library
 - better error handling
 - improved add book screen
+- added more genres
 
 ## [1.2.1]
 - fixed navigation bug on pages
