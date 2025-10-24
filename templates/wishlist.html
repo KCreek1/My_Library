@@ -20,8 +20,8 @@
                         <th style="width:10%">Author</th>
                         <th style="width:10%">Series</th>
                         <th style="width:5%">Year</th>
-                        <th class="visually-hidden" aria-label="Search"></th>
-                        <th class="visually-hidden" aria-label="Move"></th>
+                        <th class="visually-hidden" aria-label="Search web"></th>
+                        <th class="visually-hidden" aria-label="Move to library"></th>
                         <th class="visually-hidden" aria-label="Delete"></th>
                     </tr>
                 </thead>
@@ -44,14 +44,14 @@
                                 <!-- Button to search the book on Google -->
                             <form action="https://www.google.com/search" method="get" target="_blank">
                                 <input type="hidden" name="q" value="{{ book.title }} {% if book.author %}{{ book.author }} {% endif %}book">
-                                <button type="submit" class="btn btn-web btn-sm">Search Web</button>
+                                <button type="submit" class="btn btn-web btn-sm">Search web</button>
                             </form>
                             </td>
                             <td style="text-align: center;">
                                 <!-- Button to move the book to the library -->
                                 <form method="post" action="{{ url_for('books.move_to_library') }}">
                                     <input type="hidden" name="book_id" value="{{ book.id }}">
-                                    <button type="submit" class="btn btn-move btn-sm">Move to Library</button>
+                                    <button type="submit" class="btn btn-move btn-sm">Move to library</button>
                                 </form>
                             </td>
                             <td style="text-align: center;">
