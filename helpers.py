@@ -64,6 +64,7 @@ def select_value():
 def genre_selection():
     """Return a list of genres for book entry."""
     return [
+        '-',  
         'Fiction',
         'Non Fiction',
         'Adventure',
@@ -86,7 +87,6 @@ def genre_selection():
         'Manga',
         'Music',
         'Mythology',
-        'None',
         'Parenting',
         'Philosophy',
         'Photography',
@@ -112,4 +112,3 @@ def validate_book_id(book_id):
         return int(book_id)
     except (TypeError, ValueError):
         return None
-    

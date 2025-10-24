@@ -56,7 +56,11 @@
               {% else %}
                 <td>-</td>
               {% endif %}
+              {% if book.genre == '-' or book.genre == 'None' %}
+                <td>-</td>
+              {% else %}
               <td>{{ book.genre }}</td>
+              {% endif %}
               {% if book.rating %}
                 <td>{{ book.rating }}</td>
               {% else %}
