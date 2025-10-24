@@ -48,14 +48,14 @@
                                 <!-- Button to move the book to the library -->
                                 <form method="post" action="{{ url_for('books.move_to_library') }}">
                                     <input type="hidden" name="book_id" value="{{ book.id }}">
-                                    <button type="submit" class="btn btn-move btn-sm">Move Book to Library</button>
+                                    <button type="submit" class="btn btn-move btn-sm">Move to Library</button>
                                 </form>
                             </td>
                             <td style="text-align: center;">
                                 <!-- Button to delete the book from the wishlist -->
                                 <form method="post" action="{{ url_for('books.delete_book', book_type='wishlist') }}">
                                     <input type="hidden" name="book_id" value="{{ book.id }}">
-                                    <button type="submit" class="btn btn-delete btn-sm"onclick="return confirmDelete()">Delete Book</button>
+                                    <button type="submit" class="btn btn-delete btn-sm"onclick="return confirmDelete()">Delete</button>
                                 </form>
                             </td>
                         </tr>
