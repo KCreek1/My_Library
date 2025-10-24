@@ -127,6 +127,14 @@ th:nth-child(7), td:nth-child(7) {
   word-break: break-word;  /* Break long words if necessary */
   white-space: normal;  /* Ensure text wraps properly */
 }
+
+/* Ensure consistent wrapping for title, author, and series across all devices */
+th:nth-child(1), td:nth-child(1),
+th:nth-child(2), td:nth-child(2),
+th:nth-child(4), td:nth-child(4) {
+  white-space: normal; /* Allow text to wrap */
+  word-wrap: break-word; /* Break long words if necessary */
+}
 }
 
 @media (min-width: 769px) {  
@@ -140,7 +148,7 @@ th:nth-child(7), td:nth-child(7) {
 /* For larger screens (laptop/PC), keep the review column wider */
 /* Title */
 th:nth-child(1), td:nth-child(1) {
-  width: 15%;
+  width: 20%;
 }
 
 /* Author */
@@ -171,6 +179,13 @@ th:nth-child(6), td:nth-child(6) {
 th:nth-child(7), td:nth-child(7) {
   width: 50% !important; 
 }
+}
+
+/* Revert changes to the 'Delete' column */
+th:nth-child(7), td:nth-child(7) {
+  max-width: none; /* Remove width limitation */
+  width: auto; /* Restore default behavior */
+  text-align: left; /* Restore default alignment */
 }
 
 /* Default style for smaller screens (no indentation) */
@@ -263,4 +278,10 @@ footer {
   clip: rect(0 0 0 0) !important;
   overflow: hidden !important;
   white-space: nowrap !important;
+}
+
+/* Ensure the title column in wishlist has a reasonable width */
+th:nth-child(1), td:nth-child(1) {
+  min-width: 150px; /* Set a minimum width to prevent narrowness */
+  width: auto; /* Allow flexibility */
 }
