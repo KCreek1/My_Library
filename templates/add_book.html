@@ -53,10 +53,10 @@
             <label for="series_name">Series:</label>
             <input type="text" id="series_name" name="series_name" value="{{ series_name or '' }}">
         </div>
-        {% if book_type != 'wishlist' %}
+        {% if book_type == 'library' %}
         <div class="mb-3">
             <label for="genre">Genre:</label>
-            <select id="genre" name="genre" required>
+            <select id="genre" name="genre">
                 {% for genre in genres %}
                     <option value="{{ genre }}">{{ genre }}</option>
                 {% endfor %}

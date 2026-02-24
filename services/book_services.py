@@ -179,8 +179,8 @@ def add_book(book_type):
         else:
             rating = 0  # Default to 0 if no rating provided
 
-        if not title or not author or not genre:
-            flash("Title, Author, and Genre are required", "error")
+        if not title or not author:
+            flash("Title and Author are required", "error")
             return render_template("add_book.html", book_type=book_type)
         
        # Per-user uniqueness check
