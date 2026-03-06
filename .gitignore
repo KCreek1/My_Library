@@ -7,3 +7,5 @@ flask_session/
 manifest.json
 
 .DS_Store
+
+stats.txt
