@@ -112,3 +112,5 @@ If the local database already exists, you can overwrite it with the latest backu
   backups/*
   *.dump
   ```
+
+  LOGOUT!
