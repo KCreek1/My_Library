@@ -9,3 +9,5 @@ manifest.json
 .DS_Store
 
 stats.txt
+
+backups/*
