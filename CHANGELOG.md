@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Improved search method in library 
 - Added reviews to search fields on user's library page
 - Changed to more compatible python setup 
+- Library should maintain search values in pagination now
 
 ## [1.3.0] - 2025-10-24
 ### Added
