@@ -7,12 +7,19 @@
 {% block content %}
   <img src="/static/IMG_6893.jpg" alt="Library">
   <h1>My Books</h1>
-  <p>Search for books by title, author, genre, series name, or rating</p>
-  <form method="get" action="{{ url_for('library.library') }}">
+  <p>Search for books by title, author, genre, series name, rating, or review</p>
+  <form method="get" action="{{ url_for('reviews.reviews') }}">
     <div class="mb-3">
-      <input type="text" name="search" placeholder="Search by title, author, genre, etc." value="{{ search_term or '' }}">
-      <button type="submit" class='btn btn-search btn-sm'>Search</button>
-      <button type="submit" class='btn btn-search btn-sm' name="clear" value="true">Clear Search</button>
+      <select class="form-select mx-auto w-auto" name="value">
+        <option value="" disabled selected>Select Search Category</option>
+        {% for value in select_value %}
+          <option value="{{ value }}">{{ value }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
+      <input type="text" name="selection" placeholder="Search criteria">
+      <button type="submit" class="btn btn-search btn-sm">Search</button>
     </div>
   </form>
 

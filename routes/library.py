@@ -3,7 +3,7 @@
 import os
 
 from flask import Blueprint, render_template, request, current_app, flash
-from helpers import get_current_user, login_required
+from helpers import get_current_user, login_required, select_value  # Import select_value
 from models import Book
 
 bp = Blueprint("library", __name__)
@@ -60,7 +60,9 @@ def library():
     pagination = books_query.order_by(Book.title.asc()).paginate(page=page, per_page=per_page)
     books = pagination.items
 
-    return render_template("library.html", books=books, user=user, search_term=search_term, pagination=pagination)
+    select_values = select_value()  # Get dropdown options
+
+    return render_template("library.html", books=books, user=user, search_term=search_term, pagination=pagination, select_value=select_values)
 
 def register_routes(app):
     app.register_blueprint(bp)
