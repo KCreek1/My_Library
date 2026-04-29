@@ -13,7 +13,7 @@
 
 {% block content %}
   <h1>Reviews</h1>
-  <p>Search for books by title, author, genre, series name, rating, or review - books marked private will not appear</p>
+  <p>Search for books by title, author, genre, series name, rating, or review - books marked private by other users will not appear</p>
   <form method="get" action="{{ url_for('reviews.reviews') }}">
     <div class="mb-3">
       <select class="form-select mx-auto w-auto" name="value">

@@ -1,9 +1,12 @@
 # reviews
 
-from flask import Blueprint, render_template, request, flash
-from helpers import login_required, select_value
+from flask import Blueprint, render_template, request, flash, current_app  # Import current_app for debug check
+from helpers import login_required, select_value, get_current_user  # Import get_current_user
 from models import Book, Review
 from database import db
+import os
+
+ADMIN_USER_ID = int(os.getenv('ADMIN_USER_ID'))  # Define ADMIN_USER_ID
 
 bp = Blueprint("reviews", __name__)
 
@@ -11,6 +14,7 @@ bp = Blueprint("reviews", __name__)
 @login_required
 def reviews():
     """ enables users to see reviews for certain books from all users """
+    user = get_current_user()  # Define the current user
     select_values = select_value()
     results = None
     pagination = None
@@ -40,21 +44,21 @@ def reviews():
                 if value == "Rating" and selection.isdigit():
                     query = (
                         db.session.query(Review)
-                        .join(Book, Review.book_id == Book.id)  # Join the review and book tables        
-                        .filter(Review.rating == int(selection), 
-                        Book.private == False)
+                        .join(Book, Review.book_id == Book.id)
+                        .filter(
+                            (Review.rating == int(selection)) &
+                            ((Book.private == False) | (Book.username_id == user.id))  # Include user's books regardless of private status
+                        )
                     )
-                    
                 elif value != "Rating":
                     query = (
                         db.session.query(Review)
                         .join(Book, Review.book_id == Book.id)
                         .filter(
-                        attributes[value].ilike(f"%{selection.strip()}%"),
-                        Book.private == False
-                     )
+                            (attributes[value].ilike(f"%{selection.strip()}%")) &
+                            ((Book.private == False) | (Book.username_id == user.id))  # Include user's books regardless of private status
+                        )
                     )
-                    
                 else:
                     flash("Invalid rating input. Please enter a valid number.", "error")
                     query = None
