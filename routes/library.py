@@ -46,6 +46,11 @@ def library():
                     books_query = books_query.filter(
                         Book.rating == int(selection)
                     )
+                elif value == "Review":
+                    books_query = books_query.filter(
+                        Book.review.ilike(f"%{selection}%"),
+                        Book.review != ""  # Ensure reviews are not empty
+                    )
                 elif value != "Rating":
                     books_query = books_query.filter(
                         attributes[value].ilike(f"%{selection}%")
