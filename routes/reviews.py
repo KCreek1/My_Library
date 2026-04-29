@@ -27,6 +27,7 @@ def reviews():
             'Series Name': Book.series_name,
             'Genre': Book.genre,
             'Rating': Review.rating,
+            'Review': Review.review  # Added review content as a searchable field
         }
 
         if not selection:

@@ -2,7 +2,7 @@
 
 import os
 
-from flask import Blueprint, render_template, request, current_app
+from flask import Blueprint, render_template, request, current_app, flash
 from helpers import get_current_user, login_required
 from models import Book
 
@@ -23,25 +23,37 @@ def library():
     search_term = None
 
     if request.method == "GET":
-        if request.args.get("clear") == "true":
-            search_term = ""
-        else:
-            search_term = request.args.get("search", "").strip()
+        selection = request.args.get("selection", "").strip()
+        value = request.args.get("value", "").strip()
 
-        if search_term:
-            # Dynamically filter by multiple attributes
+        attributes = {
+            'Title': Book.title,
+            'Author': Book.author,
+            'Series Name': Book.series_name,
+            'Genre': Book.genre,
+            'Rating': Book.rating,
+            'Review': Book.review
+        }
+
+        if not selection:
+            flash("Please enter a search term.", "error")
+        elif value not in attributes:
+            flash("Invalid search criteria. Please try again.", "error")
+        else:
             try:
-                search_rating = int(search_term) 
-            except ValueError:
-                search_rating = None
-            
-            books_query = books_query.filter(
-                (Book.title.ilike(f"%{search_term}%")) | 
-                (Book.author.ilike(f"%{search_term}%")) |
-                (Book.series_name.ilike(f"%{search_term}%")) |
-                (Book.genre.ilike(f"%{search_term}%")) |
-                ((Book.rating == search_rating) if search_rating is not None else False)  # Exact match for integer ratings
-            )
+                if value == "Rating" and selection.isdigit():
+                    books_query = books_query.filter(
+                        Book.rating == int(selection)
+                    )
+                elif value != "Rating":
+                    books_query = books_query.filter(
+                        attributes[value].ilike(f"%{selection}%")
+                    )
+                else:
+                    flash("Invalid rating input. Please enter a valid number.", "error")
+
+            except Exception as e:
+                flash(f"An error occurred: {str(e)}", "error")
 
     page = request.args.get('page', 1, type=int)
     per_page = 25
@@ -52,4 +64,3 @@ def library():
 
 def register_routes(app):
     app.register_blueprint(bp)
-    

@@ -58,6 +58,7 @@ def select_value():
         'Series Name',
         'Genre',
         'Rating',
+        'Review',
     ]
  
   
