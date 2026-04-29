@@ -15,7 +15,7 @@ bp = Blueprint("reviews", __name__)
 def reviews():
     """ enables users to see reviews for certain books from all users """
     user = get_current_user()  # Define the current user
-    select_values = select_value()
+    select_values = [value for value in select_value() if value != 'Review']  # Remove 'Review' from dropdown options
     results = None
     pagination = None
     page = request.args.get('page', 1, type=int)
@@ -30,8 +30,7 @@ def reviews():
             'Author': Book.author,
             'Series Name': Book.series_name,
             'Genre': Book.genre,
-            'Rating': Review.rating,
-            'Review': Review.review  # Added review content as a searchable field
+            'Rating': Review.rating  # Removed Review.review from searchable fields
         }
 
         if not selection:
