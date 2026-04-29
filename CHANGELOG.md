@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.4.0] - 2026-04-29
+### Added
+- Improved search method in library 
+- Added reviews to search fields on user's library page
+- Changed to more compatible python setup 
+
 ## [1.3.0] - 2025-10-24
 ### Added
 - "Go to page" dropdown functionality for pagination.
