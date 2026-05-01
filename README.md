@@ -1,4 +1,4 @@
-# My Library
+# My Library [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/KCreek1/My_Library/pulls)
 **My Library** is a simple web app for managing personal book collections. Track the books you own, maintain a wishlist, and explore reviews from other readers. Built with Python and Flask, it’s lightweight, easy to deploy, and perfect for book enthusiasts who want a digital shelf.
 
 ## Features
