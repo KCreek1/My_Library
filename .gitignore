@@ -12,5 +12,3 @@ stats.txt
 
 backups/*
 *.dump
-
-*.csv
