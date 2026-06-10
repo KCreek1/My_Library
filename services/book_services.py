@@ -75,7 +75,7 @@ def update_book():
             book.series_name = request.form.get("series_name")
             book.year = request.form.get("year")
             book.genre = request.form.get("genre")
-            book.rating = request.form.get("rating")
+            book.rating = request.form.get("rating") or 0
             book.review = request.form.get("review")
             book.date_read = request.form.get("date_read", "").strip() or None #string so it can be general
             book.private = request.form.get("private") == "on"
