@@ -5,10 +5,12 @@
 - **Library Management**: Add, edit, and organize your owned books.
 - **Wishlist**: Keep track of books you’d like to read or purchase.
 - **User Reviews**: Read and contribute reviews to help others discover great books.
+- **Date Read Tracking**: Save a flexible “Date Read” value for books and search by it.
 - **Cloud-Hosted Database**: Uses Heroku PostgreSQL for easy deployment and scaling.
   
 ## Tech Stack
 - **Flask**: Minimalist Python web framework for quick and intuitive development.
+- **Flask-Migrate / Alembic**: Schema migration support for database changes.
 - **SQLAlchemy**: ORM for managing relational databases in a Pythonic way.
 - **PostgreSQL (Heroku)**:  Cloud-hosted, scalable database service.
 - **HTML/CSS**: Used for templating and basic front-end styling via Flask’s render_template()

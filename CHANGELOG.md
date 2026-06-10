@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.5.0] - 2026-06-10
+### Added
+- Added a flexible `date_read` field to books, including add/update form support, library display, and search support.
+- Introduced Flask-Migrate/Alembic to manage schema changes going forward.
+- Added local dev database for testing.
+
+### Changed
+- Removed automatic `db.create_all()` initialization in favor of migration-based schema updates.
+- Documented the production deployment flow for schema changes, including backup, deploy, `flask db upgrade`, and verification.
+- Confirmed the first Alembic-managed production migration was deployed successfully to Heroku with revision `9adf0478a78f`.
+
 ## [1.4.0] - 2026-04-29
 ### Added
 - Improved search method in library 
