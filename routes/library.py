@@ -32,6 +32,7 @@ def library():
             'Author': Book.author,
             'Series Name': Book.series_name,
             'Genre': Book.genre,
+            'Date Read': Book.date_read,
             'Rating': Book.rating,
             'Review': Book.review
         }
