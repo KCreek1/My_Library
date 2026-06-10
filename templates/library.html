@@ -7,7 +7,7 @@
 {% block content %}
   <img src="/static/IMG_6893.jpg" alt="Library">
   <h1>My Books</h1>
-  <p>Search for books by title, author, genre, series name, rating, or review</p>
+  <p>Search for books by title, author, genre, series name, rating, review, or date read</p>
   <form method="get" action="{{ url_for('library.library') }}">
     <div class="mb-3">
       <select class="form-select mx-auto w-auto" name="value">
@@ -36,13 +36,14 @@
       <table class='table' style="width:100%">
         <thead>
           <tr>
-            <th style="width:20%">Title</th>
+            <th style="width:16%">Title</th>
             <th style="width:10%">Author</th>
             <th style="width:5%">Year</th>
             <th style="width:10%">Series</th>
             <th style="width:10%">Genre</th>
+            <th style="width:15%; white-space: nowrap;">Date Read</th>
+            <th style="width:28%">Review</th>
             <th style="width:5%">Rating</th>
-            <th style="width:45%">Review</th>
             <th style="width:1%">Private</th>
             <th class="visually-hidden" aria-label="Update"></th>
             <th class="visually-hidden" aria-label="Delete"></th>
@@ -66,15 +67,20 @@
               {% if book.genre == '-' or book.genre == 'None' %}
                 <td>-</td>
               {% else %}
-              <td>{{ book.genre }}</td>
+                <td>{{ book.genre }}</td>
               {% endif %}
-              {% if book.rating %}
-                <td>{{ book.rating }}</td>
+              {% if book.date_read %}
+                <td style="white-space: nowrap;">{{ book.date_read }}</td>
               {% else %}
-                <td>-</td>
+                <td style="white-space: nowrap;">-</td>
               {% endif %}
               {% if book.review %}
                 <td>{{ book.review }}</td>
+              {% else %}
+                <td>-</td>
+              {% endif %}
+              {% if book.rating %}
+                <td>{{ book.rating }}</td>
               {% else %}
                 <td>-</td>
               {% endif %}
@@ -101,7 +107,7 @@
           {% endfor %}
           {% if not books %}
             <tr>
-              <td colspan="8">No books in your library.</td>
+              <td colspan="9">No books in your library.</td>
             </tr>
           {% endif %}
         </tbody>

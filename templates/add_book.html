@@ -62,14 +62,18 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="mb-3"> 
-            <label for="rating">Rating:</label> 
-            <input type="number" id="rating" name="rating" min="0" max="5">
+        <div class="mb-3">
+            <label for="date_read">Date Read:</label>
+            <input type="text" id="date_read" name="date_read" class="date-read-input" value="{{ date_read or '' }}" placeholder="e.g. Spring 2025 or yyy-mm-dd">
         </div>
         <div class="mb-3">  
             <label for="review">Review:</label>
             <input type="text" id="review" name="review" value="{{ review or '' }}">
         </div> 
+        <div class="mb-3"> 
+            <label for="rating">Rating:</label> 
+            <input type="number" id="rating" name="rating" min="0" max="5">
+        </div>
         <div class="mb-3">
             <label for="private">Private:</label>
             <input type="checkbox" id="private" name="private" value="on">

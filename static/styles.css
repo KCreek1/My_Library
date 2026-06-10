@@ -38,6 +38,11 @@ p {
   margin-right: 1rem;
 }
 
+/* Keep Date Read hint text compact while preserving normal typed text size. */
+.date-read-input::placeholder {
+  font-size: 0.80rem;
+}
+
 /* Ensure the table takes up full width */
 table {
   width: 100%;
