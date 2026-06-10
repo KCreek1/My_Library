@@ -1,0 +1,11 @@
+Single-database configuration for Flask-Migrate/Alembic.
+
+Local setup (after setting DATABASE_URL):
+- flask db upgrade
+
+Creating a new migration after model changes:
+- flask db migrate -m "describe change"
+- flask db upgrade
+
+Heroku:
+- Run `flask db upgrade` as a release phase or one-off dyno before deploying code that depends on new columns.

@@ -75,8 +75,9 @@ def update_book():
             book.series_name = request.form.get("series_name")
             book.year = request.form.get("year")
             book.genre = request.form.get("genre")
-            book.rating = request.form.get("rating")
+            book.rating = request.form.get("rating") or 0
             book.review = request.form.get("review")
+            book.date_read = request.form.get("date_read", "").strip() or None #string so it can be general
             book.private = request.form.get("private") == "on"
 
             # Validate year and rating
@@ -149,6 +150,7 @@ def add_book(book_type):
         genre = request.form.get("genre")
         rating = request.form.get("rating")
         review = request.form.get("review")
+        date_read = request.form.get("date_read", "").strip() or None
         private = request.form.get("private") == "on"
 
         # Validate year and rating
@@ -168,6 +170,7 @@ def add_book(book_type):
                     genre=genre,
                     rating=rating,
                     review=review,
+                    date_read=date_read,
                     private=private
                 )
         if rating:
@@ -214,6 +217,7 @@ def add_book(book_type):
                 genre=genre,
                 rating=rating,
                 review=review,
+                date_read=date_read,
                 private=private
             )
             model = new_book
@@ -246,6 +250,7 @@ def add_book(book_type):
                 genre=genre,
                 rating=rating,
                 review=review,
+                date_read=date_read,
                 private=private
             )
         
@@ -280,6 +285,7 @@ def add_book(book_type):
                         genre=genre,
                         rating=rating,
                         review=review,
+                        date_read=date_read,
                         private=private
                     )
         
@@ -317,6 +323,7 @@ def move_to_library():
                 genre=default_genre,
                 rating=0,
                 review=None,
+                date_read=None,
                 private=False
             )                                                              
             # add to library

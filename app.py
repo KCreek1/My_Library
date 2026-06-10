@@ -1,10 +1,8 @@
-import os
-
 from database import db, init_db
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
 # all sqlalchemy info from: flask-sqlalchemy.palletsprojects.com
-from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from flask_session import Session
 from routes import auth, library, wishlist, reviews, legal        # login, logout, passwordreset, register, new_password
 from routes.errors import page_not_found, internal_error
@@ -17,6 +15,7 @@ bootstrap = Bootstrap(app)
 
 # initiate db
 init_db(app)
+migrate = Migrate(app, db)
 
 # Configure session to use filesystem (instead of signed cookies)
 app.config["SESSION_TYPE"] = "filesystem"
