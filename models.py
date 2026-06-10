@@ -29,7 +29,7 @@ class Book(db.Model):
     series_name = db.Column(db.String(50), default='None')
     rating = db.Column(db.Integer, default=0)
     review = db.Column(db.String(300), default='No review yet') 
-    date_read = db.Column(db.String(100), nullable=True)
+    date_read = db.Column(db.String(100), nullable=True) #specifically a string to allow for flexibility in user input
     private = db.Column(db.Boolean, default=False)
     
 
