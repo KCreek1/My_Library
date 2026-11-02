@@ -3,6 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.6.0] - 2026-11-01
+### Changed
+- Refreshed the interface with warmer colors, rounded buttons, distinct section accents, and a redesigned home page.
+- Updated the footer layout to stay at the bottom on short pages without covering content.
+
 ## [1.5.0] - 2026-06-10
 ### Added
 - Added a flexible `date_read` field to books, including add/update form support, library display, and search support.

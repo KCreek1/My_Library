@@ -1,6 +1,10 @@
 {% extends "layout.html" %}
+{% block page_class %}page-profile{% endblock %}
 {% block content %}
-<p><strong>{{ username }} </strong></p>
+<section class="profile-heading">
+  <span class="profile-eyebrow">Your profile</span>
+  <h1>{{ username }}</h1>
+</section>
 
 <a href="{{ url_for('auth.change_password') }}" class="btn btn-secondary mb-2">Change Password</a>
 <br>

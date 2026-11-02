@@ -4,17 +4,33 @@
 
 {% block title %}{% endblock %}
 
-{% block content %}
-<h1>My Library</h1>
+{% block page_class %}page-home{% endblock %}
 
-<p>Do you find yourself surrounded by countless books, unsure of which ones you’ve read or what you still need? Have you ever wandered into a bookstore, torn between a timeless classic and the latest fiction release? Imagine having your personal online library right at your fingertips—wherever you go!</p>
-<p><b>This app is designed just for you!</b></p>
-<ul class="indent-list">
-    <p><b>"My Books"</b> A comprehensive list of all the books you own. Easily search, update, and manage your library.</p>
-    <p><b>"Wishlist"</b> A list of all the books you are on a quest to obtain. Perfect for your next bookstore adventure!</p>
-    <p><b>"Reviews"</b> Share your thoughts on books and see what others are saying. Discover new favorites based on real recommendations.</p>
-</ul>
-<p>Register for a free account and get <a href="{{ url_for('auth.register') }}">started!</a></p>
+{% block content %}
+<section class="home-hero">
+    <span class="home-eyebrow">A little more room for your next chapter</span>
+    <h1>Make your books feel at home.</h1>
+    <p class="home-lead">Keep track of what you own, what you hope to read, and the books worth sharing—all in one personal library.</p>
+    <a class="btn btn-primary home-cta" href="{{ url_for('auth.register') }}">Create your free library <span aria-hidden="true">→</span></a>
+</section>
+
+<section class="home-features" aria-label="What you can do">
+    <article class="home-feature home-feature-books">
+        <span class="feature-number">01</span>
+        <h2>My Books</h2>
+        <p>Keep your collection organized and easy to search, with notes on editions, ratings, and when you read each book.</p>
+    </article>
+    <article class="home-feature home-feature-wishlist">
+        <span class="feature-number">02</span>
+        <h2>Wishlist</h2>
+        <p>Save the titles you’re hoping to find, so your next bookstore visit has a ready-made reading list.</p>
+    </article>
+    <article class="home-feature home-feature-reviews">
+        <span class="feature-number">03</span>
+        <h2>Reviews</h2>
+        <p>Share what you thought and discover what other readers have enjoyed.</p>
+    </article>
+</section>
 
 <footer>
     <small class="text-muted">
