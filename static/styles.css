@@ -310,11 +310,11 @@ th:nth-child(1), td:nth-child(1) {
   --surface: #fffaf1;
   --surface-raised: #fffdf8;
   --line: #e7d8c2;
-  --accent: #ad622f;
-  --accent-hover: #914d25;
+  --accent: #bd5a1b;
+  --accent-hover: #9f4612;
   --accent-soft: #f1e1cc;
-  --danger: #b84f43;
-  --danger-hover: #9e4037;
+  --danger: #bd3f35;
+  --danger-hover: #9e3029;
 }
 
 body {
@@ -429,13 +429,13 @@ p {
 
 .btn-addbook {
   color: #fffaf2 !important;
-  background-color: #718b45 !important;
-  border: 1px solid #718b45 !important;
+  background-color: #64852e !important;
+  border: 1px solid #64852e !important;
 }
 
 .btn-addbook:hover {
-  background-color: #5d7438 !important;
-  border-color: #5d7438 !important;
+  background-color: #506e22 !important;
+  border-color: #506e22 !important;
 }
 
 .btn-delete,
@@ -453,13 +453,13 @@ p {
 
 .btn-web {
   color: #594638 !important;
-  background-color: #e8c99f !important;
-  border: 1px solid #d6b484 !important;
+  background-color: #edc27e !important;
+  border: 1px solid #d9a957 !important;
 }
 
 .btn-web:hover {
-  background-color: #dfb982 !important;
-  border-color: #cda36c !important;
+  background-color: #e5b15e !important;
+  border-color: #c99545 !important;
 }
 
 .btn-search,
