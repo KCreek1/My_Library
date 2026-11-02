@@ -427,6 +427,26 @@ p {
   border-color: var(--accent-hover) !important;
 }
 
+.btn-update {
+  background-color: #477b99 !important;
+  border-color: #477b99 !important;
+}
+
+.btn-update:hover {
+  background-color: #386681 !important;
+  border-color: #386681 !important;
+}
+
+.btn-move {
+  background-color: #4f8065 !important;
+  border-color: #4f8065 !important;
+}
+
+.btn-move:hover {
+  background-color: #3d6951 !important;
+  border-color: #3d6951 !important;
+}
+
 .btn-addbook {
   color: #fffaf2 !important;
   background-color: #64852e !important;
