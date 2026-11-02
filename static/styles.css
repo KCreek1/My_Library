@@ -275,14 +275,11 @@ footer {
   z-index: 100;
 }
 
-/* Only fix the footer on larger screens */
-@media (min-width: 769px) {
-  footer {
-    position: fixed;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-  }
+/* Keep the footer in document flow so it never covers page content. */
+footer {
+  position: static;
+  transform: none;
+  margin-top: auto;
 }
 
 .visually-hidden {
@@ -322,6 +319,9 @@ body {
   background: #f4dfbd;
   font-family: 'Merriweather', Georgia, serif;
   line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 nav.navbar {
@@ -359,7 +359,10 @@ li.nav-item {
 
 main.container {
   max-width: 1440px;
-  min-height: calc(100vh - 100px);
+  min-height: 0;
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 
 h1, h2, h3 {
@@ -438,13 +441,13 @@ p {
 }
 
 .btn-move {
-  background-color: #4f8065 !important;
-  border-color: #4f8065 !important;
+  background-color: #438174 !important;
+  border-color: #438174 !important;
 }
 
 .btn-move:hover {
-  background-color: #3d6951 !important;
-  border-color: #3d6951 !important;
+  background-color: #346d62 !important;
+  border-color: #346d62 !important;
 }
 
 .btn-addbook {
