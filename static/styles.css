@@ -333,7 +333,7 @@ nav.navbar {
 }
 
 a.navbar-brand {
-  color: var(--accent);
+  color: #dd7019;
   font-size: clamp(1.7rem, 3vw, 2.25rem);
   text-shadow: none;
   letter-spacing: -0.04em;
